@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+import "msg_base.proto";
+
+// 背包物品
+message BagItem {
+    uint64 item_uid = 1;
+    int32 item_id = 2;
+    int32 item_num = 3;
+    int32 grid_idx = 4;
+    bool is_bind = 5;
+    int32 get_time = 6;
+    int32 expire_time = 7;
+}
+
+// 背包信息请求
+message BagInfoReq {
+    uint64 role_id = 1;
+}
+
+// 背包信息响应
+message BagInfoAck {
+    uint32 ret_code = 1;
+    int32 bag_capacity = 2;
+    repeated BagItem items = 3;
+}
+
+// 添加物品请求
+message BagAddItemReq {
+    uint64 role_id = 1;
+    int32 item_id = 2;
+    int32 item_num = 3;
+    int32 add_way = 4;
+}
+
+// 添加物品响应
+message BagAddItemAck {
+    uint32 ret_code = 1;
+    repeated BagItem added_items = 2;
+}
+
+// 删除物品请求
+message BagDelItemReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    int32 item_num = 3;
+    int32 del_way = 4;
+}
+
+// 删除物品响应
+message BagDelItemAck {
+    uint32 ret_code = 1;
+}
+
+// 使用物品请求
+message BagUseItemReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    int32 item_num = 3;
+    uint64 target_id = 4;
+}
+
+// 使用物品响应
+message BagUseItemAck {
+    uint32 ret_code = 1;
+    repeated ItemData rewards = 2;
+}
+
+// 整理背包请求
+message BagSortReq {
+    uint64 role_id = 1;
+}
+
+// 整理背包响应
+message BagSortAck {
+    uint32 ret_code = 1;
+}
+
+// 扩充背包请求
+message BagExpandReq {
+    uint64 role_id = 1;
+    int32 expand_num = 2;
+}
+
+// 扩充背包响应
+message BagExpandAck {
+    uint32 ret_code = 1;
+    int32 new_capacity = 2;
+}

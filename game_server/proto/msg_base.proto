@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+// 基础数据结构
+
+// 物品数据
+message ItemData {
+    int32 item_id = 1;
+    int32 item_num = 2;
+}
+
+// 技能项
+message SkillItem {
+    uint32 skill_id = 1;
+    int32 level = 2;
+    int32 key_pos = 3;
+}
+
+// 向量3
+message Vector3 {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+// 返回码定义
+enum RetCode {
+    RC_SUCCESS = 0;
+    RC_ERROR = 1;
+    RC_INVALID_PARAM = 2;
+    RC_NOT_ENOUGH_MONEY = 3;
+    RC_NOT_ENOUGH_ITEM = 4;
+    RC_BAG_FULL = 5;
+    RC_LEVEL_NOT_ENOUGH = 6;
+    RC_VIP_NOT_ENOUGH = 7;
+    RC_NOT_FOUND = 8;
+    RC_ALREADY_EXISTS = 9;
+    RC_TIMEOUT = 10;
+    RC_SERVER_BUSY = 11;
+    RC_SERVER_MAINTAIN = 12;
+    RC_VERSION_ERROR = 13;
+    RC_ACCOUNT_NOT_EXIST = 14;
+    RC_PASSWORD_ERROR = 15;
+    RC_ACCOUNT_SEALED = 16;
+    RC_ROLE_NAME_EXIST = 17;
+    RC_ROLE_NOT_EXIST = 18;
+    RC_SERVER_FULL = 19;
+    RC_TASK_NOT_ACCEPT = 20;
+    RC_TASK_NOT_COMPLETE = 21;
+}
+
+// 通用返回消息
+message CommonAck {
+    uint32 ret_code = 1;
+    string ret_msg = 2;
+}

@@ -1,0 +1,249 @@
+syntax = "proto3";
+package msg_battle;
+
+// 场景对象信息
+message SceneObjectInfo {
+    uint64 object_id = 1;
+    int32 object_type = 2;
+    uint64 owner_id = 3;
+    float position_x = 4;
+    float position_y = 5;
+    float position_z = 6;
+    float rotation_y = 7;
+    int32 hp = 8;
+    int32 max_hp = 9;
+    bool is_alive = 10;
+}
+
+// 玩家场景对象信息
+message PlayerSceneInfo {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 level = 3;
+    int32 profession = 4;
+    int32 camp = 5;
+    float position_x = 6;
+    float position_y = 7;
+    float position_z = 8;
+    float rotation_y = 9;
+    int32 hp = 10;
+    int32 max_hp = 11;
+}
+
+// 进入场景请求
+message EnterSceneReq {
+    int32 scene_config_id = 1;
+}
+
+// 进入场景响应
+message EnterSceneRsp {
+    int32 result = 1;
+    int32 scene_id = 2;
+    string scene_name = 3;
+    float position_x = 4;
+    float position_y = 5;
+    float position_z = 6;
+}
+
+// 离开场景请求
+message LeaveSceneReq {
+}
+
+// 离开场景响应
+message LeaveSceneRsp {
+    int32 result = 1;
+}
+
+// 场景对象进入通知
+message SceneObjectEnterNotify {
+    SceneObjectInfo object = 1;
+}
+
+// 场景对象离开通知
+message SceneObjectLeaveNotify {
+    uint64 object_id = 1;
+}
+
+// 移动请求
+message MoveReq {
+    float target_x = 1;
+    float target_y = 2;
+    float target_z = 3;
+}
+
+// 移动响应
+message MoveRsp {
+    int32 result = 1;
+}
+
+// 停止移动请求
+message StopMoveReq {
+    float position_x = 1;
+    float position_y = 2;
+    float position_z = 3;
+    float rotation_y = 4;
+}
+
+// 停止移动响应
+message StopMoveRsp {
+    int32 result = 1;
+}
+
+// 位置同步通知
+message PositionSyncNotify {
+    uint64 object_id = 1;
+    float position_x = 2;
+    float position_y = 3;
+    float position_z = 4;
+    float rotation_y = 5;
+    bool is_moving = 6;
+    float target_x = 7;
+    float target_z = 8;
+}
+
+// 技能信息
+message SkillInfo {
+    uint64 skill_id = 1;
+    int32 skill_config_id = 2;
+    int32 level = 3;
+    int32 exp = 4;
+    int32 cooldown_time = 5;
+    int64 last_use_time = 6;
+    bool is_unlocked = 7;
+}
+
+// 学习技能请求
+message LearnSkillReq {
+    int32 skill_config_id = 1;
+}
+
+// 学习技能响应
+message LearnSkillRsp {
+    int32 result = 1;
+    SkillInfo skill = 2;
+}
+
+// 升级技能请求
+message UpgradeSkillReq {
+    int32 skill_config_id = 1;
+}
+
+// 升级技能响应
+message UpgradeSkillRsp {
+    int32 result = 1;
+    int32 new_level = 2;
+}
+
+// 使用技能请求
+message UseSkillReq {
+    int32 skill_config_id = 1;
+    uint64 target_id = 2;
+    float target_x = 3;
+    float target_z = 4;
+}
+
+// 使用技能响应
+message UseSkillRsp {
+    int32 result = 1;
+    int32 skill_config_id = 2;
+    int32 cooldown = 3;
+}
+
+// 技能使用通知
+message SkillUseNotify {
+    uint64 caster_id = 1;
+    int32 skill_config_id = 2;
+    uint64 target_id = 3;
+    float position_x = 4;
+    float position_z = 5;
+}
+
+// 技能效果通知
+message SkillEffectNotify {
+    uint64 caster_id = 1;
+    uint64 target_id = 2;
+    int32 skill_config_id = 3;
+    int32 effect_type = 4;
+    int32 effect_value = 5;
+}
+
+// Buff信息
+message BuffInfo {
+    uint64 buff_id = 1;
+    int32 buff_config_id = 2;
+    uint64 caster_id = 3;
+    int32 buff_type = 4;
+    int32 effect_type = 5;
+    int32 effect_value = 6;
+    int32 duration = 7;
+    int32 stack_count = 8;
+    int64 end_time = 9;
+}
+
+// Buff添加通知
+message BuffAddNotify {
+    uint64 target_id = 1;
+    BuffInfo buff = 2;
+}
+
+// Buff移除通知
+message BuffRemoveNotify {
+    uint64 target_id = 1;
+    uint64 buff_id = 2;
+}
+
+// Buff更新通知
+message BuffUpdateNotify {
+    uint64 target_id = 1;
+    uint64 buff_id = 2;
+    int32 stack_count = 3;
+    int64 end_time = 4;
+}
+
+// 伤害通知
+message DamageNotify {
+    uint64 attacker_id = 1;
+    uint64 target_id = 2;
+    int32 damage = 3;
+    bool is_critical = 4;
+    int32 hp_left = 5;
+}
+
+// 治疗通知
+message HealNotify {
+    uint64 healer_id = 1;
+    uint64 target_id = 2;
+    int32 heal = 3;
+    int32 hp_left = 4;
+}
+
+// 死亡通知
+message DeathNotify {
+    uint64 object_id = 1;
+    uint64 killer_id = 2;
+}
+
+// 复活请求
+message ReviveReq {
+    int32 revive_type = 1;  // 1=原地复活, 2=回城复活
+}
+
+// 复活响应
+message ReviveRsp {
+    int32 result = 1;
+    float position_x = 2;
+    float position_y = 3;
+    float position_z = 4;
+}
+
+// 技能数据同步请求
+message SkillDataSyncReq {
+    uint64 role_id = 1;
+    repeated SkillInfo skills = 2;
+}
+
+// Buff数据同步请求
+message BuffDataSyncReq {
+    uint64 target_id = 1;
+    repeated BuffInfo buffs = 2;
+}

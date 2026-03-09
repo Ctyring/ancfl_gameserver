@@ -1,0 +1,147 @@
+syntax = "proto3";
+package msg_shop;
+
+// 商品信息
+message ShopItemInfo {
+    int32 item_config_id = 1;
+    int32 item_count = 2;
+    int32 price_type = 3;
+    int32 price = 4;
+    int32 discount = 5;
+    int32 limit_count = 6;
+    int32 bought_count = 7;
+    int32 require_level = 8;
+    int32 require_vip = 9;
+    bool is_sold_out = 10;
+}
+
+// 商店信息
+message ShopInfo {
+    int32 shop_id = 1;
+    int32 shop_type = 2;
+    string shop_name = 3;
+    repeated ShopItemInfo items = 4;
+    int64 refresh_time = 5;
+    int32 refresh_cost = 6;
+}
+
+// 神秘商店商品信息
+message MysteryShopItemInfo {
+    int32 slot_index = 1;
+    int32 item_config_id = 2;
+    int32 item_count = 3;
+    int32 price_type = 4;
+    int32 price = 5;
+    int32 discount = 6;
+    bool is_bought = 7;
+}
+
+// 神秘商店信息
+message MysteryShopInfo {
+    int32 shop_id = 1;
+    repeated MysteryShopItemInfo items = 2;
+    int64 expire_time = 3;
+    int32 refresh_count = 4;
+}
+
+// 商店列表请求
+message ShopListReq {
+}
+
+// 商店列表响应
+message ShopListRsp {
+    int32 result = 1;
+    repeated ShopInfo shops = 2;
+}
+
+// 商店商品请求
+message ShopItemsReq {
+    int32 shop_id = 1;
+}
+
+// 商店商品响应
+message ShopItemsRsp {
+    int32 result = 1;
+    int32 shop_id = 2;
+    repeated ShopItemInfo items = 3;
+}
+
+// 购买商品请求
+message BuyItemReq {
+    int32 shop_id = 1;
+    int32 item_config_id = 2;
+    int32 count = 3;
+}
+
+// 购买商品响应
+message BuyItemRsp {
+    int32 result = 1;
+    int32 item_config_id = 2;
+    int32 count = 3;
+}
+
+// 刷新商店请求
+message RefreshShopReq {
+    int32 shop_id = 1;
+}
+
+// 刷新商店响应
+message RefreshShopRsp {
+    int32 result = 1;
+    int32 shop_id = 2;
+    repeated ShopItemInfo items = 3;
+}
+
+// 神秘商店信息请求
+message MysteryShopReq {
+}
+
+// 神秘商店信息响应
+message MysteryShopRsp {
+    int32 result = 1;
+    MysteryShopInfo shop = 2;
+}
+
+// 刷新神秘商店请求
+message RefreshMysteryShopReq {
+}
+
+// 刷新神秘商店响应
+message RefreshMysteryShopRsp {
+    int32 result = 1;
+    MysteryShopInfo shop = 2;
+}
+
+// 购买神秘商品请求
+message BuyMysteryItemReq {
+    int32 slot_index = 1;
+}
+
+// 购买神秘商品响应
+message BuyMysteryItemRsp {
+    int32 result = 1;
+    int32 slot_index = 2;
+}
+
+// 神秘商店开启通知
+message MysteryShopOpenNtf {
+    int64 expire_time = 1;
+}
+
+// 购买记录信息
+message PurchaseRecordInfo {
+    int32 shop_id = 1;
+    int32 item_config_id = 2;
+    int32 buy_count = 3;
+    int64 buy_time = 4;
+}
+
+// 购买记录请求
+message PurchaseRecordReq {
+}
+
+// 购买记录响应
+message PurchaseRecordRsp {
+    int32 result = 1;
+    repeated PurchaseRecordInfo records = 2;
+}

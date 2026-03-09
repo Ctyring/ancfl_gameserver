@@ -1,0 +1,23 @@
+# 登录服务器配置
+
+# 服务配置
+service:
+  name: LoginServer
+  id: 1
+  ip: 0.0.0.0
+  port: 8000
+  max_connections: 10000
+  
+# 心跳配置
+heartbeat:
+  interval: 30
+  timeout: 60
+  
+# 连接其他服务器
+connections:
+  account_server:
+    ip: 127.0.0.1
+    port: 8100
+  center_server:
+    ip: 127.0.0.1
+    port: 8200

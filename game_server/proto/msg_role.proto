@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+import "msg_base.proto";
+
+// 角色基础信息
+message RoleBaseInfo {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 career = 3;
+    int32 level = 4;
+    int64 exp = 5;
+    int32 head_id = 6;
+    int32 portrait_frame = 7;
+    int32 last_login_time = 8;
+    int32 create_time = 9;
+}
+
+// 角色属性
+message RoleProperty {
+    int32 hp = 1;
+    int32 max_hp = 2;
+    int32 mp = 3;
+    int32 max_mp = 4;
+    int32 atk = 5;
+    int32 def = 6;
+    int32 magic_atk = 7;
+    int32 magic_def = 8;
+    int32 crit = 9;
+    int32 crit_def = 10;
+    int32 hit = 11;
+    int32 dodge = 12;
+    int32 move_speed = 13;
+    int32 atk_speed = 14;
+}
+
+// 角色列表请求
+message RoleListReq {
+    uint64 account_id = 1;
+    int32 server_id = 2;
+}
+
+// 角色列表响应
+message RoleListAck {
+    uint32 ret_code = 1;
+    repeated RoleBaseInfo role_list = 2;
+}
+
+// 创建角色请求
+message RoleCreateReq {
+    uint64 account_id = 1;
+    int32 server_id = 2;
+    string role_name = 3;
+    int32 career = 4;
+    int32 head_id = 5;
+}
+
+// 创建角色响应
+message RoleCreateAck {
+    uint32 ret_code = 1;
+    RoleBaseInfo role_info = 2;
+}
+
+// 删除角色请求
+message RoleDeleteReq {
+    uint64 account_id = 1;
+    uint64 role_id = 2;
+}
+
+// 删除角色响应
+message RoleDeleteAck {
+    uint32 ret_code = 1;
+}
+
+// 角色登录请求
+message RoleLoginReq {
+    uint64 account_id = 1;
+    uint64 role_id = 2;
+    int32 login_code = 3;
+}
+
+// 角色登录响应
+message RoleLoginAck {
+    uint32 ret_code = 1;
+    RoleBaseInfo role_info = 2;
+    RoleProperty property = 3;
+    Vector3 position = 4;
+    int32 scene_id = 5;
+}
+
+// 角色登出请求
+message RoleLogoutReq {
+    uint64 role_id = 1;
+}
+
+// 角色登出响应
+message RoleLogoutAck {
+    uint32 ret_code = 1;
+}
+
+// 角色数据更新通知
+message RoleDataUpdateNty {
+    uint64 role_id = 1;
+    int32 update_type = 2;
+    bytes data = 3;
+}
+
+// 进入场景通知
+message NotifyIntoScene {
+    uint64 role_id = 1;
+    int32 scene_id = 2;
+    Vector3 position = 3;
+    Vector3 rotation = 4;
+}

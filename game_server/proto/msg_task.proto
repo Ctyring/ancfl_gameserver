@@ -1,0 +1,130 @@
+syntax = "proto3";
+package msg_task;
+
+// 任务条件信息
+message TaskConditionInfo {
+    int32 condition_type = 1;
+    int32 target_id = 2;
+    int32 target_count = 3;
+    int32 current_count = 4;
+}
+
+// 任务奖励信息
+message TaskRewardInfo {
+    int32 reward_type = 1;
+    int32 reward_id = 2;
+    int32 reward_count = 3;
+}
+
+// 任务信息
+message TaskInfo {
+    uint64 task_id = 1;
+    int32 task_config_id = 2;
+    int32 task_type = 3;
+    int32 status = 4;
+    repeated TaskConditionInfo conditions = 5;
+    repeated TaskRewardInfo rewards = 6;
+    int64 accept_time = 7;
+    int64 complete_time = 8;
+    int64 submit_time = 9;
+}
+
+// 日常任务信息
+message DailyTaskInfo {
+    int32 task_config_id = 1;
+    int32 status = 2;
+    int32 progress = 3;
+    int64 refresh_time = 4;
+}
+
+// 任务列表请求
+message TaskListReq {
+}
+
+// 任务列表响应
+message TaskListRsp {
+    int32 result = 1;
+    repeated TaskInfo tasks = 2;
+}
+
+// 接受任务请求
+message AcceptTaskReq {
+    int32 task_config_id = 1;
+}
+
+// 接受任务响应
+message AcceptTaskRsp {
+    int32 result = 1;
+    TaskInfo task = 2;
+}
+
+// 提交任务请求
+message SubmitTaskReq {
+    int32 task_config_id = 1;
+}
+
+// 提交任务响应
+message SubmitTaskRsp {
+    int32 result = 1;
+    repeated TaskRewardInfo rewards = 2;
+}
+
+// 放弃任务请求
+message AbandonTaskReq {
+    int32 task_config_id = 1;
+}
+
+// 放弃任务响应
+message AbandonTaskRsp {
+    int32 result = 1;
+}
+
+// 任务进度更新通知
+message TaskProgressUpdateNtf {
+    int32 task_config_id = 1;
+    int32 condition_index = 2;
+    int32 current_count = 3;
+    int32 target_count = 4;
+}
+
+// 任务完成通知
+message TaskCompleteNtf {
+    int32 task_config_id = 1;
+}
+
+// 追踪任务请求
+message TrackTaskReq {
+    int32 task_config_id = 1;
+}
+
+// 追踪任务响应
+message TrackTaskRsp {
+    int32 result = 1;
+}
+
+// 日常任务列表请求
+message DailyTaskListReq {
+}
+
+// 日常任务列表响应
+message DailyTaskListRsp {
+    int32 result = 1;
+    repeated DailyTaskInfo tasks = 2;
+    int64 next_refresh_time = 3;
+}
+
+// 接受日常任务请求
+message AcceptDailyTaskReq {
+    int32 task_config_id = 1;
+}
+
+// 接受日常任务响应
+message AcceptDailyTaskRsp {
+    int32 result = 1;
+}
+
+// 任务数据同步请求
+message TaskDataSyncReq {
+    uint64 role_id = 1;
+    repeated TaskInfo tasks = 2;
+}

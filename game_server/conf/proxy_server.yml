@@ -1,0 +1,23 @@
+# 网关服务器配置
+
+# 服务配置
+service:
+  name: ProxyServer
+  id: 5
+  ip: 0.0.0.0
+  port: 9000
+  max_connections: 20000
+  
+# 心跳配置
+heartbeat:
+  interval: 30
+  timeout: 60
+  
+# 连接其他服务器
+connections:
+  logic_server:
+    ip: 127.0.0.1
+    port: 8001
+  game_server:
+    ip: 127.0.0.1
+    port: 8002

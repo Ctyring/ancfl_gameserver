@@ -1,0 +1,182 @@
+syntax = "proto3";
+package msg_friend;
+
+// 好友信息
+message FriendInfo {
+    uint64 friend_id = 1;
+    string friend_name = 2;
+    int32 level = 3;
+    int32 profession = 4;
+    int32 status = 5;
+    int32 intimacy = 6;
+    string remark = 7;
+    bool is_online = 8;
+    int64 add_time = 9;
+}
+
+// 好友申请信息
+message FriendApplyInfo {
+    uint64 apply_id = 1;
+    uint64 applicant_id = 2;
+    string applicant_name = 3;
+    int32 applicant_level = 4;
+    int32 applicant_profession = 5;
+    int32 status = 6;
+    int64 apply_time = 7;
+    string message = 8;
+}
+
+// 好友列表请求
+message FriendListReq {
+}
+
+// 好友列表响应
+message FriendListRsp {
+    int32 result = 1;
+    repeated FriendInfo friends = 2;
+}
+
+// 添加好友请求
+message AddFriendReq {
+    uint64 target_id = 1;
+    string message = 2;
+}
+
+// 添加好友响应
+message AddFriendRsp {
+    int32 result = 1;
+}
+
+// 处理好友申请请求
+message HandleFriendApplyReq {
+    uint64 apply_id = 1;
+    bool accept = 2;
+}
+
+// 处理好友申请响应
+message HandleFriendApplyRsp {
+    int32 result = 1;
+    uint64 apply_id = 2;
+}
+
+// 删除好友请求
+message DeleteFriendReq {
+    uint64 friend_id = 1;
+}
+
+// 删除好友响应
+message DeleteFriendRsp {
+    int32 result = 1;
+}
+
+// 好友申请列表请求
+message FriendApplyListReq {
+}
+
+// 好友申请列表响应
+message FriendApplyListRsp {
+    int32 result = 1;
+    repeated FriendApplyInfo applies = 2;
+}
+
+// 好友申请通知
+message FriendApplyNtf {
+    FriendApplyInfo apply = 1;
+}
+
+// 好友申请结果通知
+message FriendApplyResultNtf {
+    uint64 target_id = 1;
+    string target_name = 2;
+    bool accepted = 3;
+}
+
+// 添加到黑名单请求
+message AddToBlacklistReq {
+    uint64 target_id = 1;
+}
+
+// 添加到黑名单响应
+message AddToBlacklistRsp {
+    int32 result = 1;
+}
+
+// 从黑名单移除请求
+message RemoveFromBlacklistReq {
+    uint64 target_id = 1;
+}
+
+// 从黑名单移除响应
+message RemoveFromBlacklistRsp {
+    int32 result = 1;
+}
+
+// 黑名单列表请求
+message BlacklistReq {
+}
+
+// 黑名单列表响应
+message BlacklistRsp {
+    int32 result = 1;
+    repeated FriendInfo blacklist = 2;
+}
+
+// 设置备注请求
+message SetRemarkReq {
+    uint64 friend_id = 1;
+    string remark = 2;
+}
+
+// 设置备注响应
+message SetRemarkRsp {
+    int32 result = 1;
+}
+
+// 好友状态变更通知
+message FriendStatusChangeNtf {
+    uint64 friend_id = 1;
+    int32 status = 2;
+}
+
+// 搜索好友请求
+message SearchFriendReq {
+    string name = 1;
+}
+
+// 搜索好友响应
+message SearchFriendRsp {
+    int32 result = 1;
+    repeated FriendInfo friends = 2;
+}
+
+// 推荐好友请求
+message RecommendedFriendsReq {
+}
+
+// 推荐好友响应
+message RecommendedFriendsRsp {
+    int32 result = 1;
+    repeated FriendInfo friends = 2;
+}
+
+// 最近联系人请求
+message RecentContactsReq {
+}
+
+// 最近联系人响应
+message RecentContactsRsp {
+    int32 result = 1;
+    repeated FriendInfo contacts = 2;
+}
+
+// 添加亲密度请求
+message AddIntimacyReq {
+    uint64 friend_id = 1;
+    int32 value = 2;
+}
+
+// 添加亲密度响应
+message AddIntimacyRsp {
+    int32 result = 1;
+    int32 new_intimacy = 2;
+}

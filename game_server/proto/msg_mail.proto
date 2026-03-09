@@ -1,0 +1,115 @@
+syntax = "proto3";
+package msg_mail;
+
+// 邮件附件信息
+message MailAttachmentInfo {
+    int32 attachment_type = 1;
+    int32 item_id = 2;
+    int32 item_count = 3;
+}
+
+// 邮件信息
+message MailInfo {
+    uint64 mail_id = 1;
+    uint64 sender_id = 2;
+    string sender_name = 3;
+    string title = 4;
+    string content = 5;
+    int32 type = 6;
+    int32 status = 7;
+    repeated MailAttachmentInfo attachments = 8;
+    int64 send_time = 9;
+    int64 expire_time = 10;
+    int64 read_time = 11;
+}
+
+// 邮件列表请求
+message MailListReq {
+}
+
+// 邮件列表响应
+message MailListRsp {
+    int32 result = 1;
+    repeated MailInfo mails = 2;
+    int32 unread_count = 3;
+}
+
+// 读取邮件请求
+message ReadMailReq {
+    uint64 mail_id = 1;
+}
+
+// 读取邮件响应
+message ReadMailRsp {
+    int32 result = 1;
+    uint64 mail_id = 2;
+    string content = 3;
+    repeated MailAttachmentInfo attachments = 4;
+}
+
+// 领取附件请求
+message TakeAttachmentReq {
+    uint64 mail_id = 1;
+}
+
+// 领取附件响应
+message TakeAttachmentRsp {
+    int32 result = 1;
+    uint64 mail_id = 2;
+    repeated MailAttachmentInfo attachments = 3;
+}
+
+// 领取所有附件请求
+message TakeAllAttachmentsReq {
+}
+
+// 领取所有附件响应
+message TakeAllAttachmentsRsp {
+    int32 result = 1;
+    int32 take_count = 2;
+}
+
+// 删除邮件请求
+message DeleteMailReq {
+    uint64 mail_id = 1;
+}
+
+// 删除邮件响应
+message DeleteMailRsp {
+    int32 result = 1;
+    uint64 mail_id = 2;
+}
+
+// 删除已读邮件请求
+message DeleteReadMailsReq {
+}
+
+// 删除已读邮件响应
+message DeleteReadMailsRsp {
+    int32 result = 1;
+    int32 delete_count = 2;
+}
+
+// 新邮件通知
+message NewMailNtf {
+    int32 new_count = 1;
+}
+
+// 发送邮件请求（GM或系统用）
+message SendMailReq {
+    uint64 receiver_id = 1;
+    string title = 2;
+    string content = 3;
+    repeated MailAttachmentInfo attachments = 4;
+}
+
+// 发送邮件响应
+message SendMailRsp {
+    int32 result = 1;
+}
+
+// 邮件数据同步请求
+message MailDataSyncReq {
+    uint64 role_id = 1;
+    repeated MailInfo mails = 2;
+}

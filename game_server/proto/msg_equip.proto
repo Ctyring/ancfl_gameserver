@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+import "msg_base.proto";
+
+// 装备信息
+message EquipInfo {
+    uint64 item_uid = 1;
+    int32 item_id = 2;
+    int32 strengthen_level = 3;
+    int32 star_level = 4;
+    int32 gem_slot1 = 5;
+    int32 gem_slot2 = 6;
+    int32 gem_slot3 = 7;
+    int32 gem_slot4 = 8;
+    repeated int32 extra_attrs = 9;
+    bool is_wear = 10;
+    int32 wear_pos = 11;
+}
+
+// 装备列表请求
+message EquipListReq {
+    uint64 role_id = 1;
+}
+
+// 装备列表响应
+message EquipListAck {
+    uint32 ret_code = 1;
+    repeated EquipInfo equips = 2;
+}
+
+// 穿戴装备请求
+message EquipWearReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    int32 wear_pos = 3;
+}
+
+// 穿戴装备响应
+message EquipWearAck {
+    uint32 ret_code = 1;
+    EquipInfo equip = 2;
+}
+
+// 卸下装备请求
+message EquipTakeOffReq {
+    uint64 role_id = 1;
+    int32 wear_pos = 2;
+}
+
+// 卸下装备响应
+message EquipTakeOffAck {
+    uint32 ret_code = 1;
+}
+
+// 装备强化请求
+message EquipStrengthenReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    bool use_protection = 3;
+}
+
+// 装备强化响应
+message EquipStrengthenAck {
+    uint32 ret_code = 1;
+    int32 new_level = 2;
+    bool is_success = 3;
+}
+
+// 装备升星请求
+message EquipStarUpgradeReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+}
+
+// 装备升星响应
+message EquipStarUpgradeAck {
+    uint32 ret_code = 1;
+    int32 new_star = 2;
+}
+
+// 宝石镶嵌请求
+message EquipGemInlayReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    int32 slot_idx = 3;
+    int32 gem_id = 4;
+}
+
+// 宝石镶嵌响应
+message EquipGemInlayAck {
+    uint32 ret_code = 1;
+}
+
+// 宝石卸下请求
+message EquipGemRemoveReq {
+    uint64 role_id = 1;
+    uint64 item_uid = 2;
+    int32 slot_idx = 3;
+}
+
+// 宝石卸下响应
+message EquipGemRemoveAck {
+    uint32 ret_code = 1;
+}

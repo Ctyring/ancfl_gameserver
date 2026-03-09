@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+import "msg_base.proto";
+
+// 版本检查请求
+message CheckVersionReq {
+    string client_version = 1;
+    int32 channel = 2;
+}
+
+// 版本检查响应
+message CheckVersionAck {
+    uint32 ret_code = 1;
+    string client_version = 2;
+    string download_url = 3;
+    bool force_update = 4;
+}
+
+// 账号日志
+message AccountLog {
+    int32 channel = 1;
+    string version = 2;
+    uint64 account_id = 3;
+    string uuid = 4;
+    string idfa = 5;
+    string imodel = 6;
+    string imei = 7;
+    int32 ip_addr = 8;
+}
+
+// 账号注册请求
+message AccountRegReq {
+    string account_name = 1;
+    string password = 2;
+    int32 channel = 3;
+    AccountLog reg_log = 4;
+}
+
+// 账号注册响应
+message AccountRegAck {
+    uint32 ret_code = 1;
+    uint64 account_id = 2;
+}
+
+// 账号登录请求
+message AccountLoginReq {
+    string account_name = 1;
+    string password = 2;
+    int32 channel = 3;
+    bool from_channel = 4;
+    bool review = 5;
+    AccountLog login_log = 6;
+}
+
+// 账号登录响应
+message AccountLoginAck {
+    uint32 ret_code = 1;
+    uint64 account_id = 2;
+    int32 last_svr_id = 3;
+    string last_svr_name = 4;
+    bool review = 5;
+    int32 channel = 6;
+    int32 ip_addr = 7;
+}
+
+// 服务器节点
+message ServerNode {
+    int32 svr_id = 1;
+    string svr_name = 2;
+    int32 svr_flag = 3;      // 0:未知, 1:流畅, 2:拥挤, 3:爆满, 4:维护, 5:关闭, 6:评审
+    int32 corner_mark = 4;   // 0:无, 1:新服, 2:推荐
+    int64 svr_open_time = 5;
+    int32 svr_status = 6;    // 1:在线, 0:离线
+    string svr_addr = 7;
+    int32 svr_port = 8;
+}
+
+// 服务器列表请求
+message ServerListReq {
+    uint64 account_id = 1;
+    int32 channel = 2;
+    string version = 3;
+    bool review = 4;
+}
+
+// 服务器列表响应
+message ServerListAck {
+    uint32 ret_code = 1;
+    repeated ServerNode svr_nodes = 2;
+}
+
+// 选择服务器请求
+message SelectServerReq {
+    uint64 account_id = 1;
+    int32 server_id = 2;
+    bool check_role = 3;
+}
+
+// 选择服务器响应
+message SelectServerAck {
+    uint32 ret_code = 1;
+    uint64 account_id = 2;
+    int32 server_id = 3;
+    string server_addr = 4;
+    int32 server_port = 5;
+    int32 login_code = 6;
+}
+
+// 封号请求
+message SealAccountReq {
+    string account_name = 1;
+    uint64 account_id = 2;
+    int32 channel = 3;
+    int32 seal_time = 4;
+    bool seal = 5;
+}
+
+// 封号响应
+message SealAccountAck {
+    uint32 ret_code = 1;
+}
+
+// 心跳请求
+message HeartBeatReq {
+    uint64 account_id = 1;
+    int32 timestamp = 2;
+}
+
+// 心跳响应
+message HeartBeatAck {
+    uint32 ret_code = 1;
+    int32 server_time = 2;
+}
+
+// 断开连接通知
+message DisconnectNty {
+    uint32 reason = 1;
+    string msg = 2;
+}

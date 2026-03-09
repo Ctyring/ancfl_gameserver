@@ -1,0 +1,164 @@
+syntax = "proto3";
+package msg_monitor;
+
+// 服务器性能数据
+message ServerPerfDataInfo {
+    int32 server_id = 1;
+    string server_name = 2;
+    int32 server_type = 3;
+    int32 status = 4;
+    int32 online_count = 5;
+    int32 max_online = 6;
+    double cpu_usage = 7;
+    double memory_usage = 8;
+    int32 network_in = 9;
+    int32 network_out = 10;
+    int32 message_queue_size = 11;
+    int32 db_query_count = 12;
+    int32 db_query_time = 13;
+    int64 update_time = 14;
+}
+
+// 告警信息
+message AlertInfo {
+    int32 alert_id = 1;
+    int32 type = 2;
+    int32 server_id = 3;
+    string message = 4;
+    int64 alert_time = 5;
+    bool is_handled = 6;
+    string handler = 7;
+    int64 handle_time = 8;
+}
+
+// 命令结果
+message CommandResultInfo {
+    int32 command_id = 1;
+    int32 command = 2;
+    int32 server_id = 3;
+    bool success = 4;
+    string message = 5;
+    int64 execute_time = 6;
+}
+
+// 上报服务器状态请求
+message ReportStatusReq {
+    ServerPerfDataInfo data = 1;
+}
+
+// 上报服务器状态响应
+message ReportStatusRsp {
+    int32 result = 1;
+}
+
+// 获取服务器状态请求
+message GetServerStatusReq {
+    int32 server_id = 1;
+}
+
+// 获取服务器状态响应
+message GetServerStatusRsp {
+    int32 result = 1;
+    ServerPerfDataInfo data = 2;
+}
+
+// 获取所有服务器状态请求
+message GetAllServerStatusReq {
+}
+
+// 获取所有服务器状态响应
+message GetAllServerStatusRsp {
+    int32 result = 1;
+    repeated ServerPerfDataInfo servers = 2;
+}
+
+// 获取告警列表请求
+message GetAlertsReq {
+    bool include_handled = 1;
+}
+
+// 获取告警列表响应
+message GetAlertsRsp {
+    int32 result = 1;
+    repeated AlertInfo alerts = 2;
+}
+
+// 处理告警请求
+message HandleAlertReq {
+    int32 alert_id = 1;
+    string handler = 2;
+}
+
+// 处理告警响应
+message HandleAlertRsp {
+    int32 result = 1;
+}
+
+// 发送控制命令请求
+message SendCommandReq {
+    int32 server_id = 1;
+    int32 command = 2;
+    string params = 3;
+}
+
+// 发送控制命令响应
+message SendCommandRsp {
+    int32 result = 1;
+    int32 command_id = 2;
+}
+
+// 获取命令结果请求
+message GetCommandResultReq {
+    int32 command_id = 1;
+}
+
+// 获取命令结果响应
+message GetCommandResultRsp {
+    int32 result = 1;
+    CommandResultInfo command_result = 2;
+}
+
+// 获取在线趋势请求
+message GetOnlineTrendReq {
+    int32 server_id = 1;
+    int64 start_time = 2;
+    int64 end_time = 3;
+}
+
+// 在线趋势数据点
+message OnlineTrendPoint {
+    int64 time = 1;
+    int32 online_count = 2;
+}
+
+// 获取在线趋势响应
+message GetOnlineTrendRsp {
+    int32 result = 1;
+    repeated OnlineTrendPoint trend = 2;
+}
+
+// 获取性能历史请求
+message GetPerfHistoryReq {
+    int32 server_id = 1;
+    int64 start_time = 2;
+    int64 end_time = 3;
+}
+
+// 获取性能历史响应
+message GetPerfHistoryRsp {
+    int32 result = 1;
+    repeated ServerPerfDataInfo history = 2;
+}
+
+// 服务器状态变化通知
+message ServerStatusChangeNtf {
+    int32 server_id = 1;
+    int32 old_status = 2;
+    int32 new_status = 3;
+    int64 change_time = 4;
+}
+
+// 新告警通知
+message NewAlertNtf {
+    AlertInfo alert = 1;
+}

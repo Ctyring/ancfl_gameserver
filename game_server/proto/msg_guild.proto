@@ -1,0 +1,272 @@
+syntax = "proto3";
+package msg_guild;
+
+// 公会成员信息
+message GuildMemberInfo {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 level = 3;
+    int32 profession = 4;
+    int32 position = 5;
+    int32 contribution = 6;
+    int32 total_contribution = 7;
+    int64 join_time = 8;
+    int64 last_active_time = 9;
+    bool is_online = 10;
+}
+
+// 公会申请信息
+message GuildApplyInfo {
+    uint64 apply_id = 1;
+    uint64 role_id = 2;
+    string role_name = 3;
+    int32 level = 4;
+    int32 profession = 5;
+    int32 status = 6;
+    int64 apply_time = 7;
+    string message = 8;
+}
+
+// 公会信息
+message GuildInfo {
+    uint64 guild_id = 1;
+    string guild_name = 2;
+    uint64 leader_id = 3;
+    string leader_name = 4;
+    int32 level = 5;
+    int32 exp = 6;
+    int32 member_count = 7;
+    int32 max_member_count = 8;
+    int32 fund = 9;
+    string announcement = 10;
+    string description = 11;
+    int32 join_condition_level = 12;
+    bool need_approval = 13;
+    int64 create_time = 14;
+}
+
+// 公会技能信息
+message GuildSkillInfo {
+    int32 skill_id = 1;
+    int32 level = 2;
+    int32 max_level = 3;
+    bool is_unlocked = 4;
+}
+
+// 创建公会请求
+message CreateGuildReq {
+    string guild_name = 1;
+}
+
+// 创建公会响应
+message CreateGuildRsp {
+    int32 result = 1;
+    uint64 guild_id = 2;
+    GuildInfo guild = 3;
+}
+
+// 解散公会请求
+message DismissGuildReq {
+}
+
+// 解散公会响应
+message DismissGuildRsp {
+    int32 result = 1;
+}
+
+// 公会信息请求
+message GuildInfoReq {
+    uint64 guild_id = 1;
+}
+
+// 公会信息响应
+message GuildInfoRsp {
+    int32 result = 1;
+    GuildInfo guild = 2;
+}
+
+// 公会成员列表请求
+message GuildMembersReq {
+    uint64 guild_id = 1;
+}
+
+// 公会成员列表响应
+message GuildMembersRsp {
+    int32 result = 1;
+    repeated GuildMemberInfo members = 2;
+}
+
+// 申请加入公会请求
+message ApplyJoinGuildReq {
+    uint64 guild_id = 1;
+    string message = 2;
+}
+
+// 申请加入公会响应
+message ApplyJoinGuildRsp {
+    int32 result = 1;
+}
+
+// 处理申请请求
+message HandleApplyReq {
+    uint64 apply_id = 1;
+    bool accept = 2;
+}
+
+// 处理申请响应
+message HandleApplyRsp {
+    int32 result = 1;
+    uint64 apply_id = 2;
+}
+
+// 退出公会请求
+message LeaveGuildReq {
+}
+
+// 退出公会响应
+message LeaveGuildRsp {
+    int32 result = 1;
+}
+
+// 踢出成员请求
+message KickMemberReq {
+    uint64 target_id = 1;
+}
+
+// 踢出成员响应
+message KickMemberRsp {
+    int32 result = 1;
+}
+
+// 设置职位请求
+message SetPositionReq {
+    uint64 target_id = 1;
+    int32 position = 2;
+}
+
+// 设置职位响应
+message SetPositionRsp {
+    int32 result = 1;
+}
+
+// 转让会长请求
+message TransferLeaderReq {
+    uint64 target_id = 1;
+}
+
+// 转让会长响应
+message TransferLeaderRsp {
+    int32 result = 1;
+}
+
+// 公会申请列表请求
+message GuildAppliesReq {
+    uint64 guild_id = 1;
+}
+
+// 公会申请列表响应
+message GuildAppliesRsp {
+    int32 result = 1;
+    repeated GuildApplyInfo applies = 2;
+}
+
+// 我的申请列表请求
+message MyAppliesReq {
+}
+
+// 我的申请列表响应
+message MyAppliesRsp {
+    int32 result = 1;
+    repeated GuildApplyInfo applies = 2;
+}
+
+// 设置公告请求
+message SetAnnouncementReq {
+    string announcement = 1;
+}
+
+// 设置公告响应
+message SetAnnouncementRsp {
+    int32 result = 1;
+}
+
+// 设置加入条件请求
+message SetJoinConditionReq {
+    int32 level = 1;
+    bool need_approval = 2;
+}
+
+// 设置加入条件响应
+message SetJoinConditionRsp {
+    int32 result = 1;
+}
+
+// 公会列表请求
+message GuildListReq {
+}
+
+// 公会列表响应
+message GuildListRsp {
+    int32 result = 1;
+    repeated GuildInfo guilds = 2;
+}
+
+// 搜索公会请求
+message SearchGuildReq {
+    string name = 1;
+}
+
+// 搜索公会响应
+message SearchGuildRsp {
+    int32 result = 1;
+    repeated GuildInfo guilds = 2;
+}
+
+// 公会技能列表请求
+message GuildSkillsReq {
+    uint64 guild_id = 1;
+}
+
+// 公会技能列表响应
+message GuildSkillsRsp {
+    int32 result = 1;
+    repeated GuildSkillInfo skills = 2;
+}
+
+// 升级公会技能请求
+message UpgradeGuildSkillReq {
+    int32 skill_id = 1;
+}
+
+// 升级公会技能响应
+message UpgradeGuildSkillRsp {
+    int32 result = 1;
+    int32 skill_id = 2;
+    int32 new_level = 3;
+}
+
+// 捐献请求
+message DonateReq {
+    int32 type = 1;
+    int32 value = 2;
+}
+
+// 捐献响应
+message DonateRsp {
+    int32 result = 1;
+    int32 contribution = 2;
+    int32 fund = 3;
+}
+
+// 公会通知
+message GuildNtf {
+    int32 type = 1;
+    string content = 2;
+}
+
+// 成员上线通知
+message MemberOnlineNtf {
+    uint64 role_id = 1;
+    string role_name = 2;
+    bool is_online = 3;
+}

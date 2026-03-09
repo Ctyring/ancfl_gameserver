@@ -1,0 +1,206 @@
+syntax = "proto3";
+package msg_cross;
+
+// 服务器信息
+message ServerInfo {
+    int32 server_id = 1;
+    int32 server_type = 2;
+    string ip = 3;
+    int32 port = 4;
+    int32 status = 5;
+    int32 online_count = 6;
+    int32 max_online = 7;
+    int64 start_time = 8;
+    int64 last_heartbeat = 9;
+    string version = 10;
+}
+
+// 跨服玩家信息
+message CrossPlayerInfo {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 src_server_id = 3;
+    int32 dest_server_id = 4;
+    int32 cross_type = 5;
+    int64 enter_time = 6;
+    string token = 7;
+    bool is_online = 8;
+}
+
+// 服务器注册请求
+message RegisterServerReq {
+    ServerInfo server = 1;
+}
+
+// 服务器注册响应
+message RegisterServerRsp {
+    int32 result = 1;
+    int32 server_id = 2;
+}
+
+// 服务器注销请求
+message UnregisterServerReq {
+    int32 server_id = 1;
+}
+
+// 服务器注销响应
+message UnregisterServerRsp {
+    int32 result = 1;
+}
+
+// 心跳请求
+message HeartbeatReq {
+    int32 server_id = 1;
+    int32 online_count = 2;
+}
+
+// 心跳响应
+message HeartbeatRsp {
+    int32 result = 1;
+    int64 server_time = 2;
+}
+
+// 服务器列表请求
+message ServerListReq {
+    int32 server_type = 1;
+}
+
+// 服务器列表响应
+message ServerListRsp {
+    int32 result = 1;
+    repeated ServerInfo servers = 2;
+}
+
+// 选择服务器请求
+message SelectServerReq {
+    int32 server_type = 1;
+}
+
+// 选择服务器响应
+message SelectServerRsp {
+    int32 result = 1;
+    ServerInfo server = 2;
+}
+
+// 玩家进入跨服请求
+message PlayerEnterCrossReq {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 src_server_id = 3;
+    int32 dest_server_id = 4;
+    int32 cross_type = 5;
+    string token = 6;
+}
+
+// 玩家进入跨服响应
+message PlayerEnterCrossRsp {
+    int32 result = 1;
+}
+
+// 玩家离开跨服请求
+message PlayerLeaveCrossReq {
+    uint64 role_id = 1;
+}
+
+// 玩家离开跨服响应
+message PlayerLeaveCrossRsp {
+    int32 result = 1;
+}
+
+// 跨服玩家信息请求
+message CrossPlayerInfoReq {
+    uint64 role_id = 1;
+}
+
+// 跨服玩家信息响应
+message CrossPlayerInfoRsp {
+    int32 result = 1;
+    CrossPlayerInfo player = 2;
+}
+
+// 加入匹配队列请求
+message JoinMatchQueueReq {
+    uint64 role_id = 1;
+    int32 match_type = 2;
+    int32 score = 3;
+}
+
+// 加入匹配队列响应
+message JoinMatchQueueRsp {
+    int32 result = 1;
+    int32 queue_size = 2;
+}
+
+// 离开匹配队列请求
+message LeaveMatchQueueReq {
+    uint64 role_id = 1;
+    int32 match_type = 2;
+}
+
+// 离开匹配队列响应
+message LeaveMatchQueueRsp {
+    int32 result = 1;
+}
+
+// 匹配成功通知
+message MatchSuccessNtf {
+    int32 match_type = 1;
+    int32 room_id = 2;
+    repeated uint64 role_ids = 3;
+    int32 dest_server_id = 4;
+}
+
+// 路由消息请求
+message RouteMessageReq {
+    int32 src_server_id = 1;
+    int32 dest_server_id = 2;
+    bytes message = 3;
+}
+
+// 路由消息响应
+message RouteMessageRsp {
+    int32 result = 1;
+}
+
+// 广播消息请求
+message BroadcastMessageReq {
+    int32 server_type = 1;
+    bytes message = 2;
+}
+
+// 广播消息响应
+message BroadcastMessageRsp {
+    int32 result = 1;
+    int32 send_count = 2;
+}
+
+// 跨服战斗开始请求
+message CrossBattleStartReq {
+    int32 battle_type = 1;
+    repeated uint64 role_ids = 2;
+}
+
+// 跨服战斗开始响应
+message CrossBattleStartRsp {
+    int32 result = 1;
+    int32 battle_id = 2;
+    int32 server_id = 3;
+}
+
+// 跨服战斗结束通知
+message CrossBattleEndNtf {
+    int32 battle_id = 1;
+    int32 battle_type = 2;
+    repeated uint64 role_ids = 3;
+}
+
+// 负载更新请求
+message UpdateLoadReq {
+    int32 server_id = 1;
+    int32 online_count = 2;
+}
+
+// 负载更新响应
+message UpdateLoadRsp {
+    int32 result = 1;
+}

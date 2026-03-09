@@ -1,0 +1,180 @@
+syntax = "proto3";
+package msg_activity;
+
+// 活动奖励信息
+message ActivityRewardInfo {
+    int32 reward_id = 1;
+    int32 reward_type = 2;
+    int32 reward_value = 3;
+    int32 reward_count = 4;
+}
+
+// 活动任务信息
+message ActivityTaskInfo {
+    int32 task_id = 1;
+    int32 task_type = 2;
+    int32 target_id = 3;
+    int32 target_count = 4;
+    int32 current_count = 5;
+    bool is_completed = 6;
+    bool is_rewarded = 7;
+    repeated ActivityRewardInfo rewards = 8;
+}
+
+// 活动信息
+message ActivityInfo {
+    int32 activity_id = 1;
+    string activity_name = 2;
+    int32 type = 3;
+    int32 status = 4;
+    int64 start_time = 5;
+    int64 end_time = 6;
+    int64 reward_end_time = 7;
+    string description = 8;
+    repeated ActivityTaskInfo tasks = 9;
+    bool is_active = 10;
+}
+
+// 玩家活动数据
+message PlayerActivityData {
+    int32 activity_id = 1;
+    repeated ActivityTaskInfo tasks = 2;
+    int32 score = 3;
+    int32 rank = 4;
+    int64 join_time = 5;
+    bool is_joined = 6;
+}
+
+// 排行榜数据
+message ActivityRankData {
+    uint64 role_id = 1;
+    string role_name = 2;
+    int32 score = 3;
+    int32 rank = 4;
+}
+
+// 活动列表请求
+message ActivityListReq {
+}
+
+// 活动列表响应
+message ActivityListRsp {
+    int32 result = 1;
+    repeated ActivityInfo activities = 2;
+}
+
+// 活动信息请求
+message ActivityInfoReq {
+    int32 activity_id = 1;
+}
+
+// 活动信息响应
+message ActivityInfoRsp {
+    int32 result = 1;
+    ActivityInfo activity = 2;
+}
+
+// 玩家活动数据请求
+message PlayerActivityReq {
+}
+
+// 玩家活动数据响应
+message PlayerActivityRsp {
+    int32 result = 1;
+    repeated PlayerActivityData activities = 2;
+}
+
+// 参与活动请求
+message JoinActivityReq {
+    int32 activity_id = 1;
+}
+
+// 参与活动响应
+message JoinActivityRsp {
+    int32 result = 1;
+    int32 activity_id = 2;
+}
+
+// 领取任务奖励请求
+message GetTaskRewardReq {
+    int32 activity_id = 1;
+    int32 task_id = 2;
+}
+
+// 领取任务奖励响应
+message GetTaskRewardRsp {
+    int32 result = 1;
+    int32 activity_id = 2;
+    int32 task_id = 3;
+    repeated ActivityRewardInfo rewards = 4;
+}
+
+// 领取所有奖励请求
+message GetAllRewardsReq {
+    int32 activity_id = 1;
+}
+
+// 领取所有奖励响应
+message GetAllRewardsRsp {
+    int32 result = 1;
+    int32 activity_id = 2;
+    int32 reward_count = 3;
+}
+
+// 活动积分请求
+message ActivityScoreReq {
+    int32 activity_id = 1;
+}
+
+// 活动积分响应
+message ActivityScoreRsp {
+    int32 result = 1;
+    int32 activity_id = 2;
+    int32 score = 3;
+    int32 rank = 4;
+}
+
+// 活动排行榜请求
+message ActivityRankingReq {
+    int32 activity_id = 1;
+    int32 count = 2;
+}
+
+// 活动排行榜响应
+message ActivityRankingRsp {
+    int32 result = 1;
+    int32 activity_id = 2;
+    repeated ActivityRankData ranking = 3;
+    int32 my_rank = 4;
+}
+
+// 活动开始通知
+message ActivityStartNtf {
+    int32 activity_id = 1;
+    string activity_name = 2;
+    int64 start_time = 3;
+    int64 end_time = 4;
+}
+
+// 活动结束通知
+message ActivityEndNtf {
+    int32 activity_id = 1;
+    string activity_name = 2;
+    int64 reward_end_time = 3;
+}
+
+// 活动进度更新通知
+message ActivityProgressNtf {
+    int32 activity_id = 1;
+    int32 task_id = 2;
+    int32 current_count = 3;
+    int32 target_count = 4;
+    bool is_completed = 5;
+}
+
+// 活动任务完成通知
+message ActivityTaskCompleteNtf {
+    int32 activity_id = 1;
+    int32 task_id = 2;
+    repeated ActivityRewardInfo rewards = 3;
+}
