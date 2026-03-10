@@ -3,9 +3,10 @@
 
 #include <unordered_map>
 #include <vector>
-#include "logic_service.h"
 
 namespace game_server {
+
+class LogicService;
 
 // 场景对象类型
 enum class SceneObjectType {

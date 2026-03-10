@@ -1,41 +1,23 @@
 #ifndef __LOGIC_SERVICE_H__
 #define __LOGIC_SERVICE_H__
 
+#include "activity_module.h"
+#include "bag_module.h"
+#include "buff_module.h"
 #include "common/game_service_base.h"
 #include "common/shared_memory.h"
+#include "equip_module.h"
+#include "friend_module.h"
+#include "guild_module.h"
+#include "mail_module.h"
+#include "role_data.h"
+#include "role_module.h"
+#include "scene_module.h"
+#include "shop_module.h"
+#include "skill_module.h"
+#include "task_module.h"
 
 namespace game_server {
-
-// 角色数据结构
-struct RoleData : public ShareObject {
-    uint64_t role_id;
-    uint64_t account_id;
-    std::string role_name;
-    int32_t level;
-    int32_t exp;
-    int32_t gold;
-    int32_t diamond;
-    int32_t job;
-    int32_t gender;
-    int32_t create_time;
-    int32_t last_login_time;
-    int32_t last_logout_time;
-    int32_t online_time;
-    int32_t vip_level;
-    int32_t vip_exp;
-    int32_t stamina;
-    int32_t energy;
-    int32_t reputation;
-    int32_t honor;
-    int32_t war_credit;
-    int32_t achievement;
-    int32_t fight_power;
-    int32_t current_scene;
-    float position_x;
-    float position_y;
-    float position_z;
-    float rotation_y;
-};
 
 // 逻辑服务类
 class LogicService : public GameServiceBase {
@@ -53,7 +35,7 @@ class LogicService : public GameServiceBase {
     // 角色管理
     bool CreateRole(uint64_t account_id,
                     const std::string& role_name,
-                    int32_t职业,
+                    int32_t job,
                     int32_t gender);
     bool LoadRoleData(uint64_t role_id, RoleData& data);
     bool SaveRoleData(const RoleData& data);
@@ -66,6 +48,20 @@ class LogicService : public GameServiceBase {
     bool InitSharedMemory();
     RoleData* AllocateRoleData();
     void FreeRoleData(RoleData* data);
+
+    // 获取各模块指针
+    RoleModule* GetRoleModule() { return &role_module_; }
+    BagModule* GetBagModule() { return &bag_module_; }
+    EquipModule* GetEquipModule() { return &equip_module_; }
+    TaskModule* GetTaskModule() { return &task_module_; }
+    MailModule* GetMailModule() { return &mail_module_; }
+    FriendModule* GetFriendModule() { return &friend_module_; }
+    ShopModule* GetShopModule() { return &shop_module_; }
+    GuildModule* GetGuildModule() { return &guild_module_; }
+    BuffModule* GetBuffModule() { return &buff_module_; }
+    SkillModule* GetSkillModule() { return &skill_module_; }
+    SceneModule* GetSceneModule() { return &scene_module_; }
+    ActivityModule* GetActivityModule() { return &activity_module_; }
 
    private:
     // 消息处理器
@@ -91,6 +87,20 @@ class LogicService : public GameServiceBase {
 
     // 同步定时器
     int32_t sync_timer_;
+
+    // 游戏功能模块
+    RoleModule role_module_;
+    BagModule bag_module_;
+    EquipModule equip_module_;
+    TaskModule task_module_;
+    MailModule mail_module_;
+    FriendModule friend_module_;
+    ShopModule shop_module_;
+    GuildModule guild_module_;
+    BuffModule buff_module_;
+    SkillModule skill_module_;
+    SceneModule scene_module_;
+    ActivityModule activity_module_;
 };
 
 }  // namespace game_server

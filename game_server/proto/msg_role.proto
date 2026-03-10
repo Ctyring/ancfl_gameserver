@@ -111,3 +111,52 @@ message NotifyIntoScene {
     Vector3 position = 3;
     Vector3 rotation = 4;
 }
+
+// 角色数据同步请求
+message RoleDataSyncReq {
+    uint64 role_id = 1;
+    uint64 account_id = 2;
+    string role_name = 3;
+    int32 level = 4;
+    int64 exp = 5;
+    int32 gold = 6;
+    int32 diamond = 7;
+    int32 job = 8;
+    int32 gender = 9;
+    int32 create_time = 10;
+    int32 last_login_time = 11;
+    int32 last_logout_time = 12;
+    int32 online_time = 13;
+    int32 vip_level = 14;
+    int32 vip_exp = 15;
+    int32 stamina = 16;
+    int32 energy = 17;
+    int32 reputation = 18;
+    int32 honor = 19;
+    int32 war_credit = 20;
+    int32 achievement = 21;
+    int32 fight_power = 22;
+    int32 current_scene = 23;
+    float position_x = 24;
+    float position_y = 25;
+    float position_z = 26;
+    float rotation_y = 27;
+}
+
+// 角色数据同步响应
+message RoleDataSyncAck {
+    uint32 ret_code = 1;
+    uint64 role_id = 2;
+}
+
+// 角色数据查询请求
+message RoleDataQueryReq {
+    uint64 role_id = 1;
+}
+
+// 角色数据查询响应
+message RoleDataQueryAck {
+    uint32 ret_code = 1;
+    RoleBaseInfo base_info = 2;
+    RoleProperty property = 3;
+}

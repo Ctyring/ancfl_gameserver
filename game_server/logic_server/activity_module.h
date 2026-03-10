@@ -3,9 +3,10 @@
 
 #include <unordered_map>
 #include <vector>
-#include "logic_service.h"
 
 namespace game_server {
+
+class LogicService;
 
 // 活动状态
 enum class ActivityStatus {

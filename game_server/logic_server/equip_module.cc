@@ -457,7 +457,7 @@ bool EquipModule::SaveEquipData(uint64_t role_id) {
         equip_data->set_level(equip.level);
         equip_data->set_star_level(equip.star_level);
         equip_data->set_quality(equip.quality);
-        equip_data->set_强化等级(equip.强化等级);
+        equip_data->set_strengthen_level(equip.strengthen_level);
         
         for (int32_t gem : equip.gems) {
             equip_data->add_gems(gem);

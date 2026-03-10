@@ -1,10 +1,11 @@
 #ifndef __EQUIP_MODULE_H__
 #define __EQUIP_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 
 namespace game_server {
+
+class LogicService;
 
 // 装备位置
 enum class EquipPosition {

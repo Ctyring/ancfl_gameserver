@@ -1,11 +1,12 @@
 #ifndef __BUFF_MODULE_H__
 #define __BUFF_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 #include <vector>
 
 namespace game_server {
+
+class LogicService;
 
 // Buff类型
 enum class BuffType {

@@ -132,6 +132,103 @@ message HeartBeatAck {
     int32 server_time = 2;
 }
 
+// 账号信息
+message AccountInfo {
+    uint64 account_id = 1;
+    string account_name = 2;
+    string password = 3;
+    int32 channel = 4;
+    int32 register_time = 5;
+    int32 last_login_time = 6;
+    int32 login_count = 7;
+    bool is_sealed = 8;
+    int32 seal_end_time = 9;
+    string seal_reason = 10;
+}
+
+// 账号创建请求
+message AccountCreateReq {
+    string account_name = 1;
+    string password = 2;
+    int32 channel = 3;
+}
+
+// 账号创建响应
+message AccountCreateAck {
+    uint32 ret_code = 1;
+    uint64 account_id = 2;
+}
+
+// 账号验证请求
+message AccountVerifyReq {
+    uint64 account_id = 1;
+    string password = 2;
+}
+
+// 账号验证响应
+message AccountVerifyAck {
+    uint32 ret_code = 1;
+    AccountInfo account_info = 2;
+}
+
+// 账号获取信息请求
+message AccountGetInfoReq {
+    uint64 account_id = 1;
+}
+
+// 账号获取信息响应
+message AccountGetInfoAck {
+    uint32 ret_code = 1;
+    AccountInfo account_info = 2;
+}
+
+// 账号封号请求
+message AccountSealReq {
+    uint64 account_id = 1;
+    int32 seal_time = 2;
+    string reason = 3;
+}
+
+// 账号封号响应
+message AccountSealAck {
+    uint32 ret_code = 1;
+}
+
+// 账号解封请求
+message AccountUnsealReq {
+    uint64 account_id = 1;
+}
+
+// 账号解封响应
+message AccountUnsealAck {
+    uint32 ret_code = 1;
+}
+
+// 账号是否被封请求
+message AccountIsSealedReq {
+    uint64 account_id = 1;
+}
+
+// 账号是否被封响应
+message AccountIsSealedAck {
+    uint32 ret_code = 1;
+    bool is_sealed = 2;
+    int32 seal_end_time = 3;
+}
+
+// 登录日志请求
+message LoginLogReq {
+    uint64 account_id = 1;
+    int32 channel = 2;
+    string login_ip = 3;
+    int32 login_time = 4;
+}
+
+// 登录日志响应
+message LoginLogAck {
+    uint32 ret_code = 1;
+}
+
 // 断开连接通知
 message DisconnectNty {
     uint32 reason = 1;

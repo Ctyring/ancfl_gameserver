@@ -102,3 +102,16 @@ message EquipGemRemoveReq {
 message EquipGemRemoveAck {
     uint32 ret_code = 1;
 }
+
+// 装备数据同步请求
+message EquipDataSyncReq {
+    uint64 role_id = 1;
+    repeated EquipInfo equip_list = 2;
+    map<int32, EquipInfo> worn_equips = 3;
+}
+
+// 装备数据同步响应
+message EquipDataSyncAck {
+    uint32 ret_code = 1;
+    uint64 role_id = 2;
+}

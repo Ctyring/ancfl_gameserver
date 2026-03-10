@@ -1,11 +1,12 @@
 #ifndef __MAIL_MODULE_H__
 #define __MAIL_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 #include <vector>
 
 namespace game_server {
+
+class LogicService;
 
 // 邮件状态
 enum class MailStatus {

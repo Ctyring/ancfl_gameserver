@@ -1,11 +1,12 @@
 #ifndef __GUILD_MODULE_H__
 #define __GUILD_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 #include <vector>
 
 namespace game_server {
+
+class LogicService;
 
 // 公会职位
 enum class GuildPosition {

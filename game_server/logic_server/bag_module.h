@@ -1,10 +1,11 @@
 #ifndef __BAG_MODULE_H__
 #define __BAG_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 
 namespace game_server {
+
+class LogicService;
 
 // 物品信息
 struct ItemInfo {

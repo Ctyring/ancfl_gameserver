@@ -1,11 +1,12 @@
 #ifndef __SKILL_MODULE_H__
 #define __SKILL_MODULE_H__
 
-#include "logic_service.h"
 #include <unordered_map>
 #include <vector>
 
 namespace game_server {
+
+class LogicService;
 
 // 技能类型
 enum class SkillType {

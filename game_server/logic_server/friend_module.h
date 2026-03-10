@@ -4,9 +4,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include "logic_service.h"
 
 namespace game_server {
+
+class LogicService;
 
 // 好友状态
 enum class FriendStatus {
