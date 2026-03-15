@@ -36,6 +36,12 @@ public:
     bool SendRawData(int32_t conn_id, uint32_t msg_id, uint64_t target_id,
                      uint32_t user_data, const char* data, uint32_t len);
 
+    // 发送消息到服务器
+    bool SendMsgToServer(int32_t server_conn_id, uint32_t msg_id, const std::string& data);
+
+    // 发送消息到客户端
+    bool SendMsgToClient(int32_t client_conn_id, uint32_t msg_id, const std::string& data);
+
     // 关闭连接
     bool CloseConnection(int32_t conn_id);
 

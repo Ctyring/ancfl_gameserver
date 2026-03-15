@@ -81,6 +81,14 @@ void TcpService::handleClient(ancfl::Socket::ptr client) {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Connection closed, conn_id=" << conn_id;
 }
 
+bool TcpService::SendMsgToServer(int32_t server_conn_id, uint32_t msg_id, const std::string& data) {
+    return SendRawData(server_conn_id, msg_id, 0, 0, data.data(), data.size());
+}
+
+bool TcpService::SendMsgToClient(int32_t client_conn_id, uint32_t msg_id, const std::string& data) {
+    return SendRawData(client_conn_id, msg_id, 0, 0, data.data(), data.size());
+}
+
 void TcpService::HandleRecv(ancfl::Socket::ptr client) {
     int32_t conn_id = -1;
     {
