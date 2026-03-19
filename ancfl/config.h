@@ -315,8 +315,8 @@ template <class T,
 class ConfigVar : public ConfigVarBase {
    public:
     typedef RWMutex RWMutexType;
-    typedef RWMutex::ReadLock ReadLockType;
-    typedef RWMutex::WriteLock WriteLockType;
+    typedef RWMutex::ReadLock ReadLock;
+    typedef RWMutex::WriteLock WriteLock;
     typedef std::shared_ptr<ConfigVar> ptr;
     typedef std::function<void(const T& old_value, const T& new_value)>
         on_change_cb;
@@ -337,7 +337,7 @@ class ConfigVar : public ConfigVarBase {
     std::string toString() override {
         try {
             // return boost::lexical_cast<std::string>(m_val);
-            ReadLockType lock(m_mutex);
+            ReadLock lock(m_mutex);
             return ToStr()(m_val);
         } catch (std::exception& e) {
             ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
@@ -365,7 +365,7 @@ class ConfigVar : public ConfigVarBase {
     /**
      * @brief 获取当前参数的�?     */
     const T getValue() {
-        ReadLockType lock(m_mutex);
+        ReadLock lock(m_mutex);
         return m_val;
     }
 
@@ -374,7 +374,7 @@ class ConfigVar : public ConfigVarBase {
      * 如果参数的值有发生变化,则通知对应的注册回调函�?     */
     void setValue(const T& v) {
         {
-            ReadLockType lock(m_mutex);
+            ReadLock lock(m_mutex);
             if (v == m_val) {
                 return;
             }
@@ -382,7 +382,7 @@ class ConfigVar : public ConfigVarBase {
                 i.second(m_val, v);
             }
         }
-        WriteLockType lock(m_mutex);
+        WriteLock lock(m_mutex);
         m_val = v;
     }
 
@@ -397,7 +397,7 @@ class ConfigVar : public ConfigVarBase {
      */
     uint64_t addListener(on_change_cb cb) {
         static uint64_t s_fun_id = 0;
-        WriteLockType lock(m_mutex);
+        WriteLock lock(m_mutex);
         ++s_fun_id;
         m_cbs[s_fun_id] = cb;
         return s_fun_id;
@@ -408,7 +408,7 @@ class ConfigVar : public ConfigVarBase {
      * @param[in] key 回调函数的唯一id
      */
     void delListener(uint64_t key) {
-        WriteLockType lock(m_mutex);
+        WriteLock lock(m_mutex);
         m_cbs.erase(key);
     }
 
@@ -418,7 +418,7 @@ class ConfigVar : public ConfigVarBase {
      * @return 如果存在返回对应的回调函�?否则返回nullptr
      */
     on_change_cb getListener(uint64_t key) {
-        ReadLockType lock(m_mutex);
+        ReadLock lock(m_mutex);
         auto it = m_cbs.find(key);
         return it == m_cbs.end() ? nullptr : it->second;
     }
@@ -427,7 +427,7 @@ class ConfigVar : public ConfigVarBase {
      * @brief 清理所有的回调函数
      */
     void clearListener() {
-        WriteLockType lock(m_mutex);
+        WriteLock lock(m_mutex);
         m_cbs.clear();
     }
 
@@ -446,8 +446,8 @@ class Config {
    public:
     typedef std::unordered_map<std::string, ConfigVarBase::ptr> ConfigVarMap;
     typedef RWMutex RWMutexType;
-    typedef RWMutex::ReadLock ReadLockType;
-    typedef RWMutex::WriteLock WriteLockType;
+    typedef RWMutex::ReadLock ReadLock;
+    typedef RWMutex::WriteLock WriteLock;
 
     /**
      * @brief 获取/创建对应参数名的配置参数
@@ -464,7 +464,7 @@ class Config {
         const std::string& name,
         const T& default_value,
         const std::string& description = "") {
-        WriteLockType lock(GetMutex());
+        WriteLock lock(GetMutex());
         auto it = GetDatas().find(name);
         if (it != GetDatas().end()) {
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
@@ -500,7 +500,7 @@ class Config {
      * @return 返回配置参数名为name的配置参�?     */
     template <class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name) {
-        RWMutexType::ReadLock lock(GetMutex());
+        ReadLock lock(GetMutex());
         auto it = GetDatas().find(name);
         if (it == GetDatas().end()) {
             return nullptr;

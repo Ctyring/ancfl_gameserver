@@ -10,10 +10,10 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "http.h"
-#include "http_session.h"
 #include "ancfl/thread.h"
 #include "ancfl/util.h"
+#include "http.h"
+#include "http_session.h"
 
 namespace ancfl {
 namespace http {
@@ -122,9 +122,10 @@ class ServletDispatch : public Servlet {
    public:
     /// 智能指针类型定义
     typedef std::shared_ptr<ServletDispatch> ptr;
-    /// 读写锁类型定�?    typedef RWMutex RWMutexType;
-    typedef RWMutex::ReadLock ReadLockType;
-    typedef RWMutex::WriteLock WriteLockType;
+    /// 读写锁类型定义
+    typedef RWMutex RWMutexType;
+    typedef RWMutex::ReadLock ReadLock;
+    typedef RWMutex::WriteLock WriteLock;
 
     /**
      * @brief 构造函�?     */
@@ -258,6 +259,3 @@ class NotFoundServlet : public Servlet {
 }  // namespace ancfl
 
 #endif
-
-
-
