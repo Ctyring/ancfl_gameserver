@@ -135,6 +135,16 @@ void ServletDispatch::listAllGlobServletCreator(
     }
 }
 
+Servlet::ptr ServletDispatch::getDefault() const {
+    ReadLock lock(m_mutex);
+    return m_default;
+}
+
+void ServletDispatch::setDefault(Servlet::ptr v) {
+    WriteLock lock(m_mutex);
+    m_default = v;
+}
+
 NotFoundServlet::NotFoundServlet(const std::string& name)
     : Servlet("NotFoundServlet"), m_name(name) {
     m_content =

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "log.h"
+#include "mutex.h"
 #include "thread.h"
 #include "util.h"
 
@@ -27,6 +28,9 @@ namespace ancfl {
 /**
  * @brief 配置变量的基�? */
 class ConfigVarBase {
+   protected:
+    /// 配置参数的名�?    std::string m_name;
+    /// 配置参数的描�?    std::string m_description;
    public:
     typedef std::shared_ptr<ConfigVarBase> ptr;
     /**
@@ -64,10 +68,6 @@ class ConfigVarBase {
      * @brief 返回配置参数值的类型名称
      */
     virtual std::string getTypeName() const = 0;
-
-   protected:
-    /// 配置参数的名�?    std::string m_name;
-    /// 配置参数的描�?    std::string m_description;
 };
 
 /**

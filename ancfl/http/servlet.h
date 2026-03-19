@@ -193,13 +193,13 @@ class ServletDispatch : public Servlet {
     /**
      * @brief 返回默认servlet
      */
-    Servlet::ptr getDefault() const { return m_default; }
+    Servlet::ptr getDefault() const;
 
     /**
      * @brief 设置默认servlet
      * @param[in] v servlet
      */
-    void setDefault(Servlet::ptr v) { m_default = v; }
+    void setDefault(Servlet::ptr v);
 
     /**
      * @brief 通过uri获取servlet

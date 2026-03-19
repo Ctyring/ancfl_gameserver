@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file socket_stream.h
  * @brief Socket流式接口封装
  */
@@ -76,7 +76,7 @@ class SocketStream : public Stream {
 
     /**
      * @brief 返回Socket�?     */
-    Socket::ptr getSocket() const { return m_socket; }
+    Socket::ptr getSocket() const;
 
     /**
      * @brief 返回是否连接

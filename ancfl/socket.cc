@@ -1,4 +1,4 @@
-﻿#include "socket.h"
+#include "socket.h"
 #include <limits.h>
 #include "fd_manager.h"
 #include "hook.h"
@@ -685,6 +685,10 @@ std::ostream& SSLSocket::dump(std::ostream& os) const {
     }
     os << "]";
     return os;
+}
+
+int Socket::getFamily() const {
+    return m_family;
 }
 
 std::string Socket::toString() const {

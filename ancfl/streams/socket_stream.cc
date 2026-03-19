@@ -1,4 +1,4 @@
-﻿#include "socket_stream.h"
+#include "socket_stream.h"
 #include "ancfl/iomanager.h"
 #include "ancfl/util.h"
 namespace ancfl {
@@ -67,6 +67,10 @@ Address::ptr SocketStream::getRemoteAddress() {
         return m_socket->getRemoteAddress();
     }
     return nullptr;
+}
+
+Socket::ptr SocketStream::getSocket() const {
+    return m_socket;
 }
 
 Address::ptr SocketStream::getLocalAddress() {

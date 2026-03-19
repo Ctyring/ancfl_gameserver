@@ -56,13 +56,13 @@ class ByteArray {
     ~ByteArray();
 
     /**
-     * @brief 写入固定长度int8_t类型的数�?     * @post m_position += sizeof(value)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入固定长度int8_t类型的数�?     * @post m_position +=
+     * sizeof(value) 如果m_position > m_size �?m_size = m_position
      */
     void writeFint8(int8_t value);
     /**
-     * @brief 写入固定长度uint8_t类型的数�?     * @post m_position += sizeof(value)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入固定长度uint8_t类型的数�?     * @post m_position +=
+     * sizeof(value) 如果m_position > m_size �?m_size = m_position
      */
     void writeFuint8(uint8_t value);
     /**
@@ -107,25 +107,25 @@ class ByteArray {
     void writeFuint64(uint64_t value);
 
     /**
-     * @brief 写入有符号Varint32类型的数�?     * @post m_position += 实际占用内存(1 ~ 5)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入有符号Varint32类型的数�?     * @post m_position +=
+     * 实际占用内存(1 ~ 5) 如果m_position > m_size �?m_size = m_position
      */
     void writeInt32(int32_t value);
     /**
-     * @brief 写入无符号Varint32类型的数�?     * @post m_position += 实际占用内存(1 ~ 5)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入无符号Varint32类型的数�?     * @post m_position +=
+     * 实际占用内存(1 ~ 5) 如果m_position > m_size �?m_size = m_position
      */
     void writeUint32(uint32_t value);
 
     /**
-     * @brief 写入有符号Varint64类型的数�?     * @post m_position += 实际占用内存(1 ~ 10)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入有符号Varint64类型的数�?     * @post m_position +=
+     * 实际占用内存(1 ~ 10) 如果m_position > m_size �?m_size = m_position
      */
     void writeInt64(int64_t value);
 
     /**
-     * @brief 写入无符号Varint64类型的数�?     * @post m_position += 实际占用内存(1 ~ 10)
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入无符号Varint64类型的数�?     * @post m_position +=
+     * 实际占用内存(1 ~ 10) 如果m_position > m_size �?m_size = m_position
      */
     void writeUint64(uint64_t value);
 
@@ -170,8 +170,8 @@ class ByteArray {
     void writeStringVint(const std::string& value);
 
     /**
-     * @brief 写入std::string类型的数�?无长�?     * @post m_position += value.size()
-     *       如果m_position > m_size �?m_size = m_position
+     * @brief 写入std::string类型的数�?无长�?     * @post m_position +=
+     * value.size() 如果m_position > m_size �?m_size = m_position
      */
     void writeStringWithoutLength(const std::string& value);
 
@@ -197,7 +197,8 @@ class ByteArray {
     int16_t readFint16();
 
     /**
-     * @brief 读取uint16_t类型的数�?     * @pre getReadSize() >= sizeof(uint16_t)
+     * @brief 读取uint16_t类型的数�?     * @pre getReadSize() >=
+     * sizeof(uint16_t)
      * @post m_position += sizeof(uint16_t);
      * @exception 如果getReadSize() < sizeof(uint16_t) 抛出 std::out_of_range
      */
@@ -211,7 +212,8 @@ class ByteArray {
     int32_t readFint32();
 
     /**
-     * @brief 读取uint32_t类型的数�?     * @pre getReadSize() >= sizeof(uint32_t)
+     * @brief 读取uint32_t类型的数�?     * @pre getReadSize() >=
+     * sizeof(uint32_t)
      * @post m_position += sizeof(uint32_t);
      * @exception 如果getReadSize() < sizeof(uint32_t) 抛出 std::out_of_range
      */
@@ -225,14 +227,16 @@ class ByteArray {
     int64_t readFint64();
 
     /**
-     * @brief 读取uint64_t类型的数�?     * @pre getReadSize() >= sizeof(uint64_t)
+     * @brief 读取uint64_t类型的数�?     * @pre getReadSize() >=
+     * sizeof(uint64_t)
      * @post m_position += sizeof(uint64_t);
      * @exception 如果getReadSize() < sizeof(uint64_t) 抛出 std::out_of_range
      */
     uint64_t readFuint64();
 
     /**
-     * @brief 读取有符号Varint32类型的数�?     * @pre getReadSize() >= 有符号Varint32实际占用内存
+     * @brief 读取有符号Varint32类型的数�?     * @pre getReadSize() >=
+     * 有符号Varint32实际占用内存
      * @post m_position += 有符号Varint32实际占用内存
      * @exception 如果getReadSize() < 有符号Varint32实际占用内存 抛出
      * std::out_of_range
@@ -240,7 +244,8 @@ class ByteArray {
     int32_t readInt32();
 
     /**
-     * @brief 读取无符号Varint32类型的数�?     * @pre getReadSize() >= 无符号Varint32实际占用内存
+     * @brief 读取无符号Varint32类型的数�?     * @pre getReadSize() >=
+     * 无符号Varint32实际占用内存
      * @post m_position += 无符号Varint32实际占用内存
      * @exception 如果getReadSize() < 无符号Varint32实际占用内存 抛出
      * std::out_of_range
@@ -248,7 +253,8 @@ class ByteArray {
     uint32_t readUint32();
 
     /**
-     * @brief 读取有符号Varint64类型的数�?     * @pre getReadSize() >= 有符号Varint64实际占用内存
+     * @brief 读取有符号Varint64类型的数�?     * @pre getReadSize() >=
+     * 有符号Varint64实际占用内存
      * @post m_position += 有符号Varint64实际占用内存
      * @exception 如果getReadSize() < 有符号Varint64实际占用内存 抛出
      * std::out_of_range
@@ -256,7 +262,8 @@ class ByteArray {
     int64_t readInt64();
 
     /**
-     * @brief 读取无符号Varint64类型的数�?     * @pre getReadSize() >= 无符号Varint64实际占用内存
+     * @brief 读取无符号Varint64类型的数�?     * @pre getReadSize() >=
+     * 无符号Varint64实际占用内存
      * @post m_position += 无符号Varint64实际占用内存
      * @exception 如果getReadSize() < 无符号Varint64实际占用内存 抛出
      * std::out_of_range
@@ -337,7 +344,8 @@ class ByteArray {
     /**
      * @brief 读取size长度的数�?     * @param[out] buf 内存缓存指针
      * @param[in] size 数据大小
-     * @param[in] position 读取开始位�?     * @exception 如果 (m_size - position) < size 则抛�?std::out_of_range
+     * @param[in] position 读取开始位�?     * @exception 如果 (m_size -
+     * position) < size 则抛�?std::out_of_range
      */
     void read(void* buf, size_t size, size_t position) const;
 
@@ -369,7 +377,7 @@ class ByteArray {
 
     /**
      * @brief 返回可读取数据大�?     */
-    size_t getReadSize() const { return m_size - m_position; }
+    size_t getReadSize() const;
 
     /**
      * @brief 是否是小�?     */
@@ -400,10 +408,11 @@ class ByteArray {
                             uint64_t len = ~0ull) const;
 
     /**
-     * @brief 获取可读取的缓存,保存成iovec数组,从position位置开�?     * @param[out] buffers 保存可读取数据的iovec数组
+     * @brief 获取可读取的缓存,保存成iovec数组,从position位置开�?     *
+     * @param[out] buffers 保存可读取数据的iovec数组
      * @param[in] len 读取数据的长�?如果len > getReadSize() �?len =
      * getReadSize()
-     * @param[in] position 读取数据的位�?     * @return 返回实际数据的长�?     */
+     * @param[in] position 读取数据的位�?     * @return 返回实际数据的长�? */
     uint64_t getReadBuffers(std::vector<iovec>& buffers,
                             uint64_t len,
                             uint64_t position) const;
@@ -411,7 +420,9 @@ class ByteArray {
     /**
      * @brief 获取可写入的缓存,保存成iovec数组
      * @param[out] buffers 保存可写入的内存的iovec数组
-     * @param[in] len 写入的长�?     * @return 返回实际的长�?     * @post 如果(m_position + len) > m_capacity �?     * m_capacity扩容N个节点以容纳len长度
+     * @param[in] len 写入的长�?     * @return 返回实际的长�?     * @post
+     * 如果(m_position + len) > m_capacity �?     *
+     * m_capacity扩容N个节点以容纳len长度
      */
     uint64_t getWriteBuffers(std::vector<iovec>& buffers, uint64_t len);
 
@@ -449,5 +460,3 @@ class ByteArray {
 }  // namespace ancfl
 
 #endif
-
-
