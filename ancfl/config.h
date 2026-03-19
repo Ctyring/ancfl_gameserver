@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file config.h
  * @brief 配置模块
  */
@@ -266,7 +266,8 @@ class LexicalCast<std::map<std::string, T>, std::string> {
 };
 
 /**
- * @brief 类型转换模板类片特化(YAML String 转换�? * std::unordered_map<std::string, T>)
+ * @brief 类型转换模板类片特化(YAML String 转换�? *
+ * std::unordered_map<std::string, T>)
  */
 template <class T>
 class LexicalCast<std::string, std::unordered_map<std::string, T> > {
@@ -304,8 +305,8 @@ class LexicalCast<std::unordered_map<std::string, T>, std::string> {
 };
 
 /**
- * @brief 配置参数模板子类,保存对应类型的参数�? * @details T 参数的具体类�? *          FromStr 从std::string转换成T类型的仿函数
- *          ToStr 从T转换成std::string的仿函数
+ * @brief 配置参数模板子类,保存对应类型的参数�? * @details T 参数的具体类�? *
+ * FromStr 从std::string转换成T类型的仿函数 ToStr 从T转换成std::string的仿函数
  *          std::string 为YAML格式的字符串
  */
 template <class T,
@@ -314,6 +315,8 @@ template <class T,
 class ConfigVar : public ConfigVarBase {
    public:
     typedef RWMutex RWMutexType;
+    typedef RWMutex::ReadLock ReadLockType;
+    typedef RWMutex::WriteLock WriteLockType;
     typedef std::shared_ptr<ConfigVar> ptr;
     typedef std::function<void(const T& old_value, const T& new_value)>
         on_change_cb;
@@ -321,7 +324,8 @@ class ConfigVar : public ConfigVarBase {
     /**
      * @brief 通过参数�?参数�?描述构造ConfigVar
      * @param[in] name 参数名称有效字符为[0-9a-z_.]
-     * @param[in] default_value 参数的默认�?     * @param[in] description 参数的描�?     */
+     * @param[in] default_value 参数的默认�?     * @param[in] description
+     * 参数的描�?     */
     ConfigVar(const std::string& name,
               const T& default_value,
               const std::string& description = "")
@@ -333,7 +337,7 @@ class ConfigVar : public ConfigVarBase {
     std::string toString() override {
         try {
             // return boost::lexical_cast<std::string>(m_val);
-            RWMutexType::ReadLock lock(m_mutex);
+            ReadLockType lock(m_mutex);
             return ToStr()(m_val);
         } catch (std::exception& e) {
             ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
@@ -345,7 +349,7 @@ class ConfigVar : public ConfigVarBase {
     }
 
     /**
-     * @brief 从YAML String 转成参数的�?     * @exception 当转换失败抛出异�?     */
+     * @brief 从YAML String 转成参数的�?     * @exception 当转换失败抛出异�? */
     bool fromString(const std::string& val) override {
         try {
             setValue(FromStr()(val));
@@ -361,15 +365,16 @@ class ConfigVar : public ConfigVarBase {
     /**
      * @brief 获取当前参数的�?     */
     const T getValue() {
-        RWMutexType::ReadLock lock(m_mutex);
+        ReadLockType lock(m_mutex);
         return m_val;
     }
 
     /**
-     * @brief 设置当前参数的�?     * @details 如果参数的值有发生变化,则通知对应的注册回调函�?     */
+     * @brief 设置当前参数的�?     * @details
+     * 如果参数的值有发生变化,则通知对应的注册回调函�?     */
     void setValue(const T& v) {
         {
-            RWMutexType::ReadLock lock(m_mutex);
+            ReadLockType lock(m_mutex);
             if (v == m_val) {
                 return;
             }
@@ -377,7 +382,7 @@ class ConfigVar : public ConfigVarBase {
                 i.second(m_val, v);
             }
         }
-        RWMutexType::WriteLock lock(m_mutex);
+        WriteLockType lock(m_mutex);
         m_val = v;
     }
 
@@ -392,7 +397,7 @@ class ConfigVar : public ConfigVarBase {
      */
     uint64_t addListener(on_change_cb cb) {
         static uint64_t s_fun_id = 0;
-        RWMutexType::WriteLock lock(m_mutex);
+        WriteLockType lock(m_mutex);
         ++s_fun_id;
         m_cbs[s_fun_id] = cb;
         return s_fun_id;
@@ -403,7 +408,7 @@ class ConfigVar : public ConfigVarBase {
      * @param[in] key 回调函数的唯一id
      */
     void delListener(uint64_t key) {
-        RWMutexType::WriteLock lock(m_mutex);
+        WriteLockType lock(m_mutex);
         m_cbs.erase(key);
     }
 
@@ -413,7 +418,7 @@ class ConfigVar : public ConfigVarBase {
      * @return 如果存在返回对应的回调函�?否则返回nullptr
      */
     on_change_cb getListener(uint64_t key) {
-        RWMutexType::ReadLock lock(m_mutex);
+        ReadLockType lock(m_mutex);
         auto it = m_cbs.find(key);
         return it == m_cbs.end() ? nullptr : it->second;
     }
@@ -422,12 +427,12 @@ class ConfigVar : public ConfigVarBase {
      * @brief 清理所有的回调函数
      */
     void clearListener() {
-        RWMutexType::WriteLock lock(m_mutex);
+        WriteLockType lock(m_mutex);
         m_cbs.clear();
     }
 
    private:
-    RWMutexType m_mutex;
+    RWMutex m_mutex;
     T m_val;
     // 变更回调函数�? uint64_t key,要求唯一，一般可以用hash
     std::map<uint64_t, on_change_cb> m_cbs;
@@ -441,13 +446,16 @@ class Config {
    public:
     typedef std::unordered_map<std::string, ConfigVarBase::ptr> ConfigVarMap;
     typedef RWMutex RWMutexType;
+    typedef RWMutex::ReadLock ReadLockType;
+    typedef RWMutex::WriteLock WriteLockType;
 
     /**
      * @brief 获取/创建对应参数名的配置参数
      * @param[in] name 配置参数名称
      * @param[in] default_value 参数默认�?     * @param[in] description 参数描述
      * @details 获取参数名为name的配置参�?如果存在直接返回
-     *          如果不存�?创建参数配置并用default_value赋�?     * @return 返回对应的配置参�?如果参数名存在但是类型不匹配则返回nullptr
+     *          如果不存�?创建参数配置并用default_value赋�?     * @return
+     * 返回对应的配置参�?如果参数名存在但是类型不匹配则返回nullptr
      * @exception 如果参数名包含非法字符[^0-9a-z_.] 抛出异常
      * std::invalid_argument
      */
@@ -456,7 +464,7 @@ class Config {
         const std::string& name,
         const T& default_value,
         const std::string& description = "") {
-        RWMutexType::WriteLock lock(GetMutex());
+        WriteLockType lock(GetMutex());
         auto it = GetDatas().find(name);
         if (it != GetDatas().end()) {
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
@@ -539,6 +547,3 @@ class Config {
 }  // namespace ancfl
 
 #endif
-
-
-

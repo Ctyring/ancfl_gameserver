@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file timer.h
  * @brief 定时器封�? */
 #ifndef __ANCFL_TIMER_H__
@@ -37,7 +37,8 @@ class Timer : public std::enable_shared_from_this<Timer> {
 
    private:
     /**
-     * @brief 构造函�?     * @param[in] ms 定时器执行间隔时�?     * @param[in] cb 回调函数
+     * @brief 构造函�?     * @param[in] ms 定时器执行间隔时�?     * @param[in]
+     * cb 回调函数
      * @param[in] recurring 是否循环
      * @param[in] manager 定时器管理器
      */
@@ -67,7 +68,8 @@ class Timer : public std::enable_shared_from_this<Timer> {
     struct Comparator {
         /**
          * @brief 比较定时器的智能指针的大�?按执行时间排�?
-         * @param[in] lhs 定时器智能指�?         * @param[in] rhs 定时器智能指�?         */
+         * @param[in] lhs 定时器智能指�?         * @param[in] rhs 定时器智能指�?
+         */
         bool operator()(const Timer::ptr& lhs, const Timer::ptr& rhs) const;
     };
 };
@@ -80,6 +82,8 @@ class TimerManager {
 
    public:
     /// 读写锁类�?    typedef RWMutex RWMutexType;
+    typedef RWMutex::ReadLock ReadLockType;
+    typedef RWMutex::WriteLock WriteLockType;
 
     /**
      * @brief 构造函�?     */
@@ -91,13 +95,15 @@ class TimerManager {
     virtual ~TimerManager();
 
     /**
-     * @brief 添加定时�?     * @param[in] ms 定时器执行间隔时�?     * @param[in] cb 定时器回调函�?     * @param[in] recurring 是否循环定时�?     */
+     * @brief 添加定时�?     * @param[in] ms 定时器执行间隔时�?     * @param[in]
+     * cb 定时器回调函�?     * @param[in] recurring 是否循环定时�?     */
     Timer::ptr addTimer(uint64_t ms,
                         std::function<void()> cb,
                         bool recurring = false);
 
     /**
-     * @brief 添加条件定时�?     * @param[in] ms 定时器执行间隔时�?     * @param[in] cb 定时器回调函�?     * @param[in] weak_cond 条件
+     * @brief 添加条件定时�?     * @param[in] ms 定时器执行间隔时�?     *
+     * @param[in] cb 定时器回调函�?     * @param[in] weak_cond 条件
      * @param[in] recurring 是否循环
      */
     Timer::ptr addConditionTimer(uint64_t ms,
@@ -128,7 +134,7 @@ class TimerManager {
 
     /**
      * @brief 将定时器添加到管理器�?     */
-    void addTimer(Timer::ptr val, RWMutexType::WriteLock& lock);
+    void addTimer(Timer::ptr val, WriteLockType& lock);
 
    private:
     /**
@@ -149,6 +155,3 @@ class TimerManager {
 }  // namespace ancfl
 
 #endif
-
-
-

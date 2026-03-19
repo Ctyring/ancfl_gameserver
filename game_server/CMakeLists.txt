@@ -7,7 +7,7 @@ include(../cmake/utils.cmake)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # 编译选项
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O2 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O2 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -Wno-error")
 
 # 包含目录
 include_directories(.)
@@ -63,11 +63,11 @@ endforeach()
 # 自定义命令生成protobuf代码
 add_custom_target(protobuf_compile ALL
     COMMAND ${Protobuf_PROTOC_EXECUTABLE}
-    --proto_path=${CMAKE_CURRENT_SOURCE_DIR}
+    --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/proto
     --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto
-    ${PROTO_FILES}
+    msg_id.proto msg_base.proto msg_account.proto msg_role.proto msg_bag.proto msg_equip.proto msg_battle.proto
     DEPENDS ${PROTO_FILES}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/proto
     COMMENT "Generating protobuf files"
 )
 

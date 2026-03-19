@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file servlet.h
  * @brief Servlet封装
  */
@@ -123,6 +123,8 @@ class ServletDispatch : public Servlet {
     /// 智能指针类型定义
     typedef std::shared_ptr<ServletDispatch> ptr;
     /// 读写锁类型定�?    typedef RWMutex RWMutexType;
+    typedef RWMutex::ReadLock ReadLockType;
+    typedef RWMutex::WriteLock WriteLockType;
 
     /**
      * @brief 构造函�?     */
