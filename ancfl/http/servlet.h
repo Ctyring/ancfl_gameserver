@@ -10,7 +10,6 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "ancfl/mutex.h"
 #include "ancfl/thread.h"
 #include "ancfl/util.h"
 #include "http.h"
@@ -123,10 +122,7 @@ class ServletDispatch : public Servlet {
    public:
     /// 智能指针类型定义
     typedef std::shared_ptr<ServletDispatch> ptr;
-    /// 读写锁类型定义
-    typedef RWMutex RWMutexType;
-    typedef RWMutex::ReadLock ReadLock;
-    typedef RWMutex::WriteLock WriteLock;
+    /// 读写锁类型定�?    typedef RWMutex RWMutexType;
 
     /**
      * @brief 构造函�?     */
@@ -193,13 +189,13 @@ class ServletDispatch : public Servlet {
     /**
      * @brief 返回默认servlet
      */
-    Servlet::ptr getDefault() const;
+    Servlet::ptr getDefault() const { return m_default; }
 
     /**
      * @brief 设置默认servlet
      * @param[in] v servlet
      */
-    void setDefault(Servlet::ptr v);
+    void setDefault(Servlet::ptr v) { m_default = v; }
 
     /**
      * @brief 通过uri获取servlet

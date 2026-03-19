@@ -230,10 +230,10 @@ bool TcpService::SendRawData(int32_t conn_id,
 
     // 构造包头
     MessageHeader header;
-    header.msg_id = ancfl::byteswapOnLittleEndian(msg_id);
-    header.msg_len = ancfl::byteswapOnLittleEndian(len + sizeof(header));
-    header.target_id = ancfl::byteswapOnLittleEndian(target_id);
-    header.user_data = ancfl::byteswapOnLittleEndian(user_data);
+    header.msg_id = ancfl::ByteSwapOnLittleEndian(msg_id);
+    header.msg_len = ancfl::ByteSwapOnLittleEndian(len + sizeof(header));
+    header.target_id = ancfl::ByteSwapOnLittleEndian(target_id);
+    header.user_data = ancfl::ByteSwapOnLittleEndian(user_data);
 
     // 发送包头
     if (client->send(&header, sizeof(header)) <= 0) {

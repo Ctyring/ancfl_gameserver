@@ -69,10 +69,6 @@ Address::ptr SocketStream::getRemoteAddress() {
     return nullptr;
 }
 
-Socket::ptr SocketStream::getSocket() const {
-    return m_socket;
-}
-
 Address::ptr SocketStream::getLocalAddress() {
     if (m_socket) {
         return m_socket->getLocalAddress();
@@ -96,6 +92,3 @@ std::string SocketStream::getLocalAddressString() {
     return "";
 }
 }  // namespace ancfl
-
-
-

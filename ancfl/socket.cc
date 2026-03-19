@@ -76,9 +76,7 @@ int64_t Socket::getSendTimeout() {
 }
 
 void Socket::setSendTimeout(int64_t v) {
-    struct timeval tv {
-        int(v / 1000), int(v % 1000 * 1000)
-    };
+    struct timeval tv{int(v / 1000), int(v % 1000 * 1000)};
     setOption(SOL_SOCKET, SO_SNDTIMEO, tv);
 }
 
@@ -91,9 +89,7 @@ int64_t Socket::getRecvTimeout() {
 }
 
 void Socket::setRecvTimeout(int64_t v) {
-    struct timeval tv {
-        int(v / 1000), int(v % 1000 * 1000)
-    };
+    struct timeval tv{int(v / 1000), int(v % 1000 * 1000)};
     setOption(SOL_SOCKET, SO_RCVTIMEO, tv);
 }
 
@@ -211,28 +207,29 @@ bool Socket::connect(const Address::ptr addr, uint64_t timeout_ms) {
         return false;
     }
     // 这两个函数之前hook过，所以不会阻�?    if (timeout_ms == (uint64_t)-1) {
-        if (::connect(m_sock, addr->getAddr(), addr->getAddrLen())) {
-            ANCFL_LOG_ERROR(g_logger)
-                << "sock=" << m_sock << " connect(" << addr->toString()
-                << ") error errno=" << errno << " errstr=" << strerror(errno);
-            close();
-            return false;
-        }
-    } else {
-        if (::connect_with_timeout(m_sock, addr->getAddr(), addr->getAddrLen(),
-                                   timeout_ms)) {
-            ANCFL_LOG_ERROR(g_logger)
-                << "sock=" << m_sock << " connect(" << addr->toString()
-                << ") timeout=" << timeout_ms << " error errno=" << errno
-                << " errstr=" << strerror(errno);
-            close();
-            return false;
-        }
+    if (::connect(m_sock, addr->getAddr(), addr->getAddrLen())) {
+        ANCFL_LOG_ERROR(g_logger)
+            << "sock=" << m_sock << " connect(" << addr->toString()
+            << ") error errno=" << errno << " errstr=" << strerror(errno);
+        close();
+        return false;
     }
-    m_isConnected = true;
-    getRemoteAddress();
-    getLocalAddress();
-    return true;
+}
+else {
+    if (::connect_with_timeout(m_sock, addr->getAddr(), addr->getAddrLen(),
+                               timeout_ms)) {
+        ANCFL_LOG_ERROR(g_logger)
+            << "sock=" << m_sock << " connect(" << addr->toString()
+            << ") timeout=" << timeout_ms << " error errno=" << errno
+            << " errstr=" << strerror(errno);
+        close();
+        return false;
+    }
+}
+m_isConnected = true;
+getRemoteAddress();
+getLocalAddress();
+return true;
 }
 
 bool Socket::listen(int backlog) {
@@ -643,19 +640,25 @@ bool SSLSocket::loadCertificates(const std::string& cert_file,
             << "SSL_CTX_use_certificate_chain_file(" << cert_file << ") error";
         return false;
     }
-    // 加载自己的私�?    if (SSL_CTX_use_PrivateKey_file(m_ctx.get(), key_file.c_str(),
+    // 加载自己的私�?    if (SSL_CTX_use_PrivateKey_file(m_ctx.get(),
+    // key_file.c_str(),
                                     SSL_FILETYPE_PEM) != 1) {
-        ANCFL_LOG_ERROR(g_logger)
-            << "SSL_CTX_use_PrivateKey_file(" << key_file << ") error";
-        return false;
-    }
-    // 验证证书和私钥是否相�?    if (SSL_CTX_check_private_key(m_ctx.get()) != 1) {
-        ANCFL_LOG_ERROR(g_logger)
-            << "SSL_CTX_check_private_key cert_file=" << cert_file
-            << " key_file=" << key_file;
-        return false;
-    }
-    return true;
+                                        ANCFL_LOG_ERROR(g_logger)
+                                            << "SSL_CTX_use_PrivateKey_file("
+                                            << key_file << ") error";
+                                        return false;
+                                    }
+                                    // 验证证书和私钥是否相�?    if
+                                    // (SSL_CTX_check_private_key(m_ctx.get())
+                                    // != 1) {
+                                    ANCFL_LOG_ERROR(g_logger)
+                                        << "SSL_CTX_check_private_key "
+                                           "cert_file="
+                                        << cert_file
+                                        << " key_file=" << key_file;
+                                    return false;
+}
+return true;
 }
 
 SSLSocket::ptr SSLSocket::CreateTCP(ancfl::Address::ptr address) {
@@ -687,10 +690,6 @@ std::ostream& SSLSocket::dump(std::ostream& os) const {
     return os;
 }
 
-int Socket::getFamily() const {
-    return m_family;
-}
-
 std::string Socket::toString() const {
     std::stringstream ss;
     dump(ss);
@@ -702,6 +701,3 @@ std::ostream& operator<<(std::ostream& os, const Socket& sock) {
 }
 
 }  // namespace ancfl
-
-
-

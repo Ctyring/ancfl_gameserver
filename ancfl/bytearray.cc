@@ -653,18 +653,6 @@ uint64_t ByteArray::getWriteBuffers(std::vector<iovec>& buffers, uint64_t len) {
     return size;
 }
 
-size_t ByteArray::getSize() const {
-    return m_size;
-}
-
-size_t ByteArray::getCapacity() const {
-    return m_capacity - m_position;
-}
-
-size_t ByteArray::getReadSize() const {
-    return m_size - m_position;
-}
-
 }  // namespace ancfl
 
 

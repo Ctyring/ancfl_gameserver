@@ -279,7 +279,7 @@ class Socket : public std::enable_shared_from_this<Socket>, Noncopyable {
 
     /**
      * @brief 获取协议�?     */
-    int getFamily() const;
+    int getFamily() const { return m_family; }
 
     /**
      * @brief 获取类型

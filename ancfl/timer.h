@@ -82,8 +82,6 @@ class TimerManager {
 
    public:
     /// 读写锁类�?    typedef RWMutex RWMutexType;
-    typedef RWMutex::ReadLock ReadLockType;
-    typedef RWMutex::WriteLock WriteLockType;
 
     /**
      * @brief 构造函�?     */
@@ -134,7 +132,7 @@ class TimerManager {
 
     /**
      * @brief 将定时器添加到管理器�?     */
-    void addTimer(Timer::ptr val, WriteLockType& lock);
+    void addTimer(Timer::ptr val, RWMutexType::WriteLock& lock);
 
    private:
     /**

@@ -76,7 +76,7 @@ class SocketStream : public Stream {
 
     /**
      * @brief 返回Socket�?     */
-    Socket::ptr getSocket() const;
+    Socket::ptr getSocket() const { return m_socket; }
 
     /**
      * @brief 返回是否连接

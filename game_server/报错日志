@@ -1,197 +1,91 @@
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h: In member function ‘size_t ancfl::ByteArray::getReadSize() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h:372:41: error: ‘m_size’ was not declared in this scope; did you mean ‘DH_size’?
-  372 |     size_t getReadSize() const { return m_size - m_position; }
-      |                                         ^~~~~~
-      |                                         DH_size
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:10,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/socket.h: In member function ‘int ancfl::Socket::getFamily() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/socket.h:282:36: error: ‘m_family’ was not declared in this scope; did you mean ‘Family’?
-  282 |     int getFamily() const { return m_family; }
-      |                                    ^~~~~~~~
-      |                                    Family
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h: In member function ‘ancfl::Socket::ptr ancfl::SocketStream::getSocket() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:79:44: error: ‘m_socket’ was not declared in this scope; did you mean ‘socket’?
-   79 |     Socket::ptr getSocket() const { return m_socket; }
-      |                                            ^~~~~~~~
-      |                                            socket
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/stream.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:11,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h: In member function ‘size_t ancfl::ByteArray::getReadSize() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h:372:41: error: ‘m_size’ was not declared in this scope; did you mean ‘DH_size’?
-  372 |     size_t getReadSize() const { return m_size - m_position; }
-      |                                         ^~~~~~
-      |                                         DH_size
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/stream.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:11,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h: In member function ‘size_t ancfl::ByteArray::getReadSize() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/bytearray.h:372:41: error: ‘m_size’ was not declared in this scope; did you mean ‘DH_size’?
-  372 |     size_t getReadSize() const { return m_size - m_position; }
-      |                                         ^~~~~~
-      |                                         DH_size
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h: In member function ‘ancfl::Socket::ptr ancfl::SocketStream::getSocket() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:79:44: error: ‘m_socket’ was not declared in this scope; did you mean ‘socket’?
-   79 |     Socket::ptr getSocket() const { return m_socket; }
-      |                                            ^~~~~~~~
-      |                                            socket
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h: In member function ‘ancfl::Socket::ptr ancfl::SocketStream::getSocket() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:79:44: error: ‘m_socket’ was not declared in this scope; did you mean ‘socket’?
-   79 |     Socket::ptr getSocket() const { return m_socket; }
-      |                                            ^~~~~~~~
-      |                                            socket
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:9,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:128:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  128 |     typedef RWMutex::ReadLock ReadLock;
-      |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:129:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  129 |     typedef RWMutex::WriteLock WriteLock;
-      |                      ^~~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:9,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:128:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  128 |     typedef RWMutex::ReadLock ReadLock;
-      |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:129:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  129 |     typedef RWMutex::WriteLock WriteLock;
-      |                      ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘ancfl::http::Servlet::ptr ancfl::http::ServletDispatch::getDefault() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:196:46: error: ‘m_default’ was not declared in this scope
-  196 |     Servlet::ptr getDefault() const { return m_default; }
-      |                                              ^~~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:9,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:128:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  128 |     typedef RWMutex::ReadLock ReadLock;
-      |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:129:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  129 |     typedef RWMutex::WriteLock WriteLock;
-      |                      ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘void ancfl::http::ServletDispatch::setDefault(ancfl::http::Servlet::ptr)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:202:39: error: ‘m_default’ was not declared in this scope
-  202 |     void setDefault(Servlet::ptr v) { m_default = v; }
-      |                                       ^~~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:11,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In constructor ‘ancfl::ConfigVarBase::ConfigVarBase(const string&, const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
-   37 |         : m_name(name), m_description(description) {
-      |           ^~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
-   37 |         : m_name(name), m_description(description) {
-      |                         ^~~~~~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘ancfl::http::Servlet::ptr ancfl::http::ServletDispatch::getDefault() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:196:46: error: ‘m_default’ was not declared in this scope
-  196 |     Servlet::ptr getDefault() const { return m_default; }
-      |                                              ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:38:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   38 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
-      |                        ^~~~~~
-      |                        rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘void ancfl::http::ServletDispatch::setDefault(ancfl::http::Servlet::ptr)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:202:39: error: ‘m_default’ was not declared in this scope
-  202 |     void setDefault(Servlet::ptr v) { m_default = v; }
-      |                                       ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:49:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   49 |     const std::string& getName() const { return m_name; }
-      |                                                 ^~~~~~
-      |                                                 rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘bool ancfl::LogFormatter::isError() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:346:35: error: ‘m_error’ was not declared in this scope; did you mean ‘perror’?
+  346 |     bool isError() const { return m_error; }
+      |                                   ^~~~~~~
+      |                                   perror
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:11,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In constructor ‘ancfl::ConfigVarBase::ConfigVarBase(const string&, const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
-   37 |         : m_name(name), m_description(description) {
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
+   41 |         : m_name(name), m_description(description) {
       |           ^~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
-   37 |         : m_name(name), m_description(description) {
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
+   41 |         : m_name(name), m_description(description) {
       |                         ^~~~~~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:38:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   38 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:42:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   42 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
       |                        ^~~~~~
       |                        rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:49:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   49 |     const std::string& getName() const { return m_name; }
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:7,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h: In member function ‘const string& ancfl::Scheduler::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h:41:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   41 |     const std::string& getName() const { return m_name; }
       |                                                 ^~~~~~
       |                                                 rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   53 |     const std::string& getName() const { return m_name; }
+      |                                                 ^~~~~~
+      |                                                 rename
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:85:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+   85 |     typedef RWMutex::ReadLock ReadLockType;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:86:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+   86 |     typedef RWMutex::WriteLock WriteLockType;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:137:35: error: ‘WriteLockType’ has not been declared
+  137 |     void addTimer(Timer::ptr val, WriteLockType& lock);
+      |                                   ^~~~~~~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getDescription() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
-   53 |     const std::string& getDescription() const { return m_description; }
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:57:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
+   57 |     const std::string& getDescription() const { return m_description; }
       |                                                        ^~~~~~~~~~~~~
       |                                                        LN_description
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘ancfl::http::Servlet::ptr ancfl::http::ServletDispatch::getDefault() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:196:46: error: ‘m_default’ was not declared in this scope
-  196 |     Servlet::ptr getDefault() const { return m_default; }
-      |                                              ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getDescription() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
-   53 |     const std::string& getDescription() const { return m_description; }
-      |                                                        ^~~~~~~~~~~~~
-      |                                                        LN_description
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:147:5: error: ‘RWMutexType’ does not name a type; did you mean ‘RWMutex’?
+  147 |     RWMutexType m_mutex;
+      |     ^~~~~~~~~~~
+      |     RWMutex
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h:12,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:7,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘const char* ancfl::LogEvent::getFile() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:176:42: error: ‘m_file’ was not declared in this scope; did you mean ‘m_line’?
+  176 |     const char* getFile() const { return m_file; }
+      |                                          ^~~~~~
+      |                                          m_line
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:318:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
   318 |     typedef RWMutex::ReadLock ReadLock;
@@ -199,90 +93,55 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:319:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
   319 |     typedef RWMutex::WriteLock WriteLock;
       |                      ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:318:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  318 |     typedef RWMutex::ReadLock ReadLock;
-      |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:319:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  319 |     typedef RWMutex::WriteLock WriteLock;
-      |                      ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h: In member function ‘void ancfl::http::ServletDispatch::setDefault(ancfl::http::Servlet::ptr)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:202:39: error: ‘m_default’ was not declared in this scope
-  202 |     void setDefault(Servlet::ptr v) { m_default = v; }
-      |                                       ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘uint64_t ancfl::LogEvent::getTime() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:201:39: error: ‘m_time’ was not declared in this scope; did you mean ‘mktime’?
+  201 |     uint64_t getTime() const { return m_time; }
+      |                                       ^~~~~~
+      |                                       mktime
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘std::string ancfl::LogEvent::getContent() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:211:45: error: ‘m_ss’ was not declared in this scope
+  211 |     std::string getContent() const { return m_ss.str(); }
+      |                                             ^~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘std::string ancfl::ConfigVar<T, FromStr, ToStr>::toString()’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:340:13: error: ‘ReadLock’ was not declared in this scope
   340 |             ReadLock lock(m_mutex);
       |             ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘std::string ancfl::ConfigVar<T, FromStr, ToStr>::toString()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:340:13: error: ‘ReadLock’ was not declared in this scope
-  340 |             ReadLock lock(m_mutex);
-      |             ^~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:11,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In constructor ‘ancfl::ConfigVarBase::ConfigVarBase(const string&, const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
-   37 |         : m_name(name), m_description(description) {
-      |           ^~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:37:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
-   37 |         : m_name(name), m_description(description) {
-      |                         ^~~~~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘std::shared_ptr<ancfl::Logger> ancfl::LogEvent::getLogger() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:215:56: error: ‘m_logger’ was not declared in this scope; did you mean ‘Logger’?
+  215 |     std::shared_ptr<Logger> getLogger() const { return m_logger; }
+      |                                                        ^~~~~~~~
+      |                                                        Logger
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:346:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
   346 |                 << " name=" << m_name;
       |                                ^~~~~~
       |                                rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:38:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   38 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
-      |                        ^~~~~~
-      |                        rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:346:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  346 |                 << " name=" << m_name;
-      |                                ^~~~~~
-      |                                rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘std::stringstream& ancfl::LogEvent::getSS()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:225:41: error: ‘m_ss’ was not declared in this scope
+  225 |     std::stringstream& getSS() { return m_ss; }
+      |                                         ^~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘bool ancfl::ConfigVar<T, FromStr, ToStr>::fromString(const string&)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:360:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
   360 |                 << " name=" << m_name << " - " << val;
       |                                ^~~~~~
       |                                rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:49:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-   49 |     const std::string& getName() const { return m_name; }
-      |                                                 ^~~~~~
-      |                                                 rename
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const T ancfl::ConfigVar<T, FromStr, ToStr>::getValue()’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:368:9: error: ‘ReadLock’ was not declared in this scope
   368 |         ReadLock lock(m_mutex);
       |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘bool ancfl::ConfigVar<T, FromStr, ToStr>::fromString(const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:360:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  360 |                 << " name=" << m_name << " - " << val;
-      |                                ^~~~~~
-      |                                rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getDescription() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
-   53 |     const std::string& getDescription() const { return m_description; }
-      |                                                        ^~~~~~~~~~~~~
-      |                                                        LN_description
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const T ancfl::ConfigVar<T, FromStr, ToStr>::getValue()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:368:9: error: ‘ReadLock’ was not declared in this scope
-  368 |         ReadLock lock(m_mutex);
-      |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::setValue(const T&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:377:13: error: ‘ReadLock’ was not declared in this scope
-  377 |             ReadLock lock(m_mutex);
-      |             ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:318:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  318 |     typedef RWMutex::ReadLock ReadLock;
-      |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:319:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  319 |     typedef RWMutex::WriteLock WriteLock;
-      |                      ^~~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h:12,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:7,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h: In member function ‘bool ancfl::LogFormatter::isError() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/log.h:346:35: error: ‘m_error’ was not declared in this scope; did you mean ‘perror’?
+  346 |     bool isError() const { return m_error; }
+      |                                   ^~~~~~~
+      |                                   perror
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::setValue(const T&)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:377:13: error: ‘ReadLock’ was not declared in this scope
   377 |             ReadLock lock(m_mutex);
@@ -290,61 +149,64 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:385:9: error: ‘WriteLock’ was not declared in this scope
   385 |         WriteLock lock(m_mutex);
       |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘std::string ancfl::ConfigVar<T, FromStr, ToStr>::toString()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:340:13: error: ‘ReadLock’ was not declared in this scope
-  340 |             ReadLock lock(m_mutex);
-      |             ^~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘uint64_t ancfl::ConfigVar<T, FromStr, ToStr>::addListener(ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:400:9: error: ‘WriteLock’ was not declared in this scope
   400 |         WriteLock lock(m_mutex);
       |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:385:9: error: ‘WriteLock’ was not declared in this scope
-  385 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:346:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  346 |                 << " name=" << m_name;
-      |                                ^~~~~~
-      |                                rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
-  411 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘uint64_t ancfl::ConfigVar<T, FromStr, ToStr>::addListener(ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:400:9: error: ‘WriteLock’ was not declared in this scope
-  400 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb ancfl::ConfigVar<T, FromStr, ToStr>::getListener(uint64_t)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:421:9: error: ‘ReadLock’ was not declared in this scope
-  421 |         ReadLock lock(m_mutex);
-      |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘bool ancfl::ConfigVar<T, FromStr, ToStr>::fromString(const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:360:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  360 |                 << " name=" << m_name << " - " << val;
-      |                                ^~~~~~
-      |                                rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
-  411 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::clearListener()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:430:9: error: ‘WriteLock’ was not declared in this scope
-  430 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:449:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  449 |     typedef RWMutex::ReadLock ReadLock;
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:7,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h: In member function ‘const string& ancfl::Scheduler::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/scheduler.h:41:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   41 |     const std::string& getName() const { return m_name; }
+      |                                                 ^~~~~~
+      |                                                 rename
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/iomanager.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/streams/socket_stream.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_session.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:85:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+   85 |     typedef RWMutex::ReadLock ReadLockType;
       |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:450:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  450 |     typedef RWMutex::WriteLock WriteLock;
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:86:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+   86 |     typedef RWMutex::WriteLock WriteLockType;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:137:35: error: ‘WriteLockType’ has not been declared
+  137 |     void addTimer(Timer::ptr val, WriteLockType& lock);
+      |                                   ^~~~~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
+  411 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:9,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:128:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  128 |     typedef RWMutex::ReadLock ReadLock;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:129:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  129 |     typedef RWMutex::WriteLock WriteLock;
       |                      ^~~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb ancfl::ConfigVar<T, FromStr, ToStr>::getListener(uint64_t)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:421:9: error: ‘ReadLock’ was not declared in this scope
   421 |         ReadLock lock(m_mutex);
       |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const T ancfl::ConfigVar<T, FromStr, ToStr>::getValue()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:368:9: error: ‘ReadLock’ was not declared in this scope
-  368 |         ReadLock lock(m_mutex);
-      |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/timer.h:147:5: error: ‘RWMutexType’ does not name a type; did you mean ‘RWMutex’?
+  147 |     RWMutexType m_mutex;
+      |     ^~~~~~~~~~~
+      |     RWMutex
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::clearListener()’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:430:9: error: ‘WriteLock’ was not declared in this scope
   430 |         WriteLock lock(m_mutex);
@@ -360,52 +222,209 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:467:9: error: ‘WriteLock’ was not declared in this scope
   467 |         WriteLock lock(GetMutex());
       |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::setValue(const T&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:377:13: error: ‘ReadLock’ was not declared in this scope
-  377 |             ReadLock lock(m_mutex);
-      |             ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&, const T&, const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:467:9: error: ‘WriteLock’ was not declared in this scope
-  467 |         WriteLock lock(GetMutex());
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:385:9: error: ‘WriteLock’ was not declared in this scope
-  385 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘uint64_t ancfl::ConfigVar<T, FromStr, ToStr>::addListener(ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:400:9: error: ‘WriteLock’ was not declared in this scope
-  400 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
-  411 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:503:9: error: ‘ReadLock’ was not declared in this scope
-  503 |         ReadLock lock(GetMutex());
-      |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb ancfl::ConfigVar<T, FromStr, ToStr>::getListener(uint64_t)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:421:9: error: ‘ReadLock’ was not declared in this scope
-  421 |         ReadLock lock(m_mutex);
-      |         ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::clearListener()’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:430:9: error: ‘WriteLock’ was not declared in this scope
-  430 |         WriteLock lock(m_mutex);
-      |         ^~~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:11,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In constructor ‘ancfl::ConfigVarBase::ConfigVarBase(const string&, const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
+   41 |         : m_name(name), m_description(description) {
+      |           ^~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
+   41 |         : m_name(name), m_description(description) {
+      |                         ^~~~~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:42:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   42 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
+      |                        ^~~~~~
+      |                        rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   53 |     const std::string& getName() const { return m_name; }
+      |                                                 ^~~~~~
+      |                                                 rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getDescription() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:57:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
+   57 |     const std::string& getDescription() const { return m_description; }
+      |                                                        ^~~~~~~~~~~~~
+      |                                                        LN_description
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:449:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
-  449 |     typedef RWMutex::ReadLock ReadLock;
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:318:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  318 |     typedef RWMutex::ReadLock ReadLock;
       |                      ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:450:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
-  450 |     typedef RWMutex::WriteLock WriteLock;
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:319:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  319 |     typedef RWMutex::WriteLock WriteLock;
       |                      ^~~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:503:9: error: ‘ReadLock’ was not declared in this scope
   503 |         ReadLock lock(GetMutex());
       |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘std::string ancfl::ConfigVar<T, FromStr, ToStr>::toString()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:340:13: error: ‘ReadLock’ was not declared in this scope
+  340 |             ReadLock lock(m_mutex);
+      |             ^~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:9,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:128:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  128 |     typedef RWMutex::ReadLock ReadLock;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/servlet.h:129:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  129 |     typedef RWMutex::WriteLock WriteLock;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:346:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  346 |                 << " name=" << m_name;
+      |                                ^~~~~~
+      |                                rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘bool ancfl::ConfigVar<T, FromStr, ToStr>::fromString(const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:360:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  360 |                 << " name=" << m_name << " - " << val;
+      |                                ^~~~~~
+      |                                rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const T ancfl::ConfigVar<T, FromStr, ToStr>::getValue()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:368:9: error: ‘ReadLock’ was not declared in this scope
+  368 |         ReadLock lock(m_mutex);
+      |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::setValue(const T&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:377:13: error: ‘ReadLock’ was not declared in this scope
+  377 |             ReadLock lock(m_mutex);
+      |             ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:385:9: error: ‘WriteLock’ was not declared in this scope
+  385 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:11,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In constructor ‘ancfl::ConfigVarBase::ConfigVarBase(const string&, const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:11: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_name’
+   41 |         : m_name(name), m_description(description) {
+      |           ^~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:41:25: error: class ‘ancfl::ConfigVarBase’ does not have any field named ‘m_description’
+   41 |         : m_name(name), m_description(description) {
+      |                         ^~~~~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘uint64_t ancfl::ConfigVar<T, FromStr, ToStr>::addListener(ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:400:9: error: ‘WriteLock’ was not declared in this scope
+  400 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:42:24: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   42 |         std::transform(m_name.begin(), m_name.end(), m_name.begin(), ::tolower);
+      |                        ^~~~~~
+      |                        rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:53:49: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+   53 |     const std::string& getName() const { return m_name; }
+      |                                                 ^~~~~~
+      |                                                 rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
+  411 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb ancfl::ConfigVar<T, FromStr, ToStr>::getListener(uint64_t)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:421:9: error: ‘ReadLock’ was not declared in this scope
+  421 |         ReadLock lock(m_mutex);
+      |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const string& ancfl::ConfigVarBase::getDescription() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:57:56: error: ‘m_description’ was not declared in this scope; did you mean ‘LN_description’?
+   57 |     const std::string& getDescription() const { return m_description; }
+      |                                                        ^~~~~~~~~~~~~
+      |                                                        LN_description
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h: In member function ‘std::string ancfl::TcpServer::getName() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:157:42: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  157 |     std::string getName() const { return m_name; }
+      |                                          ^~~~~~
+      |                                          rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:318:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  318 |     typedef RWMutex::ReadLock ReadLock;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::clearListener()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:430:9: error: ‘WriteLock’ was not declared in this scope
+  430 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:319:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  319 |     typedef RWMutex::WriteLock WriteLock;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:449:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  449 |     typedef RWMutex::ReadLock ReadLock;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:450:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  450 |     typedef RWMutex::WriteLock WriteLock;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h: In member function ‘virtual void ancfl::TcpServer::setName(const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:166:50: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  166 |     virtual void setName(const std::string& v) { m_name = v; }
+      |                                                  ^~~~~~
+      |                                                  rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘std::string ancfl::ConfigVar<T, FromStr, ToStr>::toString()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:340:13: error: ‘ReadLock’ was not declared in this scope
+  340 |             ReadLock lock(m_mutex);
+      |             ^~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&, const T&, const string&)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:467:9: error: ‘WriteLock’ was not declared in this scope
   467 |         WriteLock lock(GetMutex());
       |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:346:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  346 |                 << " name=" << m_name;
+      |                                ^~~~~~
+      |                                rename
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘ancfl::http::ServletDispatch::ptr ancfl::http::HttpServer::getServletDispatch() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:33:62: error: ‘m_dispatch’ was not declared in this scope
+   33 |     ServletDispatch::ptr getServletDispatch() const { return m_dispatch; }
+      |                                                              ^~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘bool ancfl::ConfigVar<T, FromStr, ToStr>::fromString(const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:360:32: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
+  360 |                 << " name=" << m_name << " - " << val;
+      |                                ^~~~~~
+      |                                rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘const T ancfl::ConfigVar<T, FromStr, ToStr>::getValue()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:368:9: error: ‘ReadLock’ was not declared in this scope
+  368 |         ReadLock lock(m_mutex);
+      |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘void ancfl::http::HttpServer::setServletDispatch(ancfl::http::ServletDispatch::ptr)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:38:55: error: ‘m_dispatch’ was not declared in this scope
+   38 |     void setServletDispatch(ServletDispatch::ptr v) { m_dispatch = v; }
+      |                                                       ^~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::setValue(const T&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:377:13: error: ‘ReadLock’ was not declared in this scope
+  377 |             ReadLock lock(m_mutex);
+      |             ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:503:9: error: ‘ReadLock’ was not declared in this scope
+  503 |         ReadLock lock(GetMutex());
+      |         ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:385:9: error: ‘WriteLock’ was not declared in this scope
+  385 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘uint64_t ancfl::ConfigVar<T, FromStr, ToStr>::addListener(ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:400:9: error: ‘WriteLock’ was not declared in this scope
+  400 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::delListener(uint64_t)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:411:9: error: ‘WriteLock’ was not declared in this scope
+  411 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘ancfl::ConfigVar<T, FromStr, ToStr>::on_change_cb ancfl::ConfigVar<T, FromStr, ToStr>::getListener(uint64_t)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:421:9: error: ‘ReadLock’ was not declared in this scope
+  421 |         ReadLock lock(m_mutex);
+      |         ^~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
@@ -421,21 +440,21 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
   166 |     virtual void setName(const std::string& v) { m_name = v; }
       |                                                  ^~~~~~
       |                                                  rename
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:10,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h: In member function ‘std::string ancfl::TcpServer::getName() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:157:42: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  157 |     std::string getName() const { return m_name; }
-      |                                          ^~~~~~
-      |                                          rename
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h: In member function ‘virtual void ancfl::TcpServer::setName(const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:166:50: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
-  166 |     virtual void setName(const std::string& v) { m_name = v; }
-      |                                                  ^~~~~~
-      |                                                  rename
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In member function ‘void ancfl::ConfigVar<T, FromStr, ToStr>::clearListener()’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:430:9: error: ‘WriteLock’ was not declared in this scope
+  430 |         WriteLock lock(m_mutex);
+      |         ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:449:22: error: ‘ReadLock’ in ‘class ancfl::RWMutex’ does not name a type
+  449 |     typedef RWMutex::ReadLock ReadLock;
+      |                      ^~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:450:22: error: ‘WriteLock’ in ‘class ancfl::RWMutex’ does not name a type
+  450 |     typedef RWMutex::WriteLock WriteLock;
+      |                      ^~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h: In static member function ‘static typename ancfl::ConfigVar<T>::ptr ancfl::Config::Lookup(const string&, const T&, const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/config.h:467:9: error: ‘WriteLock’ was not declared in this scope
+  467 |         WriteLock lock(GetMutex());
+      |         ^~~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
@@ -444,18 +463,6 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:33:62: error: ‘m_dispatch’ was not declared in this scope
    33 |     ServletDispatch::ptr getServletDispatch() const { return m_dispatch; }
       |                                                              ^~~~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘ancfl::http::ServletDispatch::ptr ancfl::http::HttpServer::getServletDispatch() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:33:62: error: ‘m_dispatch’ was not declared in this scope
-   33 |     ServletDispatch::ptr getServletDispatch() const { return m_dispatch; }
-      |                                                              ^~~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘void ancfl::http::HttpServer::setServletDispatch(ancfl::http::ServletDispatch::ptr)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:38:55: error: ‘m_dispatch’ was not declared in this scope
-   38 |     void setServletDispatch(ServletDispatch::ptr v) { m_dispatch = v; }
-      |                                                       ^~~~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘void ancfl::http::HttpServer::setServletDispatch(ancfl::http::ServletDispatch::ptr)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:38:55: error: ‘m_dispatch’ was not declared in this scope
    38 |     void setServletDispatch(ServletDispatch::ptr v) { m_dispatch = v; }
@@ -468,8 +475,7 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h: In member function ‘std::string ancfl::TcpServer::getName() const’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/tcp_server.h:157:42: error: ‘m_name’ was not declared in this scope; did you mean ‘rename’?
   157 |     std::string getName() const { return m_name; }
@@ -483,8 +489,7 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/application.h:2,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:8,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h: In member function ‘ancfl::http::ServletDispatch::ptr ancfl::http::HttpServer::getServletDispatch() const’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_server.h:33:62: error: ‘m_dispatch’ was not declared in this scope
    33 |     ServletDispatch::ptr getServletDispatch() const { return m_dispatch; }
@@ -494,26 +499,14 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
    38 |     void setServletDispatch(ServletDispatch::ptr v) { m_dispatch = v; }
       |                                                       ^~~~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:14,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::isInit() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:32:34: error: ‘m_isInit’ was not declared in this scope; did you mean ‘isInit’?
-   32 |     bool isInit() const { return m_isInit; }
-      |                                  ^~~~~~~~
-      |                                  isInit
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:14,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::isInit() const’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:32:34: error: ‘m_isInit’ was not declared in this scope; did you mean ‘isInit’?
    32 |     bool isInit() const { return m_isInit; }
       |                                  ^~~~~~~~
       |                                  isInit
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setUserNonblock(bool)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:46:36: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
-   46 |     void setUserNonblock(bool v) { m_userNonblock = v; }
-      |                                    ^~~~~~~~~~~~~~
-      |                                    setUserNonblock
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setUserNonblock(bool)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:46:36: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
    46 |     void setUserNonblock(bool v) { m_userNonblock = v; }
@@ -529,16 +522,29 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
    56 |     void setSysNonblock(bool v) { m_sysNonblock = v; }
       |                                   ^~~~~~~~~~~~~
       |                                   setSysNonblock
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getUserNonblock() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:51:43: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
-   51 |     bool getUserNonblock() const { return m_userNonblock; }
-      |                                           ^~~~~~~~~~~~~~
-      |                                           setUserNonblock
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getSysNonblock() const’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:60:42: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
    60 |     bool getSysNonblock() const { return m_sysNonblock; }
       |                                          ^~~~~~~~~~~~~
       |                                          setSysNonblock
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:14,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::isInit() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:32:34: error: ‘m_isInit’ was not declared in this scope; did you mean ‘isInit’?
+   32 |     bool isInit() const { return m_isInit; }
+      |                                  ^~~~~~~~
+      |                                  isInit
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setUserNonblock(bool)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:46:36: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
+   46 |     void setUserNonblock(bool v) { m_userNonblock = v; }
+      |                                    ^~~~~~~~~~~~~~
+      |                                    setUserNonblock
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getUserNonblock() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:51:43: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
+   51 |     bool getUserNonblock() const { return m_userNonblock; }
+      |                                           ^~~~~~~~~~~~~~
+      |                                           setUserNonblock
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setSysNonblock(bool)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:56:35: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
    56 |     void setSysNonblock(bool v) { m_sysNonblock = v; }
@@ -551,18 +557,59 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
       |                                          setSysNonblock
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:14,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::isInit() const’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:32:34: error: ‘m_isInit’ was not declared in this scope; did you mean ‘isInit’?
    32 |     bool isInit() const { return m_isInit; }
       |                                  ^~~~~~~~
       |                                  isInit
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:51,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h: In constructor ‘ancfl::http::HttpResult::HttpResult(int, ancfl::http::HttpResponse::ptr, const string&)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:11: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘result’
+   53 |         : result(_result), response(_response), error(_error) {}
+      |           ^~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:28: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘response’
+   53 |         : result(_result), response(_response), error(_error) {}
+      |                            ^~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:3,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h: At global scope:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h:64:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
+   64 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
+      |                                                               ^~~~~~~~~~
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setUserNonblock(bool)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:46:36: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
    46 |     void setUserNonblock(bool v) { m_userNonblock = v; }
       |                                    ^~~~~~~~~~~~~~
       |                                    setUserNonblock
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:23:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
+   23 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
+      |                                                               ^~~~~~~~~~
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getUserNonblock() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:51:43: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
+   51 |     bool getUserNonblock() const { return m_userNonblock; }
+      |                                           ^~~~~~~~~~~~~~
+      |                                           setUserNonblock
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setSysNonblock(bool)’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:56:35: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
+   56 |     void setSysNonblock(bool v) { m_sysNonblock = v; }
+      |                                   ^~~~~~~~~~~~~
+      |                                   setSysNonblock
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getSysNonblock() const’:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:60:42: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
+   60 |     bool getSysNonblock() const { return m_sysNonblock; }
+      |                                          ^~~~~~~~~~~~~
+      |                                          setSysNonblock
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:51,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
@@ -573,11 +620,6 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:28: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘response’
    53 |         : result(_result), response(_response), error(_error) {}
       |                            ^~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getUserNonblock() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:51:43: error: ‘m_userNonblock’ was not declared in this scope; did you mean ‘setUserNonblock’?
-   51 |     bool getUserNonblock() const { return m_userNonblock; }
-      |                                           ^~~~~~~~~~~~~~
-      |                                           setUserNonblock
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:3,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
@@ -585,6 +627,12 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h: At global scope:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h:64:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
    64 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
+      |                                                               ^~~~~~~~~~
+In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
+/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:23:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
+   23 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
       |                                                               ^~~~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:51,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
@@ -596,36 +644,6 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:28: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘response’
    53 |         : result(_result), response(_response), error(_error) {}
       |                            ^~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:23:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
-   23 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
-      |                                                               ^~~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘void ancfl::FdCtx::setSysNonblock(bool)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:56:35: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
-   56 |     void setSysNonblock(bool v) { m_sysNonblock = v; }
-      |                                   ^~~~~~~~~~~~~
-      |                                   setSysNonblock
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:3,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h: At global scope:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h:64:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
-   64 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
-      |                                                               ^~~~~~~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:23:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
-   23 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
-      |                                                               ^~~~~~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h: In member function ‘bool ancfl::FdCtx::getSysNonblock() const’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/fd_manager.h:60:42: error: ‘m_sysNonblock’ was not declared in this scope; did you mean ‘setSysNonblock’?
-   60 |     bool getSysNonblock() const { return m_sysNonblock; }
-      |                                          ^~~~~~~~~~~~~
-      |                                          setSysNonblock
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc: In member function ‘bool game_server::MessageDispatcher::Dispatch(const game_server::NetPacket&)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/message_dispatcher.cc:22:13: error: ‘ANCFL_ANCFL_LOG_ERROR’ was not declared in this scope; did you mean ‘ANCFL_LOG_ERROR’?
    22 |             ANCFL_ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(ANCFL_LOG_ROOT()) << "No handler for message id: " << packet.msg_id;
@@ -667,30 +685,17 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/mutex.h:52:23: note:   initializing argument 1 of ‘ancfl::ScopedLockImpl<T>::ScopedLockImpl(T&) [with T = ancfl::Mutex]’
    52 |     ScopedLockImpl(T& mutex) : m_mutex(mutex) {
       |                    ~~~^~~~~
-In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:51,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h: In constructor ‘ancfl::http::HttpResult::HttpResult(int, ancfl::http::HttpResponse::ptr, const string&)’:
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:11: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘result’
-   53 |         : result(_result), response(_response), error(_error) {}
-      |           ^~~~~~
-/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/http_connection.h:53:28: error: class ‘ancfl::http::HttpResult’ does not have any field named ‘response’
-   53 |         : result(_result), response(_response), error(_error) {}
-      |                            ^~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:3,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h: At global scope:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_session.h:64:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
    64 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
       |                                                               ^~~~~~~~~~
 In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/ancfl.h:58,
                  from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.h:4,
-                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/game_service_base.cc:1:
+                 from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:1:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/../ancfl/http/ws_connection.h:23:63: error: ‘TEXT_FRAME’ is not a member of ‘ancfl::http::WSFrameHead::OPCODE’
    23 |                         int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
       |                                                               ^~~~~~~~~~
@@ -703,6 +708,7 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
    25 |         int64_t now = ancfl::GetCurrentMs();
       |                              ^~~~~~~~~~~~
       |                              GetCurrentMS
+make[2]: *** [CMakeFiles/game_common.dir/build.make:92: CMakeFiles/game_common.dir/common/game_service_base.cc.o] Error 1
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc: In member function ‘void game_server::TcpService::HandleRecv(ancfl::Socket::ptr)’:
 /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/common/tcp_service.cc:124:32: error: ‘ByteSwapOnLittleEndian’ is not a member of ‘ancfl’; did you mean ‘byteswapOnLittleEndian’?
   124 |         header.msg_id = ancfl::ByteSwapOnLittleEndian(header.msg_id);
@@ -720,7 +726,6 @@ In file included from /home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_s
   127 |         header.user_data = ancfl::ByteSwapOnLittleEndian(header.user_data);
       |                                   ^~~~~~~~~~~~~~~~~~~~~~
       |                                   byteswapOnLittleEndian
-make[2]: *** [CMakeFiles/game_common.dir/build.make:92: CMakeFiles/game_common.dir/common/game_service_base.cc.o] Error 1
 make[2]: *** [CMakeFiles/game_common.dir/build.make:66: CMakeFiles/game_common.dir/common/message_dispatcher.cc.o] Error 1
 make[2]: *** [CMakeFiles/game_common.dir/build.make:79: CMakeFiles/game_common.dir/common/tcp_service.cc.o] Error 1
 make[2]: Leaving directory '/home/user/桌面/ancfl_gameserver/ancfl_gameserver/game_server/build'

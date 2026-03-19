@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file log.h
  * @brief 日志模块封装
  * @author cty

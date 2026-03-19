@@ -61,7 +61,7 @@ class WSSession : public HttpSession {
     WSFrameMessage::ptr recvMessage();
     int32_t sendMessage(WSFrameMessage::ptr msg, bool fin = true);
     int32_t sendMessage(const std::string& msg,
-                        int32_t opcode = WSFrameHead::OPCODE::TEXT_FRAME,
+                        int32_t opcode = WSFrameHead::TEXT_FRAME,
                         bool fin = true);
     int32_t ping();
     int32_t pong();

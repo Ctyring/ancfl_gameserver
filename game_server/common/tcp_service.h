@@ -1,18 +1,18 @@
 #ifndef __TCP_SERVICE_H__
 #define __TCP_SERVICE_H__
 
+#include <google/protobuf/message.h>
 #include "ancfl/ancfl.h"
 #include "message_dispatcher.h"
-#include <google/protobuf/message.h>
 
 namespace game_server {
 
 // TCP服务基类
 class TcpService : public ancfl::TcpServer {
-public:
+   public:
     using ptr = std::shared_ptr<TcpService>;
 
-    TcpService(ancfl::IOManager* worker = nullptr, 
+    TcpService(ancfl::IOManager* worker = nullptr,
                ancfl::IOManager* accept_worker = nullptr);
     virtual ~TcpService();
 
@@ -29,18 +29,29 @@ public:
     virtual void Stop();
 
     // 发送消息
-    bool SendMessage(int32_t conn_id, uint32_t msg_id, uint64_t target_id, 
-                     uint32_t user_data, const google::protobuf::Message& msg);
+    bool SendMessage(int32_t conn_id,
+                     uint32_t msg_id,
+                     uint64_t target_id,
+                     uint32_t user_data,
+                     const google::protobuf::Message& msg);
 
     // 发送原始数据
-    bool SendRawData(int32_t conn_id, uint32_t msg_id, uint64_t target_id,
-                     uint32_t user_data, const char* data, uint32_t len);
+    bool SendRawData(int32_t conn_id,
+                     uint32_t msg_id,
+                     uint64_t target_id,
+                     uint32_t user_data,
+                     const char* data,
+                     uint32_t len);
 
     // 发送消息到服务器
-    bool SendMsgToServer(int32_t server_conn_id, uint32_t msg_id, const std::string& data);
+    bool SendMsgToServer(int32_t server_conn_id,
+                         uint32_t msg_id,
+                         const std::string& data);
 
     // 发送消息到客户端
-    bool SendMsgToClient(int32_t client_conn_id, uint32_t msg_id, const std::string& data);
+    bool SendMsgToClient(int32_t client_conn_id,
+                         uint32_t msg_id,
+                         const std::string& data);
 
     // 关闭连接
     bool CloseConnection(int32_t conn_id);
@@ -57,7 +68,7 @@ public:
     // 每秒定时器
     virtual void OnSecondTimer();
 
-protected:
+   protected:
     // 处理客户端连接
     virtual void handleClient(ancfl::Socket::ptr client) override;
 
@@ -65,19 +76,22 @@ protected:
     void HandleRecv(ancfl::Socket::ptr client);
 
     // 消息解析
-    virtual bool ParseMessage(const char* data, uint32_t len, NetPacket& packet);
+    virtual bool ParseMessage(const char* data,
+                              uint32_t len,
+                              NetPacket& packet);
 
     // 序列化消息
-    virtual bool SerializeMessage(const google::protobuf::Message& msg, 
-                                   std::string& out_data);
+    virtual bool SerializeMessage(const google::protobuf::Message& msg,
+                                  std::string& out_data);
 
     // 创建Protobuf消息
-    virtual std::shared_ptr<google::protobuf::Message> CreateMessage(uint32_t msg_id);
+    virtual std::shared_ptr<google::protobuf::Message> CreateMessage(
+        uint32_t msg_id);
 
-protected:
+   protected:
     MessageDispatcher::ptr dispatcher_;
     std::unordered_map<int32_t, ancfl::Socket::ptr> connections_;
-    mutable ancfl::Mutex conn_mutex_;
+    ancfl::Mutex conn_mutex_;
     int32_t next_conn_id_;
     bool running_;
     std::string ip_;
@@ -88,6 +102,6 @@ protected:
     std::unordered_map<int32_t, int64_t> last_heart_time_;
 };
 
-} // namespace game_server
+}  // namespace game_server
 
-#endif // __TCP_SERVICE_H__
+#endif  // __TCP_SERVICE_H__
