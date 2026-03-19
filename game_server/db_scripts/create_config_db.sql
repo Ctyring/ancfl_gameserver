@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS buff_config (
     effect_type INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '效果类型 1:攻击提升 2:攻击降低 3:防御提升 4:防御降低 5:速度提升 6:速度降低 7:生命恢复 8:法力恢复 9:眩晕 10:沉默 11:中毒 12:燃烧 13:冰冻 14:护盾',
     effect_value INT NOT NULL DEFAULT 0 COMMENT '效果值',
     duration INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '持续时间(秒)',
-    interval INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '触发间隔(秒)',
+    trigger_interval INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '触发间隔(秒)',
     max_stack INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '最大堆叠数',
     is_debuff TINYINT NOT NULL DEFAULT 0 COMMENT '是否减益 0:否 1:是',
     can_dispel TINYINT NOT NULL DEFAULT 1 COMMENT '是否可驱散 0:否 1:是',
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS skill_effect_config (
     effect_type INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '效果类型',
     effect_value INT NOT NULL DEFAULT 0 COMMENT '效果值',
     duration INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '持续时间(秒)',
-    interval INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '触发间隔(秒)',
+    trigger_interval INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '触发间隔(秒)',
     PRIMARY KEY (id),
     KEY idx_skill_id (skill_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='技能效果配置表';

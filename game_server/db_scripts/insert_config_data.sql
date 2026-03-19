@@ -4,7 +4,7 @@
 USE game_config;
 
 -- ==================== Buff配置数据 ====================
-INSERT INTO buff_config (id, name, type, effect_type, effect_value, duration, interval, max_stack, is_debuff, can_dispel, description, icon) VALUES
+INSERT INTO buff_config (id, name, type, effect_type, effect_value, duration, trigger_interval, max_stack, is_debuff, can_dispel, description, icon) VALUES
 (1, '攻击提升', 1, 1, 10, 30, 0, 3, 0, 1, '提升10点攻击力', 'buff_attack_up.png'),
 (2, '防御提升', 1, 3, 10, 30, 0, 3, 0, 1, '提升10点防御力', 'buff_defense_up.png'),
 (3, '速度提升', 1, 5, 20, 15, 0, 2, 0, 1, '提升20点速度', 'buff_speed_up.png'),
@@ -83,7 +83,7 @@ INSERT INTO skill_config (id, name, type, target_type, cast_range, aoe_radius, c
 (12, '毒雾', 4, 3, 8, 4, 18, 40, 80, 0, '释放毒雾造成持续伤害', 'skill_poison.png');
 
 -- 技能效果配置数据
-INSERT INTO skill_effect_config (skill_id, effect_type, effect_value, duration, interval) VALUES
+INSERT INTO skill_effect_config (skill_id, effect_type, effect_value, duration, trigger_interval) VALUES
 (2, 12, 5, 5, 1),
 (5, 9, 0, 3, 0),
 (6, 1, 10, 30, 0),
