@@ -444,11 +444,11 @@ CREATE TABLE IF NOT EXISTS rank_level (
     role_name VARCHAR(64) NOT NULL COMMENT '角色名称',
     level INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '等级',
     exp BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '经验值',
-    rank INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
+    ranking INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
     update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (rank_id),
     UNIQUE KEY uk_role_id (role_id),
-    KEY idx_rank (rank),
+    KEY idx_ranking (ranking),
     KEY idx_level (level)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='等级排行榜';
 
@@ -458,11 +458,11 @@ CREATE TABLE IF NOT EXISTS rank_power (
     role_id BIGINT UNSIGNED NOT NULL COMMENT '角色ID',
     role_name VARCHAR(64) NOT NULL COMMENT '角色名称',
     power INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '战力',
-    rank INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
+    ranking INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
     update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (rank_id),
     UNIQUE KEY uk_role_id (role_id),
-    KEY idx_rank (rank),
+    KEY idx_ranking (ranking),
     KEY idx_power (power)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='战力排行榜';
 
@@ -472,11 +472,11 @@ CREATE TABLE IF NOT EXISTS rank_wealth (
     role_id BIGINT UNSIGNED NOT NULL COMMENT '角色ID',
     role_name VARCHAR(64) NOT NULL COMMENT '角色名称',
     wealth INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '财富值',
-    rank INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
+    ranking INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '排名',
     update_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (rank_id),
     UNIQUE KEY uk_role_id (role_id),
-    KEY idx_rank (rank),
+    KEY idx_ranking (ranking),
     KEY idx_wealth (wealth)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='财富排行榜';
 
