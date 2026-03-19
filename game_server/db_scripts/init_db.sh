@@ -10,7 +10,7 @@ echo "========================================"
 
 # 数据库连接参数
 DB_USER="root"
-DB_PASS="password"  # 请根据实际情况修改
+DB_PASS="root"  # 请根据实际情况修改
 DB_HOST="localhost"
 DB_PORT="3306"
 
