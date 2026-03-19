@@ -49,21 +49,31 @@ set(PROTO_FILES
 )
 
 set(PROTO_SRCS)
+set(PROTO_HDRS)
 foreach(proto ${PROTO_FILES})
     get_filename_component(proto_name ${proto} NAME_WE)
     list(APPEND PROTO_SRCS 
         ${CMAKE_CURRENT_SOURCE_DIR}/proto/${proto_name}.pb.cc
+    )
+    list(APPEND PROTO_HDRS 
         ${CMAKE_CURRENT_SOURCE_DIR}/proto/${proto_name}.pb.h
     )
 endforeach()
 
 # 自定义命令生成protobuf代码
-add_custom_command(
-    OUTPUT ${PROTO_SRCS}
-    COMMAND ${Protobuf_PROTOC_EXECUTABLE} --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto -I ${CMAKE_CURRENT_SOURCE_DIR}/proto ${PROTO_FILES}
+add_custom_target(protobuf_compile ALL
+    COMMAND ${Protobuf_PROTOC_EXECUTABLE}
+    --proto_path=${CMAKE_CURRENT_SOURCE_DIR}
+    --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto
+    ${PROTO_FILES}
     DEPENDS ${PROTO_FILES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating protobuf files"
 )
+
+# 设置protobuf生成的源文件依赖
+set_source_files_properties(${PROTO_SRCS} PROPERTIES GENERATED TRUE)
+set_source_files_properties(${PROTO_HDRS} PROPERTIES GENERATED TRUE)
 
 # 公共库源文件
 set(COMMON_SRCS
@@ -78,6 +88,9 @@ set(COMMON_SRCS
 # 创建公共库
 add_library(game_common STATIC ${COMMON_SRCS})
 force_redefine_file_macro_for_sources(game_common)
+
+# 添加protobuf编译依赖
+add_dependencies(game_common protobuf_compile)
 
 # 链接库
 set(LIBS
