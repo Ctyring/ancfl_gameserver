@@ -106,6 +106,9 @@ public:
     bool SaveBuffData(uint64_t target_id);
     
 private:
+    // 加载Buff配置
+    bool LoadBuffConfigs();
+    
     // 获取Buff配置
     bool GetBuffConfig(int32_t buff_config_id, BuffConfig& config);
     

@@ -20,7 +20,8 @@ bool FriendModule::InitFriends(uint64_t role_id) {
     sent_apply_cache_[role_id] = std::vector<FriendApplyInfo>();
     recent_cache_[role_id] = std::vector<FriendInfo>();
 
-    LOG_INFO("Friends initialized: role_id=%llu", role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Friends initialized: role_id=%llu",
+                                     role_id);
     return true;
 }
 
@@ -67,7 +68,8 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     if (!CheckFriendLimit(role_id)) {
-        LOG_ERROR("Friend limit reached: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Friend limit reached: role_id=%llu",
+                                          role_id);
         return false;
     }
 
@@ -81,8 +83,9 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
     for (const auto& friend_info : it->second) {
         if (friend_info.friend_id == friend_id &&
             friend_info.relation_type == FriendRelationType::FRIEND) {
-            LOG_ERROR("Already friends: role_id=%llu, friend_id=%llu", role_id,
-                      friend_id);
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+                "Already friends: role_id=%llu, friend_id=%llu", role_id,
+                friend_id);
             return false;
         }
     }
@@ -102,7 +105,8 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
 
     it->second.push_back(info);
 
-    LOG_INFO("Friend added: role_id=%llu, friend_id=%llu", role_id, friend_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Friend added: role_id=%llu, friend_id=%llu", role_id, friend_id);
     return true;
 }
 
@@ -111,21 +115,24 @@ bool FriendModule::ApplyAddFriend(uint64_t role_id,
                                   const std::string& message) {
     // 不能添加自己
     if (role_id == target_id) {
-        LOG_ERROR("Cannot add self as friend: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Cannot add self as friend: role_id=%llu", role_id);
         return false;
     }
 
     // 检查是否已经是好友
     if (IsFriend(role_id, target_id)) {
-        LOG_ERROR("Already friends: role_id=%llu, target_id=%llu", role_id,
-                  target_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Already friends: role_id=%llu, target_id=%llu", role_id,
+            target_id);
         return false;
     }
 
     // 检查是否在黑名单中
     if (IsInBlacklist(target_id, role_id)) {
-        LOG_ERROR("Target has blocked you: role_id=%llu, target_id=%llu",
-                  role_id, target_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Target has blocked you: role_id=%llu, target_id=%llu", role_id,
+            target_id);
         return false;
     }
 
@@ -142,7 +149,7 @@ bool FriendModule::ApplyAddFriend(uint64_t role_id,
     for (const auto& apply : it->second) {
         if (apply.applicant_id == role_id &&
             apply.status == FriendApplyStatus::PENDING) {
-            LOG_ERROR(
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
                 "Friend apply already pending: role_id=%llu, target_id=%llu",
                 role_id, target_id);
             return false;
@@ -170,8 +177,9 @@ bool FriendModule::ApplyAddFriend(uint64_t role_id,
     }
     sent_it->second.push_back(apply);
 
-    LOG_INFO("Friend apply sent: role_id=%llu, target_id=%llu, apply_id=%llu",
-             role_id, target_id, apply.apply_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Friend apply sent: role_id=%llu, target_id=%llu, apply_id=%llu",
+        role_id, target_id, apply.apply_id);
     return true;
 }
 
@@ -195,14 +203,15 @@ bool FriendModule::HandleFriendApply(uint64_t role_id,
                 AddFriend(role_id, apply.applicant_id);
                 AddFriend(apply.applicant_id, role_id);
 
-                LOG_INFO(
+                ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
                     "Friend apply accepted: role_id=%llu, apply_id=%llu, "
                     "applicant_id=%llu",
                     role_id, apply_id, apply.applicant_id);
             } else {
                 apply.status = FriendApplyStatus::REJECTED;
-                LOG_INFO("Friend apply rejected: role_id=%llu, apply_id=%llu",
-                         role_id, apply_id);
+                ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+                    "Friend apply rejected: role_id=%llu, apply_id=%llu",
+                    role_id, apply_id);
             }
 
             return true;
@@ -232,15 +241,16 @@ bool FriendModule::DeleteFriend(uint64_t role_id, uint64_t friend_id) {
                                     });
 
     if (friend_it == it->second.end()) {
-        LOG_ERROR("Friend not found: role_id=%llu, friend_id=%llu", role_id,
-                  friend_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Friend not found: role_id=%llu, friend_id=%llu", role_id,
+            friend_id);
         return false;
     }
 
     it->second.erase(friend_it, it->second.end());
 
-    LOG_INFO("Friend deleted: role_id=%llu, friend_id=%llu", role_id,
-             friend_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Friend deleted: role_id=%llu, friend_id=%llu", role_id, friend_id);
     return true;
 }
 
@@ -288,7 +298,8 @@ bool FriendModule::AddToBlacklist(uint64_t role_id, uint64_t target_id) {
     }
 
     if (blacklist_count >= MAX_BLACKLIST_COUNT) {
-        LOG_ERROR("Blacklist limit reached: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Blacklist limit reached: role_id=%llu", role_id);
         return false;
     }
 
@@ -316,8 +327,8 @@ bool FriendModule::AddToBlacklist(uint64_t role_id, uint64_t target_id) {
 
     it->second.push_back(info);
 
-    LOG_INFO("Added to blacklist: role_id=%llu, target_id=%llu", role_id,
-             target_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Added to blacklist: role_id=%llu, target_id=%llu", role_id, target_id);
     return true;
 }
 
@@ -337,15 +348,17 @@ bool FriendModule::RemoveFromBlacklist(uint64_t role_id, uint64_t target_id) {
         });
 
     if (blacklist_it == it->second.end()) {
-        LOG_ERROR("Not in blacklist: role_id=%llu, target_id=%llu", role_id,
-                  target_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Not in blacklist: role_id=%llu, target_id=%llu", role_id,
+            target_id);
         return false;
     }
 
     it->second.erase(blacklist_it, it->second.end());
 
-    LOG_INFO("Removed from blacklist: role_id=%llu, target_id=%llu", role_id,
-             target_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Removed from blacklist: role_id=%llu, target_id=%llu", role_id,
+        target_id);
     return true;
 }
 
@@ -457,7 +470,8 @@ bool FriendModule::ClearRecentContacts(uint64_t role_id) {
     }
 
     it->second.clear();
-    LOG_INFO("Recent contacts cleared: role_id=%llu", role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Recent contacts cleared: role_id=%llu",
+                                     role_id);
     return true;
 }
 
@@ -507,7 +521,7 @@ bool FriendModule::AddIntimacy(uint64_t role_id,
             if (info.intimacy < 0) {
                 info.intimacy = 0;
             }
-            LOG_INFO(
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
                 "Intimacy added: role_id=%llu, friend_id=%llu, value=%d, "
                 "total=%d",
                 role_id, friend_id, value, info.intimacy);
@@ -552,8 +566,9 @@ bool FriendModule::SetRemark(uint64_t role_id,
         if (info.friend_id == friend_id &&
             info.relation_type == FriendRelationType::FRIEND) {
             info.remark = remark;
-            LOG_INFO("Remark set: role_id=%llu, friend_id=%llu, remark=%s",
-                     role_id, friend_id, remark.c_str());
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+                "Remark set: role_id=%llu, friend_id=%llu, remark=%s", role_id,
+                friend_id, remark.c_str());
             return true;
         }
     }

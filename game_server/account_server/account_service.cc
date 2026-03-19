@@ -5,12 +5,9 @@
 namespace game_server {
 
 AccountService::AccountService()
-    : GameServiceBase("AccountServer")
-    , db_port_(3306) {
-}
+    : GameServiceBase("AccountServer"), db_port_(3306) {}
 
-AccountService::~AccountService() {
-}
+AccountService::~AccountService() {}
 
 bool AccountService::InitService() {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing AccountServer...";
@@ -18,7 +15,8 @@ bool AccountService::InitService() {
     // 加载配置
     auto config = ancfl::Config::LoadFromYamlFile("conf/account_server.yml");
     if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to load account_server.yml";
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to load account_server.yml";
         return false;
     }
 
@@ -62,7 +60,8 @@ bool AccountService::InitService() {
     RegisterAllHandlers();
     SetMessageDispatcher(dispatcher_);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "AccountServer initialized on " << ip << ":" << port;
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
+        << "AccountServer initialized on " << ip << ":" << port;
     return true;
 }
 
@@ -74,12 +73,21 @@ void AccountService::UninitService() {
 
 void AccountService::RegisterAllHandlers() {
     // 注册消息处理器
-    REGISTER_MESSAGE(dispatcher_, 100003, &AccountService::OnAccountRegReq);    // MSG_ACCOUNT_REG_REQ
-    REGISTER_MESSAGE(dispatcher_, 100005, &AccountService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
-    REGISTER_MESSAGE(dispatcher_, 100039, &AccountService::OnSealAccountReq);   // MSG_SEAL_ACCOUNT_REQ
-    REGISTER_MESSAGE(dispatcher_, 100024, &AccountService::OnHeartBeatReq);     // MSG_WATCH_HEART_BEAT_REQ
+    REGISTER_MESSAGE(dispatcher_, 100003,
+                     &AccountService::OnAccountRegReq);  // MSG_ACCOUNT_REG_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100005,
+        &AccountService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100039,
+        &AccountService::OnSealAccountReq);  // MSG_SEAL_ACCOUNT_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100024,
+        &AccountService::OnHeartBeatReq);  // MSG_WATCH_HEART_BEAT_REQ
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Registered " << dispatcher_->GetHandlerCount() << " message handlers";
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
+        << "Registered " << dispatcher_->GetHandlerCount()
+        << " message handlers";
 }
 
 void AccountService::OnTimer() {
@@ -89,10 +97,11 @@ void AccountService::OnTimer() {
 
 bool AccountService::InitDatabase() {
     mysql_.reset(new ancfl::MySQL());
-    
-    if (!mysql_->connect(db_host_, db_user_, db_password_, db_name_, db_port_)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to connect to MySQL: " 
-                                          << db_host_ << ":" << db_port_;
+
+    if (!mysql_->connect(db_host_, db_user_, db_password_, db_name_,
+                         db_port_)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to connect to MySQL: " << db_host_ << ":" << db_port_;
         return false;
     }
 
@@ -111,11 +120,14 @@ std::string AccountService::MD5Encrypt(const std::string& input) {
     return ancfl::MD5(input).toHex();
 }
 
-bool AccountService::CreateAccount(const std::string& account_name, const std::string& password,
-                                   int32_t channel, uint64_t& account_id) {
+bool AccountService::CreateAccount(const std::string& account_name,
+                                   const std::string& password,
+                                   int32_t channel,
+                                   uint64_t& account_id) {
     // 检查账号名是否已存在
     if (GetAccountInfo(account_name, AccountInfo())) {
-        ANCFL_LOG_WARN(ANCFL_LOG_ROOT()) << "Account already exists: " << account_name;
+        ANCFL_LOG_WARN(ANCFL_LOG_ROOT())
+            << "Account already exists: " << account_name;
         return false;
     }
 
@@ -126,12 +138,15 @@ bool AccountService::CreateAccount(const std::string& account_name, const std::s
     // 插入数据库
     char sql[512];
     snprintf(sql, sizeof(sql),
-             "INSERT INTO account (account_name, password, channel, create_time, last_login_time, is_sealed) "
+             "INSERT INTO account (account_name, password, channel, "
+             "create_time, last_login_time, is_sealed) "
              "VALUES ('%s', '%s', %d, %lld, %lld, 0)",
-             account_name.c_str(), encrypted_password.c_str(), channel, now, now);
+             account_name.c_str(), encrypted_password.c_str(), channel, now,
+             now);
 
     if (!mysql_->execute(sql)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to create account: " << mysql_->getErrStr();
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to create account: " << mysql_->getErrStr();
         return false;
     }
 
@@ -156,11 +171,13 @@ bool AccountService::CreateAccount(const std::string& account_name, const std::s
         name_to_id_[account_name] = account_id;
     }
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Account created: " << account_name << " id=" << account_id;
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
+        << "Account created: " << account_name << " id=" << account_id;
     return true;
 }
 
-bool AccountService::VerifyAccount(const std::string& account_name, const std::string& password,
+bool AccountService::VerifyAccount(const std::string& account_name,
+                                   const std::string& password,
                                    AccountInfo& info) {
     // 先从缓存查找
     {
@@ -265,7 +282,8 @@ bool AccountService::GetAccountInfo(uint64_t account_id, AccountInfo& info) {
     return true;
 }
 
-bool AccountService::GetAccountInfo(const std::string& account_name, AccountInfo& info) {
+bool AccountService::GetAccountInfo(const std::string& account_name,
+                                    AccountInfo& info) {
     // 先从缓存查找
     {
         ancfl::Mutex::Lock lock(cache_mutex_);
@@ -319,11 +337,13 @@ bool AccountService::SealAccount(uint64_t account_id, int32_t seal_time) {
 
     char sql[256];
     snprintf(sql, sizeof(sql),
-             "UPDATE account SET is_sealed = 1, seal_end_time = %lld WHERE account_id = %llu",
+             "UPDATE account SET is_sealed = 1, seal_end_time = %lld WHERE "
+             "account_id = %llu",
              seal_end_time, account_id);
 
     if (!mysql_->execute(sql)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to seal account: " << mysql_->getErrStr();
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to seal account: " << mysql_->getErrStr();
         return false;
     }
 
@@ -337,18 +357,21 @@ bool AccountService::SealAccount(uint64_t account_id, int32_t seal_time) {
         }
     }
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Account sealed: " << account_id << " for " << seal_time << " seconds";
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Account sealed: " << account_id
+                                     << " for " << seal_time << " seconds";
     return true;
 }
 
 bool AccountService::UnsealAccount(uint64_t account_id) {
     char sql[256];
     snprintf(sql, sizeof(sql),
-             "UPDATE account SET is_sealed = 0, seal_end_time = 0 WHERE account_id = %llu",
+             "UPDATE account SET is_sealed = 0, seal_end_time = 0 WHERE "
+             "account_id = %llu",
              account_id);
 
     if (!mysql_->execute(sql)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to unseal account: " << mysql_->getErrStr();
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to unseal account: " << mysql_->getErrStr();
         return false;
     }
 
@@ -385,18 +408,25 @@ bool AccountService::IsAccountSealed(uint64_t account_id) {
     return true;
 }
 
-bool AccountService::RecordLoginLog(uint64_t account_id, int32_t channel, const std::string& version,
-                                    const std::string& uuid, const std::string& idfa,
-                                    const std::string& imodel, const std::string& imei, int32_t ip) {
+bool AccountService::RecordLoginLog(uint64_t account_id,
+                                    int32_t channel,
+                                    const std::string& version,
+                                    const std::string& uuid,
+                                    const std::string& idfa,
+                                    const std::string& imodel,
+                                    const std::string& imei,
+                                    int32_t ip) {
     char sql[512];
     snprintf(sql, sizeof(sql),
-             "INSERT INTO account_login_log (account_id, login_time, login_ip, channel, version, uuid, idfa, imodel, imei) "
+             "INSERT INTO account_login_log (account_id, login_time, login_ip, "
+             "channel, version, uuid, idfa, imodel, imei) "
              "VALUES (%llu, %lld, %d, %d, '%s', '%s', '%s', '%s', '%s')",
              account_id, time(nullptr), ip, channel, version.c_str(),
              uuid.c_str(), idfa.c_str(), imodel.c_str(), imei.c_str());
 
     if (!mysql_->execute(sql)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to record login log: " << mysql_->getErrStr();
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
+            << "Failed to record login log: " << mysql_->getErrStr();
         return false;
     }
 
@@ -425,4 +455,4 @@ bool AccountService::OnHeartBeatReq(const NetPacket& packet) {
     return true;
 }
 
-} // namespace game_server
+}  // namespace game_server

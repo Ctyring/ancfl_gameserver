@@ -1,40 +1,61 @@
-#include "proxy_service.h"
-#include "ancfl/log.h"
+#include "ancfl/ancfl.h"
 #include "ancfl/config.h"
+#include "ancfl/log.h"
+#include "proxy_service.h"
 
 using namespace game_server;
 
 int main(int argc, char* argv[]) {
+    // 设置时区
+    setenv("TZ", ":/etc/localtime", 1);
+    tzset();
+    srand(time(0));
+
+    // 初始化ancfl
+    ancfl::IOManager iom(1);
+
+    // 创建工作线程池
+    ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
+
     // 初始化日志
     ancfl::Logger::Instance().Init("proxy_server");
-    
+
     // 加载配置
     auto config = ancfl::Config::Instance().Load("conf/proxy_server.yml");
     if (!config) {
-        LOG_ERROR("Failed to load config");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to load config");
         return -1;
     }
-    
+
     // 创建网关服务
     auto proxy_service = ProxyService::Instance();
-    
+
+    // 设置主IOManager（用于网络IO）
+    proxy_service->SetIOManager(&iom);
+
+    // 设置工作线程池（用于后台任务）
+    proxy_service->SetWorkerPool(worker.get());
+
     // 初始化服务
     if (!proxy_service->InitService()) {
-        LOG_ERROR("Failed to init ProxyService");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to init ProxyService");
         return -1;
     }
-    
+
     // 启动服务
     proxy_service->Start();
-    
-    // 主循环
-    proxy_service->MainLoop();
-    
-    // 停止服务
-    proxy_service->StopService();
-    
-    // 反初始化服务
-    proxy_service->UninitService();
-    
+
+    // 启动工作线程池
+    worker->start();
+
+    // 启动主循环
+    iom.schedule([proxy_service]() { proxy_service->MainLoop(); });
+
+    // 运行IO管理器
+    iom.start();
+
+    // 停止工作线程池
+    worker->stop();
+
     return 0;
 }

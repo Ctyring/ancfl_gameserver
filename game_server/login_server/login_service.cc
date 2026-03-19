@@ -4,13 +4,11 @@
 namespace game_server {
 
 LoginService::LoginService()
-    : GameServiceBase("LoginServer")
-    , account_server_conn_id_(-1)
-    , center_server_conn_id_(-1) {
-}
+    : GameServiceBase("LoginServer"),
+      account_server_conn_id_(-1),
+      center_server_conn_id_(-1) {}
 
-LoginService::~LoginService() {
-}
+LoginService::~LoginService() {}
 
 bool LoginService::InitService() {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing LoginServer...";
@@ -37,13 +35,15 @@ bool LoginService::InitService() {
     if (conn_config) {
         auto account_config = conn_config->getConfig("account_server");
         if (account_config) {
-            account_server_ip_ = account_config->getValue<std::string>("ip", "127.0.0.1");
+            account_server_ip_ =
+                account_config->getValue<std::string>("ip", "127.0.0.1");
             account_server_port_ = account_config->getValue<int>("port", 8100);
         }
 
         auto center_config = conn_config->getConfig("center_server");
         if (center_config) {
-            center_server_ip_ = center_config->getValue<std::string>("ip", "127.0.0.1");
+            center_server_ip_ =
+                center_config->getValue<std::string>("ip", "127.0.0.1");
             center_server_port_ = center_config->getValue<int>("port", 8200);
         }
     }
@@ -59,7 +59,8 @@ bool LoginService::InitService() {
     RegisterAllHandlers();
     SetMessageDispatcher(dispatcher_);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "LoginServer initialized on " << ip << ":" << port;
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
+        << "LoginServer initialized on " << ip << ":" << port;
     return true;
 }
 
@@ -70,25 +71,40 @@ void LoginService::UninitService() {
 
 void LoginService::RegisterAllHandlers() {
     // 客户端消息
-    REGISTER_MESSAGE(dispatcher_, 100001, &LoginService::OnCheckVersionReq);  // MSG_CHECK_VERSION_REQ
-    REGISTER_MESSAGE(dispatcher_, 100003, &LoginService::OnAccountRegReq);    // MSG_ACCOUNT_REG_REQ
-    REGISTER_MESSAGE(dispatcher_, 100005, &LoginService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
-    REGISTER_MESSAGE(dispatcher_, 100009, &LoginService::OnServerListReq);    // MSG_SERVER_LIST_REQ
-    REGISTER_MESSAGE(dispatcher_, 100011, &LoginService::OnSelectServerReq);  // MSG_SELECT_SERVER_REQ
-    REGISTER_MESSAGE(dispatcher_, 100024, &LoginService::OnHeartBeatReq);     // MSG_WATCH_HEART_BEAT_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100001,
+        &LoginService::OnCheckVersionReq);  // MSG_CHECK_VERSION_REQ
+    REGISTER_MESSAGE(dispatcher_, 100003,
+                     &LoginService::OnAccountRegReq);  // MSG_ACCOUNT_REG_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100005,
+        &LoginService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
+    REGISTER_MESSAGE(dispatcher_, 100009,
+                     &LoginService::OnServerListReq);  // MSG_SERVER_LIST_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100011,
+        &LoginService::OnSelectServerReq);  // MSG_SELECT_SERVER_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100024,
+        &LoginService::OnHeartBeatReq);  // MSG_WATCH_HEART_BEAT_REQ
 
     // 服务器间消息
-    REGISTER_MESSAGE(dispatcher_, 100013, &LoginService::OnLogicRegToLoginReq); // MSG_LOGIC_REGTO_LOGIN_REQ
-    REGISTER_MESSAGE(dispatcher_, 100015, &LoginService::OnLogicUpdateReq);     // MSG_LOGIC_UPDATE_REQ
+    REGISTER_MESSAGE(
+        dispatcher_, 100013,
+        &LoginService::OnLogicRegToLoginReq);  // MSG_LOGIC_REGTO_LOGIN_REQ
+    REGISTER_MESSAGE(dispatcher_, 100015,
+                     &LoginService::OnLogicUpdateReq);  // MSG_LOGIC_UPDATE_REQ
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Registered " << dispatcher_->GetHandlerCount() << " message handlers";
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
+        << "Registered " << dispatcher_->GetHandlerCount()
+        << " message handlers";
 }
 
 void LoginService::OnTimer() {
     // 清理过期的登录验证码
     int64_t now = time(nullptr);
     std::vector<uint64_t> expired_codes;
-    
+
     {
         ancfl::Mutex::Lock lock(code_mutex_);
         for (auto& pair : code_expire_time_) {
@@ -108,13 +124,14 @@ void LoginService::OnTimer() {
     {
         ancfl::Mutex::Lock lock(server_mutex_);
         for (auto& pair : logic_servers_) {
-            if (now - pair.second.last_update_time > 120) { // 2分钟未更新
+            if (now - pair.second.last_update_time > 120) {  // 2分钟未更新
                 inactive_servers.push_back(pair.first);
             }
         }
 
         for (auto server_id : inactive_servers) {
-            ANCFL_LOG_WARN(ANCFL_LOG_ROOT()) << "Logic server " << server_id << " inactive, removing";
+            ANCFL_LOG_WARN(ANCFL_LOG_ROOT())
+                << "Logic server " << server_id << " inactive, removing";
             logic_servers_.erase(server_id);
         }
     }
@@ -152,7 +169,9 @@ bool LoginService::VerifyLoginCode(uint64_t account_id, int32_t login_code) {
     return false;
 }
 
-bool LoginService::GetLogicServerInfo(uint64_t account_id, std::string& ip, int32_t& port) {
+bool LoginService::GetLogicServerInfo(uint64_t account_id,
+                                      std::string& ip,
+                                      int32_t& port) {
     // TODO: 根据账号ID获取对应的逻辑服信息
     // 暂时返回第一个可用的逻辑服
     ancfl::Mutex::Lock lock(server_mutex_);
@@ -208,4 +227,4 @@ bool LoginService::OnLogicUpdateReq(const NetPacket& packet) {
     return true;
 }
 
-} // namespace game_server
+}  // namespace game_server

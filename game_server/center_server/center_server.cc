@@ -12,7 +12,8 @@ CenterServer::~CenterServer() {
 
 bool CenterServer::Init(const std::string& config_file) {
     // TODO: 从配置文件加载配置
-    LOG_INFO("Center server initializing: config=%s", config_file.c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Center server initializing: config=%s",
+                                     config_file.c_str());
     return true;
 }
 
@@ -22,13 +23,13 @@ bool CenterServer::Start() {
     }
 
     is_running_ = true;
-    LOG_INFO("Center server started");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Center server started");
     return true;
 }
 
 void CenterServer::Stop() {
     is_running_ = false;
-    LOG_INFO("Center server stopped");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Center server stopped");
 }
 
 bool CenterServer::IsRunning() {
@@ -42,8 +43,9 @@ bool CenterServer::RegisterServer(const ServerInfo& info) {
     servers_[info.server_id].last_heartbeat = time(nullptr);
     servers_[info.server_id].status = ServerStatus::RUNNING;
 
-    LOG_INFO("Server registered: id=%d, type=%d, ip=%s:%d", info.server_id,
-             static_cast<int32_t>(info.type), info.ip.c_str(), info.port);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Server registered: id=%d, type=%d, ip=%s:%d", info.server_id,
+        static_cast<int32_t>(info.type), info.ip.c_str(), info.port);
     return true;
 }
 
@@ -55,7 +57,7 @@ bool CenterServer::UnregisterServer(int32_t server_id) {
         return false;
     }
 
-    LOG_INFO("Server unregistered: id=%d", server_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Server unregistered: id=%d", server_id);
     servers_.erase(it);
     return true;
 }
@@ -159,8 +161,9 @@ bool CenterServer::PlayerEnterCross(uint64_t role_id,
 
     cross_players_[role_id] = player;
 
-    LOG_INFO("Player enter cross: role_id=%llu, src=%d, dest=%d, type=%d",
-             role_id, src_server_id, dest_server_id, cross_type);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Player enter cross: role_id=%llu, src=%d, dest=%d, type=%d", role_id,
+        src_server_id, dest_server_id, cross_type);
     return true;
 }
 
@@ -172,8 +175,9 @@ bool CenterServer::PlayerLeaveCross(uint64_t role_id) {
         return false;
     }
 
-    LOG_INFO("Player leave cross: role_id=%llu, src=%d, dest=%d", role_id,
-             it->second.src_server_id, it->second.dest_server_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Player leave cross: role_id=%llu, src=%d, dest=%d", role_id,
+        it->second.src_server_id, it->second.dest_server_id);
     cross_players_.erase(it);
     return true;
 }
@@ -211,7 +215,7 @@ bool CenterServer::AddToMatchQueue(uint64_t role_id,
 
     queue.push_back(std::make_pair(role_id, score));
 
-    LOG_INFO(
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
         "Player added to match queue: role_id=%llu, match_type=%d, score=%d",
         role_id, match_type, score);
     return true;
@@ -229,7 +233,8 @@ bool CenterServer::RemoveFromMatchQueue(uint64_t role_id) {
                            });
         if (it != queue.end()) {
             queue.erase(it, queue.end());
-            LOG_INFO("Player removed from match queue: role_id=%llu", role_id);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+                "Player removed from match queue: role_id=%llu", role_id);
             return true;
         }
     }
@@ -283,8 +288,8 @@ bool CenterServer::ProcessMatch(int32_t match_type, int32_t team_size) {
 
     // TODO: 通知匹配成功的玩家
 
-    LOG_INFO("Match processed: match_type=%d, team_size=%d", match_type,
-             team_size);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Match processed: match_type=%d, team_size=%d", match_type, team_size);
     return true;
 }
 
@@ -295,7 +300,7 @@ bool CenterServer::RouteMessage(int32_t src_server_id,
 
     auto it = servers_.find(dest_server_id);
     if (it == servers_.end() || it->second.status != ServerStatus::RUNNING) {
-        LOG_ERROR(
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
             "Route message failed: dest server not found or not running: "
             "src=%d, dest=%d",
             src_server_id, dest_server_id);
@@ -303,8 +308,8 @@ bool CenterServer::RouteMessage(int32_t src_server_id,
     }
 
     // TODO: 实际发送消息到目标服务器
-    LOG_INFO("Message routed: src=%d, dest=%d, size=%d", src_server_id,
-             dest_server_id, msg.size());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Message routed: src=%d, dest=%d, size=%d",
+                                     src_server_id, dest_server_id, msg.size());
     return true;
 }
 
@@ -320,8 +325,9 @@ bool CenterServer::BroadcastMessage(ServerType type, const std::string& msg) {
         }
     }
 
-    LOG_INFO("Message broadcast: type=%d, count=%d, size=%d",
-             static_cast<int32_t>(type), count, msg.size());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Message broadcast: type=%d, count=%d, size=%d",
+        static_cast<int32_t>(type), count, msg.size());
     return true;
 }
 
@@ -336,7 +342,8 @@ bool CenterServer::BroadcastToAll(const std::string& msg) {
         }
     }
 
-    LOG_INFO("Message broadcast to all: count=%d, size=%d", count, msg.size());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Message broadcast to all: count=%d, size=%d", count, msg.size());
     return true;
 }
 

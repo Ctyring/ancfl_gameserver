@@ -33,13 +33,13 @@ bool LogicService::InitService() {
 
     // 初始化共享内存
     if (!InitSharedMemory()) {
-        LOG_ERROR("Failed to init shared memory");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to init shared memory");
         return false;
     }
 
     // 连接数据库服务器
     if (!ConnectToDBServer()) {
-        LOG_ERROR("Failed to connect to DB server");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to connect to DB server");
         return false;
     }
 
@@ -50,7 +50,7 @@ bool LogicService::InitService() {
     sync_timer_ =
         GetTimerMgr()->AddTimer(60000, std::bind(&LogicService::OnTimer, this));
 
-    LOG_INFO("LogicService initialized successfully");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("LogicService initialized successfully");
     return true;
 }
 
@@ -68,7 +68,7 @@ void LogicService::UninitService() {
     }
 
     GameServiceBase::UninitService();
-    LOG_INFO("LogicService uninitialized");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("LogicService uninitialized");
 }
 
 void LogicService::RegisterAllHandlers() {
@@ -100,12 +100,44 @@ void LogicService::RegisterAllHandlers() {
 }
 
 void LogicService::OnTimer() {
-    // 同步数据到数据库
-    for (auto& pair : role_cache_) {
-        RoleData* data = pair.second;
-        if (data->GetStatus() == SharedMemoryStatus::USE) {
-            SaveRoleData(*data);
+    // 优先使用工作线程池处理后台任务
+    ancfl::IOManager* scheduler = worker_pool_ ? worker_pool_ : io_manager_;
+
+    if (scheduler) {
+        // 同步数据到数据库 - 使用工作线程池异步调度
+        for (auto& pair : role_cache_) {
+            RoleData* data = pair.second;
+            if (data->GetStatus() == SharedMemoryStatus::USE) {
+                scheduler->schedule([this, data]() { SaveRoleData(*data); });
+            }
         }
+
+        // 使用工作线程池异步调度各模块的定时器
+        scheduler->schedule([this]() { buff_module_.OnTimer(); });
+        scheduler->schedule([this]() { scene_module_.OnTimer(); });
+        scheduler->schedule([this]() { shop_module_.OnTimer(); });
+        scheduler->schedule([this]() { mail_module_.OnTimer(); });
+        scheduler->schedule([this]() { guild_module_.OnTimer(); });
+        scheduler->schedule([this]() { friend_module_.OnTimer(); });
+        scheduler->schedule([this]() { activity_module_.OnTimer(); });
+    } else {
+        // 如果没有IOManager，同步执行
+        // 同步数据到数据库
+        for (auto& pair : role_cache_) {
+            RoleData* data = pair.second;
+            if (data->GetStatus() == SharedMemoryStatus::USE) {
+                SaveRoleData(*data);
+            }
+        }
+
+        // 调用各模块的定时器
+        buff_module_.OnTimer();
+        scene_module_.OnTimer();
+        shop_module_.OnTimer();
+        mail_module_.OnTimer();
+        guild_module_.OnTimer();
+        friend_module_.OnTimer();
+        activity_module_.OnTimer();
     }
 }
 
@@ -120,14 +152,16 @@ bool LogicService::ConnectToDBServer() {
     // 连接数据库服务器
     uint32_t conn_id = Connect(db_server_ip_, db_server_port_);
     if (conn_id == 0) {
-        LOG_ERROR("Failed to connect to DB server: %s:%d",
-                  db_server_ip_.c_str(), db_server_port_);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Failed to connect to DB server: %s:%d", db_server_ip_.c_str(),
+            db_server_port_);
         return false;
     }
 
     db_server_id_ = conn_id;
-    LOG_INFO("Connected to DB server: %s:%d, conn_id: %u",
-             db_server_ip_.c_str(), db_server_port_, conn_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Connected to DB server: %s:%d, conn_id: %u", db_server_ip_.c_str(),
+        db_server_port_, conn_id);
     return true;
 }
 
@@ -138,7 +172,7 @@ bool LogicService::CreateRole(uint64_t account_id,
     // 分配角色数据
     RoleData* data = AllocateRoleData();
     if (!data) {
-        LOG_ERROR("Failed to allocate role data");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to allocate role data");
         return false;
     }
 
@@ -177,8 +211,9 @@ bool LogicService::CreateRole(uint64_t account_id,
     // 保存到数据库
     SaveRoleData(*data);
 
-    LOG_INFO("Created role: id=%llu, name=%s, account_id=%llu", data->role_id,
-             role_name.c_str(), account_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Created role: id=%llu, name=%s, account_id=%llu", data->role_id,
+        role_name.c_str(), account_id);
     return true;
 }
 
@@ -266,12 +301,14 @@ bool LogicService::InitSharedMemory() {
     // 初始化角色共享内存
     role_memory_ = std::make_unique<SharedMemory<RoleData>>(1, 1000);
     if (!role_memory_) {
-        LOG_ERROR("Failed to create role shared memory");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+            "Failed to create role shared memory");
         return false;
     }
 
-    LOG_INFO("Shared memory initialized: block_count=%d",
-             role_memory_->GetBlockCount());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Shared memory initialized: block_count=%d",
+        role_memory_->GetBlockCount());
     return true;
 }
 
@@ -404,7 +441,8 @@ bool LogicService::OnDBRegToLogicReq(const NetPacket& packet) {
     }
 
     db_server_id_ = packet.conn_id;
-    LOG_INFO("DB server registered: conn_id=%u", db_server_id_);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("DB server registered: conn_id=%u",
+                                     db_server_id_);
 
     // 发送注册响应
     msg_base::ServerRegAck ack;
@@ -422,8 +460,9 @@ bool LogicService::OnDBDataSyncAck(const NetPacket& packet) {
         return false;
     }
 
-    LOG_INFO("DB data sync ack: role_id=%llu, result=%d", ack.role_id(),
-             ack.result());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "DB data sync ack: role_id=%llu, result=%d", ack.role_id(),
+        ack.result());
 
     return true;
 }

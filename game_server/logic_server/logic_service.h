@@ -2,6 +2,7 @@
 #define __LOGIC_SERVICE_H__
 
 #include "activity_module.h"
+#include "ancfl/ancfl.h"
 #include "bag_module.h"
 #include "buff_module.h"
 #include "common/game_service_base.h"
@@ -63,6 +64,16 @@ class LogicService : public GameServiceBase {
     SceneModule* GetSceneModule() { return &scene_module_; }
     ActivityModule* GetActivityModule() { return &activity_module_; }
 
+    // 设置主IOManager（用于网络IO）
+    void SetIOManager(ancfl::IOManager* io_manager) {
+        io_manager_ = io_manager;
+    }
+
+    // 设置工作线程池（用于后台任务）
+    void SetWorkerPool(ancfl::IOManager* worker_pool) {
+        worker_pool_ = worker_pool;
+    }
+
    private:
     // 消息处理器
     bool OnRoleCreateReq(const NetPacket& packet);
@@ -87,6 +98,12 @@ class LogicService : public GameServiceBase {
 
     // 同步定时器
     int32_t sync_timer_;
+
+    // IO管理器
+    ancfl::IOManager* io_manager_;
+
+    // 工作线程池
+    ancfl::IOManager* worker_pool_;
 
     // 游戏功能模块
     RoleModule role_module_;

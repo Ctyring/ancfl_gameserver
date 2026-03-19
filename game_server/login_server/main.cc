@@ -1,5 +1,5 @@
-#include "login_service.h"
 #include "ancfl/ancfl.h"
+#include "login_service.h"
 
 using namespace game_server;
 
@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
     // 初始化ancfl
     ancfl::IOManager iom(1);
-    
+
     // 创建工作线程池
     ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
 
@@ -28,9 +28,7 @@ int main(int argc, char** argv) {
     service->Run();
 
     // 启动主循环
-    iom.schedule([service]() {
-        service->MainLoop();
-    });
+    iom.schedule([service]() { service->MainLoop(); });
 
     // 运行IO管理器
     iom.start();

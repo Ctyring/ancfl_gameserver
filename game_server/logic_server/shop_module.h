@@ -121,6 +121,9 @@ public:
     void OnTimer();
     
 private:
+    // 加载商店配置
+    bool LoadShopConfigs();
+    
     // 获取商品信息
     bool GetShopItem(int32_t shop_id, int32_t item_config_id, ShopItem& item);
     

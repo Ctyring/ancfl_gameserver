@@ -19,7 +19,7 @@ bool MessageDispatcher::Dispatch(const NetPacket& packet) {
         ancfl::Mutex::Lock lock(mutex_);
         auto it = handlers_.find(packet.msg_id);
         if (it == handlers_.end()) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "No handler for message id: " << packet.msg_id;
+            ANCFL_ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(ANCFL_LOG_ROOT()) << "No handler for message id: " << packet.msg_id;
             return false;
         }
         handler = it->second;

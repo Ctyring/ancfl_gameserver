@@ -145,6 +145,9 @@ class TaskModule {
     bool SaveTaskData(uint64_t role_id);
 
    private:
+    // 加载任务配置
+    bool LoadTaskConfigs();
+    
     // 获取任务配置
     bool GetTaskConfig(int32_t task_config_id, TaskConfig& config);
 

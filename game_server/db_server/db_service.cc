@@ -34,7 +34,7 @@ bool DBService::InitService() {
 
     // 连接数据库
     if (!ConnectToDatabase()) {
-        LOG_ERROR("Failed to connect to database");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to connect to database");
         return false;
     }
 
@@ -45,7 +45,7 @@ bool DBService::InitService() {
     sync_timer_ =
         GetTimerMgr()->AddTimer(60000, std::bind(&DBService::OnTimer, this));
 
-    LOG_INFO("DBService initialized successfully");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("DBService initialized successfully");
     return true;
 }
 
@@ -63,7 +63,7 @@ void DBService::UninitService() {
     }
 
     GameServiceBase::UninitService();
-    LOG_INFO("DBService uninitialized");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("DBService uninitialized");
 }
 
 void DBService::RegisterAllHandlers() {
@@ -110,7 +110,8 @@ void DBService::OnTimer() {
     // 检查数据库连接
     for (auto& conn : db_pool_) {
         if (!conn->Ping()) {
-            LOG_WARN("Database connection lost, reconnecting...");
+            ANCFL_LOG_WARN(ANCFL_LOG_ROOT())(
+                "Database connection lost, reconnecting...");
             conn->Connect();
         }
     }
@@ -122,22 +123,23 @@ bool DBService::ConnectToDatabase() {
         auto conn = std::make_shared<ancfl::MySQL>();
         if (!conn->Connect(db_host_, db_user_, db_password_, db_name_,
                            db_port_)) {
-            LOG_ERROR("Failed to connect to database: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
+                "Failed to connect to database: %s", conn->GetError().c_str());
             return false;
         }
         db_pool_.push_back(conn);
     }
 
-    LOG_INFO("Connected to database: %s:%d, pool_size=%d", db_host_.c_str(),
-             db_port_, db_pool_size_);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Connected to database: %s:%d, pool_size=%d", db_host_.c_str(),
+        db_port_, db_pool_size_);
     return true;
 }
 
 std::shared_ptr<ancfl::MySQL> DBService::GetDBConnection() {
     std::lock_guard<std::mutex> lock(db_pool_mutex_);
     if (db_pool_.empty()) {
-        LOG_ERROR("No database connection available");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("No database connection available");
         return nullptr;
     }
     return db_pool_[rand() % db_pool_.size()];
@@ -164,8 +166,8 @@ bool DBService::CreateRole(const msg_role::RoleDataSyncReq& req) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -198,14 +200,15 @@ bool DBService::CreateRole(const msg_role::RoleDataSyncReq& req) {
         stmt->SetFloat(27, req.rotation_y());
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in CreateRole: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in CreateRole: %s",
+                                          e.what());
         return false;
     }
 }
@@ -227,8 +230,8 @@ bool DBService::UpdateRole(const msg_role::RoleDataSyncReq& req) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -260,14 +263,15 @@ bool DBService::UpdateRole(const msg_role::RoleDataSyncReq& req) {
         stmt->SetUInt64(26, req.role_id());
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in UpdateRole: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in UpdateRole: %s",
+                                          e.what());
         return false;
     }
 }
@@ -283,22 +287,23 @@ bool DBService::DeleteRole(uint64_t role_id) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         stmt->SetUInt64(1, role_id);
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in DeleteRole: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in DeleteRole: %s",
+                                          e.what());
         return false;
     }
 }
@@ -317,8 +322,8 @@ bool DBService::GetRoleList(uint64_t account_id,
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -326,7 +331,8 @@ bool DBService::GetRoleList(uint64_t account_id,
 
         auto result = stmt->Query();
         if (!result) {
-            LOG_ERROR("Failed to query: %s", conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to query: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -343,7 +349,8 @@ bool DBService::GetRoleList(uint64_t account_id,
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in GetRoleList: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in GetRoleList: %s",
+                                          e.what());
         return false;
     }
 }
@@ -359,8 +366,8 @@ bool DBService::GetRoleData(uint64_t role_id, msg_role::RoleDataSyncReq& data) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -368,7 +375,8 @@ bool DBService::GetRoleData(uint64_t role_id, msg_role::RoleDataSyncReq& data) {
 
         auto result = stmt->Query();
         if (!result) {
-            LOG_ERROR("Failed to query: %s", conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to query: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -405,7 +413,8 @@ bool DBService::GetRoleData(uint64_t role_id, msg_role::RoleDataSyncReq& data) {
 
         return false;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in GetRoleData: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in GetRoleData: %s",
+                                          e.what());
         return false;
     }
 }
@@ -433,8 +442,8 @@ bool DBService::CreateAccount(const std::string& account_name,
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -451,14 +460,15 @@ bool DBService::CreateAccount(const std::string& account_name,
         stmt->SetInt32(10, 0);
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in CreateAccount: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in CreateAccount: %s",
+                                          e.what());
         return false;
     }
 }
@@ -482,8 +492,8 @@ bool DBService::VerifyAccount(const std::string& account_name,
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -492,7 +502,8 @@ bool DBService::VerifyAccount(const std::string& account_name,
 
         auto result = stmt->Query();
         if (!result) {
-            LOG_ERROR("Failed to query: %s", conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to query: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -511,7 +522,8 @@ bool DBService::VerifyAccount(const std::string& account_name,
 
         return false;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in VerifyAccount: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in VerifyAccount: %s",
+                                          e.what());
         return false;
     }
 }
@@ -531,8 +543,8 @@ bool DBService::GetAccountInfo(uint64_t account_id,
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -540,7 +552,8 @@ bool DBService::GetAccountInfo(uint64_t account_id,
 
         auto result = stmt->Query();
         if (!result) {
-            LOG_ERROR("Failed to query: %s", conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to query: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -559,7 +572,8 @@ bool DBService::GetAccountInfo(uint64_t account_id,
 
         return false;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in GetAccountInfo: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in GetAccountInfo: %s",
+                                          e.what());
         return false;
     }
 }
@@ -578,8 +592,8 @@ bool DBService::SealAccount(uint64_t account_id, int32_t seal_time) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -587,14 +601,15 @@ bool DBService::SealAccount(uint64_t account_id, int32_t seal_time) {
         stmt->SetUInt64(2, account_id);
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in SealAccount: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in SealAccount: %s",
+                                          e.what());
         return false;
     }
 }
@@ -611,22 +626,23 @@ bool DBService::UnsealAccount(uint64_t account_id) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         stmt->SetUInt64(1, account_id);
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in UnsealAccount: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in UnsealAccount: %s",
+                                          e.what());
         return false;
     }
 }
@@ -643,8 +659,8 @@ bool DBService::IsAccountSealed(uint64_t account_id) {
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -652,7 +668,8 @@ bool DBService::IsAccountSealed(uint64_t account_id) {
 
         auto result = stmt->Query();
         if (!result) {
-            LOG_ERROR("Failed to query: %s", conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to query: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -667,7 +684,8 @@ bool DBService::IsAccountSealed(uint64_t account_id) {
 
         return false;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in IsAccountSealed: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in IsAccountSealed: %s",
+                                          e.what());
         return false;
     }
 }
@@ -693,8 +711,8 @@ bool DBService::RecordLoginLog(uint64_t account_id,
     try {
         auto stmt = conn->Prepare(sql);
         if (!stmt) {
-            LOG_ERROR("Failed to prepare statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to prepare statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
@@ -710,14 +728,15 @@ bool DBService::RecordLoginLog(uint64_t account_id,
         stmt->SetInt64(9, now);
 
         if (!stmt->Execute()) {
-            LOG_ERROR("Failed to execute statement: %s",
-                      conn->GetError().c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to execute statement: %s",
+                                              conn->GetError().c_str());
             return false;
         }
 
         return true;
     } catch (const std::exception& e) {
-        LOG_ERROR("Exception in RecordLoginLog: %s", e.what());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Exception in RecordLoginLog: %s",
+                                          e.what());
         return false;
     }
 }
@@ -957,8 +976,9 @@ bool DBService::OnLogicRegToDBReq(const NetPacket& packet) {
     }
 
     logic_servers_[packet.conn_id] = req.server_name();
-    LOG_INFO("Logic server registered: conn_id=%u, name=%s", packet.conn_id,
-             req.server_name().c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
+        "Logic server registered: conn_id=%u, name=%s", packet.conn_id,
+        req.server_name().c_str());
 
     // 发送注册响应
     msg_base::ServerRegAck ack;
