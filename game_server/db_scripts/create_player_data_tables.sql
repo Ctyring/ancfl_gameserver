@@ -1,6 +1,9 @@
 -- 玩家数据表创建脚本
 -- 数据库: game_db
 
+-- 创建玩家数据库
+CREATE DATABASE IF NOT EXISTS game_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 USE game_db;
 
 -- ==================== 角色技能表 ====================
