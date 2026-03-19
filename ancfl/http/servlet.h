@@ -10,6 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "ancfl/mutex.h"
 #include "ancfl/thread.h"
 #include "ancfl/util.h"
 #include "http.h"

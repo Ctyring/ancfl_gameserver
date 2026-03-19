@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @file bytearray.h
  * @brief 二进制数�?序列�?反序列化)
  */
@@ -417,7 +417,12 @@ class ByteArray {
 
     /**
      * @brief 返回数据的长�?     */
-    size_t getSize() const { return m_size; }
+    size_t getSize() const;
+
+    /**
+     * @brief 获取当前的可写入容量
+     */
+    size_t getCapacity() const;
 
    private:
     /**
@@ -425,11 +430,6 @@ class ByteArray {
      * 扩容ByteArray,使其可以容纳size个数�?如果原本可以可以容纳,则不扩容)
      */
     void addCapacity(size_t size);
-
-    /**
-     * @brief 获取当前的可写入容量
-     */
-    size_t getCapacity() const { return m_capacity - m_position; }
 
    private:
     /// 内存块的大小

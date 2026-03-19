@@ -1,4 +1,4 @@
-﻿#include "bytearray.h"
+#include "bytearray.h"
 #include <string.h>
 #include <fstream>
 #include <iomanip>
@@ -651,6 +651,14 @@ uint64_t ByteArray::getWriteBuffers(std::vector<iovec>& buffers, uint64_t len) {
         buffers.push_back(iov);
     }
     return size;
+}
+
+size_t ByteArray::getSize() const {
+    return m_size;
+}
+
+size_t ByteArray::getCapacity() const {
+    return m_capacity - m_position;
 }
 
 }  // namespace ancfl
