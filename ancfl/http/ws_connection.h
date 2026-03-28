@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ancfl/http/http_connection.h"
 #include "ancfl/http/ws_session.h"
 

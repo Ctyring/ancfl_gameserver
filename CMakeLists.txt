@@ -1,14 +1,18 @@
-﻿cmake_miniMum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 
 project(ancfl)
+cmake_policy(SET CMP0064 NEW)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include (cmake/utils.cmake)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # 指定编译选项
-# -rdynamic 将所有符号加入符号表，便于使用dlopen或者backtrace追踪到符�?# -Werror 不区分警告和错误，遇到任何警告都停止编译
+# -rdynamic 将所有符号加入符号表，便于使用dlopen或者backtrace追踪到符号
+# -Werror 不区分警告和错误，遇到任何警告都停止编译
 # -Wall 开启大部分警告提示
-# -Wno-unused-funtion 不要警告未使用函�?# -Wno-deprecated 不要警告过时特�?set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O2 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
+# -Wno-unused-funtion 不要警告未使用函数
+# -Wno-deprecated 不要警告过时特性
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O2 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
 set(CMAKE_C_FLAGS "$ENV{CXXFLAGS} -rdynamic -O2 -fPIC -ggdb -std=c11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
 
 include_directories(.)
@@ -17,7 +21,7 @@ include_directories(/usr/local/include)
 link_directories(/yaml-cpp/lib)
 link_directories(/root/cty/ancfl/include)
 
-option(TEST "ON for complile test" OFF)
+option(BUILD_TESTS "ON for complile test" ON)
 
 message("***", ${YAMLCPP})
 
@@ -43,9 +47,9 @@ if(ZLIB_FOUND)
 endif()
 
 set(LIB_SRC 
+	ancfl/hook.cc
 	ancfl/config.cc
 	ancfl/fiber.cc
-	ancfl/hook.cc
 	ancfl/fd_manager.cc
 	ancfl/iomanager.cc
 	ancfl/log.cc
@@ -74,7 +78,7 @@ set(LIB_SRC
     ancfl/http/ws_server.cc
     ancfl/http/ws_servlet.cc
 	ancfl/util/hash_util.cc
-	ancfl/db/redis.cc
+	# ancfl/db/redis.cc
 	ancfl/application.cc
 	ancfl/util/time.cc
 	ancfl/worker.cc
@@ -97,9 +101,9 @@ set(LIB_SRC
 	ancfl/http/session_data.cc
 	ancfl/http/servlets/config_servlet.cc
     ancfl/http/servlets/status_servlet.cc
-	ancfl/ns/name_server_module.cc
-    ancfl/ns/ns_client.cc
-    ancfl/ns/ns_protocol.cc
+	# ancfl/ns/name_server_module.cc
+	# ancfl/ns/ns_client.cc
+	# ancfl/ns/ns_protocol.cc
 	ancfl/ds/bitmap.cc
 	ancfl/zk_client.cc
 	ancfl/streams/service_discovery.cc
@@ -113,7 +117,7 @@ ragelmaker(ancfl/http/http11_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ancfl
 ragelmaker(ancfl/http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ancfl/http)
 ragelmaker(ancfl/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ancfl)
 
-protobufmaker(ancfl/ns/ns_protobuf.proto LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR})
+# protobufmaker(ancfl/ns/ns_protobuf.proto LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR})
 # protobufmaker(ancfl/test.proto LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(ancfl SHARED ${LIB_SRC})
@@ -129,20 +133,20 @@ set(LIBS
         yaml-cpp
 		${PROTOBUF_LIBRARIES}
 		${OPENSSL_LIBRARIES}
-		libjsoncpp_static.a
+		jsoncpp
 		${ZLIB_LIBRARIES}
 		sqlite3
 		tinyxml2
 		mysqlclient
-		mysqlclient_r
-		zookeeper_mt
+		# mysqlclient_r
+		# zookeeper_mt
 		event
-        hiredis_vip
+        hiredis
 		jemalloc
 		)
 
 message("***", ${LIBS})
-if(TEST)
+if(BUILD_TESTS)
 ancfl_add_executable(test1 "tests/test.cc" ancfl "${LIBS}")
 ancfl_add_executable(test_config "tests/test_config.cc" ancfl "${LIBS}")
 ancfl_add_executable(test_thread "tests/test_thread.cc" ancfl "${LIBS}")
@@ -200,16 +204,16 @@ add_library(test_module SHARED tests/test_module.cc)
 ancfl_add_executable(bin_ancfl "ancfl/main.cc" ancfl "${LIBS}")
 set_target_properties(bin_ancfl PROPERTIES OUTPUT_NAME "ancfl")
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/orm_out)
-set(OLIBS ${LIBS})
-set(OLIBS ${OLIBS} orm_data)
-ancfl_add_executable(test_orm "tests/test_orm.cc" orm_data "${OLIBS}")
+# add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/orm_out)
+# set(OLIBS ${LIBS})
+# set(OLIBS ${OLIBS} orm_data)
+# ancfl_add_executable(test_orm "tests/test_orm.cc" orm_data "${OLIBS}")
 
-ancfl_add_executable(test_nameserver "tests/test_nameserver.cc" ancfl "${LIBS}")
+# ancfl_add_executable(test_nameserver "tests/test_nameserver.cc" ancfl "${LIBS}")
 ancfl_add_executable(test_bitmap "tests/test_bitmap.cc" ancfl "${LIBS}")
 endif()
-ancfl_add_executable(test_zookeeper "tests/test_zookeeper.cc" ancfl "${LIBS}")
-ancfl_add_executable(test_service_discovery "tests/test_service_discovery.cc" ancfl "${LIBS}")
+# ancfl_add_executable(test_zookeeper "tests/test_zookeeper.cc" ancfl "${LIBS}")
+# ancfl_add_executable(test_service_discovery "tests/test_service_discovery.cc" ancfl "${LIBS}")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
