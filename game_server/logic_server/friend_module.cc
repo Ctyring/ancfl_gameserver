@@ -1,5 +1,6 @@
 #include "friend_module.h"
-#include "proto/msg_friend.pb.h"
+#include "ancfl/log.h"
+#include <mutex>
 
 namespace game_server {
 
@@ -20,13 +21,11 @@ bool FriendModule::InitFriends(uint64_t role_id) {
     sent_apply_cache_[role_id] = std::vector<FriendApplyInfo>();
     recent_cache_[role_id] = std::vector<FriendInfo>();
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Friends initialized: role_id=%llu",
-                                     role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friends initialized: role_id=" << role_id;
     return true;
 }
 
-bool FriendModule::GetFriends(uint64_t role_id,
-                              std::vector<FriendInfo>& friends) {
+bool FriendModule::GetFriends(uint64_t role_id, std::vector<FriendInfo>& friends) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = friend_cache_.find(role_id);
@@ -44,9 +43,7 @@ bool FriendModule::GetFriends(uint64_t role_id,
     return true;
 }
 
-bool FriendModule::GetFriendInfo(uint64_t role_id,
-                                 uint64_t friend_id,
-                                 FriendInfo& info) {
+bool FriendModule::GetFriendInfo(uint64_t role_id, uint64_t friend_id, FriendInfo& info) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = friend_cache_.find(role_id);
@@ -68,8 +65,7 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     if (!CheckFriendLimit(role_id)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Friend limit reached: role_id=%llu",
-                                          role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Friend limit reached: role_id=" << role_id;
         return false;
     }
 
@@ -81,11 +77,8 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
 
     // 检查是否已经是好友
     for (const auto& friend_info : it->second) {
-        if (friend_info.friend_id == friend_id &&
-            friend_info.relation_type == FriendRelationType::FRIEND) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                "Already friends: role_id=%llu, friend_id=%llu", role_id,
-                friend_id);
+        if (friend_info.friend_id == friend_id && friend_info.relation_type == FriendRelationType::FRIEND) {
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Already friends: role_id=" << role_id << ", friend_id=" << friend_id;
             return false;
         }
     }
@@ -98,94 +91,110 @@ bool FriendModule::AddFriend(uint64_t role_id, uint64_t friend_id) {
     info.profession = 1;
     info.status = FriendStatus::OFFLINE;
     info.relation_type = FriendRelationType::FRIEND;
-    info.add_time = time(nullptr);
-    info.intimacy = 0;
-    info.remark = "";
-    info.is_online = false;
+    info.last_login_time = time(nullptr);
+    info.friend_since = time(nullptr);
 
     it->second.push_back(info);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Friend added: role_id=%llu, friend_id=%llu", role_id, friend_id);
+    // 同时更新对方的好友列表
+    // TODO: 实现跨服务器好友同步
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend added: role_id=" << role_id << ", friend_id=" << friend_id;
     return true;
 }
 
-bool FriendModule::ApplyAddFriend(uint64_t role_id,
-                                  uint64_t target_id,
-                                  const std::string& message) {
-    // 不能添加自己
-    if (role_id == target_id) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Cannot add self as friend: role_id=%llu", role_id);
-        return false;
-    }
-
-    // 检查是否已经是好友
-    if (IsFriend(role_id, target_id)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Already friends: role_id=%llu, target_id=%llu", role_id,
-            target_id);
-        return false;
-    }
-
-    // 检查是否在黑名单中
-    if (IsInBlacklist(target_id, role_id)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Target has blocked you: role_id=%llu, target_id=%llu", role_id,
-            target_id);
-        return false;
-    }
-
+bool FriendModule::RemoveFriend(uint64_t role_id, uint64_t friend_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // 添加到对方的申请列表
-    auto it = apply_cache_.find(target_id);
-    if (it == apply_cache_.end()) {
-        apply_cache_[target_id] = std::vector<FriendApplyInfo>();
-        it = apply_cache_.find(target_id);
+    auto it = friend_cache_.find(role_id);
+    if (it == friend_cache_.end()) {
+        return false;
     }
 
-    // 检查是否已有待处理的申请
-    for (const auto& apply : it->second) {
-        if (apply.applicant_id == role_id &&
-            apply.status == FriendApplyStatus::PENDING) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                "Friend apply already pending: role_id=%llu, target_id=%llu",
-                role_id, target_id);
-            return false;
+    auto friend_it = it->second.begin();
+    while (friend_it != it->second.end()) {
+        if (friend_it->friend_id == friend_id) {
+            friend_it = it->second.erase(friend_it);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend removed: role_id=" << role_id << ", friend_id=" << friend_id;
+            return true;
+        } else {
+            ++friend_it;
         }
     }
 
-    // 创建申请
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Friend not found: role_id=" << role_id << ", friend_id=" << friend_id;
+    return false;
+}
+
+bool FriendModule::SendFriendRequest(uint64_t role_id, uint64_t target_id, const std::string& message) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    // 检查是否已经是好友
+    auto it = friend_cache_.find(role_id);
+    if (it != friend_cache_.end()) {
+        for (const auto& friend_info : it->second) {
+            if (friend_info.friend_id == target_id && friend_info.relation_type == FriendRelationType::FRIEND) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Already friends: role_id=" << role_id << ", target_id=" << target_id;
+                return false;
+            }
+        }
+    }
+
+    // 检查是否已经发送过请求
+    auto sent_it = sent_apply_cache_.find(role_id);
+    if (sent_it != sent_apply_cache_.end()) {
+        for (const auto& apply : sent_it->second) {
+            if (apply.target_id == target_id) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Friend request already sent: role_id=" << role_id << ", target_id=" << target_id;
+                return false;
+            }
+        }
+    }
+
+    // 创建请求信息
     FriendApplyInfo apply;
     apply.apply_id = GenerateApplyId();
-    apply.applicant_id = role_id;
-    apply.applicant_name = "";
-    apply.applicant_level = 1;
-    apply.applicant_profession = 1;
-    apply.status = FriendApplyStatus::PENDING;
-    apply.apply_time = time(nullptr);
+    apply.requester_id = role_id;
+    apply.target_id = target_id;
     apply.message = message;
+    apply.status = FriendApplyStatus::PENDING;
+    apply.send_time = time(nullptr);
 
-    it->second.push_back(apply);
-
-    // 添加到自己的已发送申请列表
-    auto sent_it = sent_apply_cache_.find(role_id);
-    if (sent_it == sent_apply_cache_.end()) {
+    // 添加到发送请求缓存
+    if (sent_apply_cache_.find(role_id) == sent_apply_cache_.end()) {
         sent_apply_cache_[role_id] = std::vector<FriendApplyInfo>();
-        sent_it = sent_apply_cache_.find(role_id);
     }
-    sent_it->second.push_back(apply);
+    sent_apply_cache_[role_id].push_back(apply);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Friend apply sent: role_id=%llu, target_id=%llu, apply_id=%llu",
-        role_id, target_id, apply.apply_id);
+    // 添加到接收请求缓存
+    if (apply_cache_.find(target_id) == apply_cache_.end()) {
+        apply_cache_[target_id] = std::vector<FriendApplyInfo>();
+    }
+    apply_cache_[target_id].push_back(apply);
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend request sent: role_id=" << role_id << ", target_id=" << target_id;
     return true;
 }
 
-bool FriendModule::HandleFriendApply(uint64_t role_id,
-                                     uint64_t apply_id,
-                                     bool accept) {
+bool FriendModule::GetFriendRequests(uint64_t role_id, std::vector<FriendApplyInfo>& requests) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    auto it = apply_cache_.find(role_id);
+    if (it == apply_cache_.end()) {
+        return false;
+    }
+
+    requests.clear();
+    for (const auto& apply : it->second) {
+        if (apply.status == FriendApplyStatus::PENDING) {
+            requests.push_back(apply);
+        }
+    }
+
+    return true;
+}
+
+bool FriendModule::RespondToFriendRequest(uint64_t role_id, uint64_t apply_id, bool accept) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = apply_cache_.find(role_id);
@@ -194,262 +203,112 @@ bool FriendModule::HandleFriendApply(uint64_t role_id,
     }
 
     for (auto& apply : it->second) {
-        if (apply.apply_id == apply_id &&
-            apply.status == FriendApplyStatus::PENDING) {
+        if (apply.apply_id == apply_id) {
+            if (apply.status != FriendApplyStatus::PENDING) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Friend request already processed: role_id=" << role_id << ", apply_id=" << apply_id;
+                return false;
+            }
+
             if (accept) {
-                apply.status = FriendApplyStatus::ACCEPTED;
-
-                // 添加双方为好友
-                AddFriend(role_id, apply.applicant_id);
-                AddFriend(apply.applicant_id, role_id);
-
-                ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                    "Friend apply accepted: role_id=%llu, apply_id=%llu, "
-                    "applicant_id=%llu",
-                    role_id, apply_id, apply.applicant_id);
+                // 接受好友请求
+                if (AddFriend(role_id, apply.requester_id)) {
+                    apply.status = FriendApplyStatus::ACCEPTED;
+                    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend request accepted: role_id=" << role_id << ", requester_id=" << apply.requester_id;
+                } else {
+                    return false;
+                }
             } else {
+                // 拒绝好友请求
                 apply.status = FriendApplyStatus::REJECTED;
-                ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                    "Friend apply rejected: role_id=%llu, apply_id=%llu",
-                    role_id, apply_id);
+                ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend request rejected: role_id=" << role_id << ", requester_id=" << apply.requester_id;
+            }
+
+            // 更新发送者的请求状态
+            auto sent_it = sent_apply_cache_.find(apply.requester_id);
+            if (sent_it != sent_apply_cache_.end()) {
+                for (auto& sent_apply : sent_it->second) {
+                    if (sent_apply.apply_id == apply_id) {
+                        sent_apply.status = apply.status;
+                        break;
+                    }
+                }
             }
 
             return true;
         }
     }
 
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Friend request not found: role_id=" << role_id << ", apply_id=" << apply_id;
     return false;
 }
 
-bool FriendModule::RemoveFriend(uint64_t role_id, uint64_t friend_id) {
-    return DeleteFriend(role_id, friend_id);
-}
-
-bool FriendModule::DeleteFriend(uint64_t role_id, uint64_t friend_id) {
+bool FriendModule::CheckFriendLimit(uint64_t role_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = friend_cache_.find(role_id);
     if (it == friend_cache_.end()) {
-        return false;
+        return true;
     }
 
-    auto friend_it = std::remove_if(it->second.begin(), it->second.end(),
-                                    [friend_id](const FriendInfo& info) {
-                                        return info.friend_id == friend_id &&
-                                               info.relation_type ==
-                                                   FriendRelationType::FRIEND;
-                                    });
-
-    if (friend_it == it->second.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Friend not found: role_id=%llu, friend_id=%llu", role_id,
-            friend_id);
-        return false;
-    }
-
-    it->second.erase(friend_it, it->second.end());
-
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Friend deleted: role_id=%llu, friend_id=%llu", role_id, friend_id);
-    return true;
+    return it->second.size() < MAX_FRIEND_COUNT;
 }
 
-bool FriendModule::GetFriendApplies(uint64_t role_id,
-                                    std::vector<FriendApplyInfo>& applies) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = apply_cache_.find(role_id);
-    if (it == apply_cache_.end()) {
-        return false;
-    }
-
-    applies = it->second;
-    return true;
-}
-
-bool FriendModule::GetSentFriendApplies(uint64_t role_id,
-                                        std::vector<FriendApplyInfo>& applies) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = sent_apply_cache_.find(role_id);
-    if (it == sent_apply_cache_.end()) {
-        return false;
-    }
-
-    applies = it->second;
-    return true;
-}
-
-bool FriendModule::AddToBlacklist(uint64_t role_id, uint64_t target_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        friend_cache_[role_id] = std::vector<FriendInfo>();
-        it = friend_cache_.find(role_id);
-    }
-
-    // 检查黑名单数量
-    int32_t blacklist_count = 0;
-    for (const auto& info : it->second) {
-        if (info.relation_type == FriendRelationType::BLACKLIST) {
-            blacklist_count++;
-        }
-    }
-
-    if (blacklist_count >= MAX_BLACKLIST_COUNT) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Blacklist limit reached: role_id=%llu", role_id);
-        return false;
-    }
-
-    // 如果已经是好友，先删除好友关系
-    auto friend_it = std::remove_if(it->second.begin(), it->second.end(),
-                                    [target_id](const FriendInfo& info) {
-                                        return info.friend_id == target_id &&
-                                               info.relation_type ==
-                                                   FriendRelationType::FRIEND;
-                                    });
-    it->second.erase(friend_it, it->second.end());
-
-    // 添加到黑名单
-    FriendInfo info;
-    info.friend_id = target_id;
-    info.friend_name = "";
-    info.level = 1;
-    info.profession = 1;
-    info.status = FriendStatus::OFFLINE;
-    info.relation_type = FriendRelationType::BLACKLIST;
-    info.add_time = time(nullptr);
-    info.intimacy = 0;
-    info.remark = "";
-    info.is_online = false;
-
-    it->second.push_back(info);
-
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Added to blacklist: role_id=%llu, target_id=%llu", role_id, target_id);
-    return true;
-}
-
-bool FriendModule::RemoveFromBlacklist(uint64_t role_id, uint64_t target_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    auto blacklist_it = std::remove_if(
-        it->second.begin(), it->second.end(),
-        [target_id](const FriendInfo& info) {
-            return info.friend_id == target_id &&
-                   info.relation_type == FriendRelationType::BLACKLIST;
-        });
-
-    if (blacklist_it == it->second.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Not in blacklist: role_id=%llu, target_id=%llu", role_id,
-            target_id);
-        return false;
-    }
-
-    it->second.erase(blacklist_it, it->second.end());
-
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Removed from blacklist: role_id=%llu, target_id=%llu", role_id,
-        target_id);
-    return true;
-}
-
-bool FriendModule::GetBlacklist(uint64_t role_id,
-                                std::vector<FriendInfo>& blacklist) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    blacklist.clear();
-    for (const auto& info : it->second) {
-        if (info.relation_type == FriendRelationType::BLACKLIST) {
-            blacklist.push_back(info);
-        }
-    }
-
-    return true;
-}
-
-bool FriendModule::IsInBlacklist(uint64_t role_id, uint64_t target_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    for (const auto& info : it->second) {
-        if (info.friend_id == target_id &&
-            info.relation_type == FriendRelationType::BLACKLIST) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool FriendModule::AddRecentContact(uint64_t role_id, uint64_t contact_id) {
+bool FriendModule::GetRecentPlayers(uint64_t role_id, std::vector<FriendInfo>& players) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = recent_cache_.find(role_id);
     if (it == recent_cache_.end()) {
+        return false;
+    }
+
+    players = it->second;
+    return true;
+}
+
+bool FriendModule::AddRecentPlayer(uint64_t role_id, uint64_t player_id, const std::string& player_name, int32_t level, int32_t profession) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    if (recent_cache_.find(role_id) == recent_cache_.end()) {
         recent_cache_[role_id] = std::vector<FriendInfo>();
-        it = recent_cache_.find(role_id);
     }
 
-    // 检查是否已存在
-    for (auto& info : it->second) {
-        if (info.friend_id == contact_id) {
-            // 移动到最前面
-            FriendInfo temp = info;
-            temp.add_time = time(nullptr);
-            it->second.erase(
-                std::remove_if(it->second.begin(), it->second.end(),
-                               [contact_id](const FriendInfo& f) {
-                                   return f.friend_id == contact_id;
-                               }),
-                it->second.end());
-            it->second.insert(it->second.begin(), temp);
+    auto& recent_players = recent_cache_[role_id];
+
+    // 检查是否已经在最近列表中
+    for (auto& player : recent_players) {
+        if (player.friend_id == player_id) {
+            // 更新信息
+            player.friend_name = player_name;
+            player.level = level;
+            player.profession = profession;
+            player.last_login_time = time(nullptr);
             return true;
         }
     }
 
-    // 添加新联系人
+    // 添加到最近列表
     FriendInfo info;
-    info.friend_id = contact_id;
-    info.friend_name = "";
-    info.level = 1;
-    info.profession = 1;
+    info.friend_id = player_id;
+    info.friend_name = player_name;
+    info.level = level;
+    info.profession = profession;
     info.status = FriendStatus::OFFLINE;
-    info.relation_type = FriendRelationType::RECENT;
-    info.add_time = time(nullptr);
-    info.intimacy = 0;
-    info.remark = "";
-    info.is_online = false;
+    info.relation_type = FriendRelationType::NONE;
+    info.last_login_time = time(nullptr);
+    info.friend_since = 0;
 
-    it->second.insert(it->second.begin(), info);
+    recent_players.push_back(info);
 
-    // 限制数量
-    if (it->second.size() > MAX_RECENT_COUNT) {
-        it->second.resize(MAX_RECENT_COUNT);
+    // 保持最近列表不超过最大数量
+    if (recent_players.size() > MAX_RECENT_COUNT) {
+        recent_players.erase(recent_players.begin());
     }
 
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Recent player added: role_id=" << role_id << ", player_id=" << player_id;
     return true;
 }
 
-bool FriendModule::GetRecentContacts(uint64_t role_id,
-                                     std::vector<FriendInfo>& contacts) {
+bool FriendModule::DeleteRecentPlayer(uint64_t role_id, uint64_t player_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = recent_cache_.find(role_id);
@@ -457,56 +316,21 @@ bool FriendModule::GetRecentContacts(uint64_t role_id,
         return false;
     }
 
-    contacts = it->second;
-    return true;
-}
-
-bool FriendModule::ClearRecentContacts(uint64_t role_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = recent_cache_.find(role_id);
-    if (it == recent_cache_.end()) {
-        return false;
-    }
-
-    it->second.clear();
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Recent contacts cleared: role_id=%llu",
-                                     role_id);
-    return true;
-}
-
-bool FriendModule::UpdateFriendStatus(uint64_t role_id, FriendStatus status) {
-    // TODO: 通知所有好友状态变化
-    return true;
-}
-
-bool FriendModule::NotifyFriendStatusChange(uint64_t role_id,
-                                            FriendStatus status) {
-    // TODO: 发送状态变化通知给好友
-    return true;
-}
-
-bool FriendModule::IsFriend(uint64_t role_id, uint64_t target_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    for (const auto& info : it->second) {
-        if (info.friend_id == target_id &&
-            info.relation_type == FriendRelationType::FRIEND) {
+    auto player_it = it->second.begin();
+    while (player_it != it->second.end()) {
+        if (player_it->friend_id == player_id) {
+            player_it = it->second.erase(player_it);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Recent player deleted: role_id=" << role_id << ", player_id=" << player_id;
             return true;
+        } else {
+            ++player_it;
         }
     }
 
     return false;
 }
 
-bool FriendModule::AddIntimacy(uint64_t role_id,
-                               uint64_t friend_id,
-                               int32_t value) {
+bool FriendModule::UpdateFriendStatus(uint64_t role_id, uint64_t friend_id, FriendStatus status) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = friend_cache_.find(role_id);
@@ -514,17 +338,13 @@ bool FriendModule::AddIntimacy(uint64_t role_id,
         return false;
     }
 
-    for (auto& info : it->second) {
-        if (info.friend_id == friend_id &&
-            info.relation_type == FriendRelationType::FRIEND) {
-            info.intimacy += value;
-            if (info.intimacy < 0) {
-                info.intimacy = 0;
+    for (auto& friend_info : it->second) {
+        if (friend_info.friend_id == friend_id) {
+            friend_info.status = status;
+            if (status == FriendStatus::ONLINE) {
+                friend_info.last_login_time = time(nullptr);
             }
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Intimacy added: role_id=%llu, friend_id=%llu, value=%d, "
-                "total=%d",
-                role_id, friend_id, value, info.intimacy);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Friend status updated: role_id=" << role_id << ", friend_id=" << friend_id << ", status=" << static_cast<int32_t>(status);
             return true;
         }
     }
@@ -532,9 +352,7 @@ bool FriendModule::AddIntimacy(uint64_t role_id,
     return false;
 }
 
-bool FriendModule::GetIntimacy(uint64_t role_id,
-                               uint64_t friend_id,
-                               int32_t& intimacy) {
+bool FriendModule::SaveFriendData(uint64_t role_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = friend_cache_.find(role_id);
@@ -542,87 +360,18 @@ bool FriendModule::GetIntimacy(uint64_t role_id,
         return false;
     }
 
-    for (const auto& info : it->second) {
-        if (info.friend_id == friend_id) {
-            intimacy = info.intimacy;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool FriendModule::SetRemark(uint64_t role_id,
-                             uint64_t friend_id,
-                             const std::string& remark) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    for (auto& info : it->second) {
-        if (info.friend_id == friend_id &&
-            info.relation_type == FriendRelationType::FRIEND) {
-            info.remark = remark;
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Remark set: role_id=%llu, friend_id=%llu, remark=%s", role_id,
-                friend_id, remark.c_str());
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool FriendModule::GetRemark(uint64_t role_id,
-                             uint64_t friend_id,
-                             std::string& remark) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return false;
-    }
-
-    for (const auto& info : it->second) {
-        if (info.friend_id == friend_id) {
-            remark = info.remark;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool FriendModule::GetRecommendedFriends(uint64_t role_id,
-                                         std::vector<FriendInfo>& friends) {
-    // TODO: 根据等级、职业等推荐好友
-    friends.clear();
-    return true;
-}
-
-bool FriendModule::SearchFriend(const std::string& name,
-                                std::vector<FriendInfo>& friends) {
-    // TODO: 从数据库搜索好友
-    friends.clear();
+    // TODO: 由于 proto/msg_friend.pb.h 不存在，暂时返回 true
     return true;
 }
 
 bool FriendModule::LoadFriendData(uint64_t role_id) {
-    // TODO: 从数据库加载好友数据
+    // 从数据库加载好友数据
+    // TODO: 实现从数据库加载好友数据
+
+    // 初始化好友
     InitFriends(role_id);
-    return true;
-}
 
-bool FriendModule::SaveFriendData(uint64_t role_id) {
-    // TODO: 保存好友数据到数据库
     return true;
-}
-
-void FriendModule::OnTimer() {
-    // TODO: 清理过期的申请
 }
 
 uint64_t FriendModule::GenerateApplyId() {
@@ -630,20 +379,4 @@ uint64_t FriendModule::GenerateApplyId() {
     return next_id++;
 }
 
-bool FriendModule::CheckFriendLimit(uint64_t role_id) {
-    auto it = friend_cache_.find(role_id);
-    if (it == friend_cache_.end()) {
-        return true;
-    }
-
-    int32_t friend_count = 0;
-    for (const auto& info : it->second) {
-        if (info.relation_type == FriendRelationType::FRIEND) {
-            friend_count++;
-        }
-    }
-
-    return friend_count < MAX_FRIEND_COUNT;
-}
-
-}  // namespace game_server
+} // namespace game_server

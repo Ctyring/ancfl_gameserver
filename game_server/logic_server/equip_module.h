@@ -2,6 +2,8 @@
 #define __EQUIP_MODULE_H__
 
 #include <unordered_map>
+#include <mutex>
+#include <vector>
 
 namespace game_server {
 
@@ -29,7 +31,7 @@ struct EquipInfo {
     int32_t level;
     int32_t star_level;
     int32_t quality;
-    int32_t强化等级;
+    int32_t enhance_level;
     std::vector<int32_t> gems;
     std::string extra_data;
 };

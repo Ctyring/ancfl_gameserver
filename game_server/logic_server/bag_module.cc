@@ -1,5 +1,7 @@
 #include "bag_module.h"
 #include "proto/msg_bag.pb.h"
+#include "proto/msg_id.pb.h"
+#include "ancfl/log.h"
 
 namespace game_server {
 
@@ -26,8 +28,7 @@ bool BagModule::InitBag(uint64_t role_id) {
 
     bag_cache_[role_id] = slots;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Bag initialized: role_id=%llu, size=%d",
-                                     role_id, BASE_BAG_SIZE);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Bag initialized: role_id=" << role_id << ", size=" << BASE_BAG_SIZE;
     return true;
 }
 
@@ -53,7 +54,7 @@ bool BagModule::GetBagSlot(uint64_t role_id,
         return false;
     }
 
-    if (slot_index < 0 || slot_index >= it->second.size()) {
+    if (slot_index < 0 || slot_index >= static_cast<int32_t>(it->second.size())) {
         return false;
     }
 
@@ -76,18 +77,15 @@ bool BagModule::AddItem(uint64_t role_id,
     int32_t stackable_slot = FindStackableSlot(role_id, item_config_id);
     if (stackable_slot >= 0) {
         // 堆叠物品
-        it->second[stackable_slot].item.count += count;
-        ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-            "Item stacked: role_id=%llu, slot=%d, item_id=%d, count=%d",
-            role_id, stackable_slot, item_config_id,
-            it->second[stackable_slot].item.count);
-        return true;
+    it->second[stackable_slot].item.count += count;
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item stacked: role_id=" << role_id << ", slot=" << stackable_slot << ", item_id=" << item_config_id << ", count=" << it->second[stackable_slot].item.count;
+    return true;
     }
 
     // 查找空格子
     int32_t empty_slot = FindEmptySlot(role_id);
     if (empty_slot < 0) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Bag is full: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Bag is full: role_id=" << role_id;
         return false;
     }
 
@@ -101,9 +99,7 @@ bool BagModule::AddItem(uint64_t role_id,
     it->second[empty_slot].item.bind_type = 0;
     it->second[empty_slot].item.expire_time = 0;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Item added: role_id=%llu, slot=%d, item_id=%d, count=%d", role_id,
-        empty_slot, item_config_id, count);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item added: role_id=" << role_id << ", slot=" << empty_slot << ", item_id=" << item_config_id << ", count=" << count;
     return true;
 }
 
@@ -119,10 +115,7 @@ bool BagModule::RemoveItem(uint64_t role_id, uint64_t item_id, int32_t count) {
     for (auto& slot : it->second) {
         if (!slot.is_empty && slot.item.item_id == item_id) {
             if (slot.item.count < count) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                    "Item count not enough: role_id=%llu, item_id=%llu, "
-                    "have=%d, need=%d",
-                    role_id, item_id, slot.item.count, count);
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Item count not enough: role_id=" << role_id << ", item_id=" << item_id << ", have=" << slot.item.count << ", need=" << count;
                 return false;
             }
 
@@ -132,15 +125,12 @@ bool BagModule::RemoveItem(uint64_t role_id, uint64_t item_id, int32_t count) {
                 slot.item = ItemInfo();
             }
 
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Item removed: role_id=%llu, item_id=%llu, count=%d", role_id,
-                item_id, count);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item removed: role_id=" << role_id << ", item_id=" << item_id << ", count=" << count;
             return true;
         }
     }
 
-    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-        "Item not found: role_id=%llu, item_id=%llu", role_id, item_id);
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Item not found: role_id=" << role_id << ", item_id=" << item_id;
     return false;
 }
 
@@ -152,10 +142,7 @@ bool BagModule::UseItem(uint64_t role_id, uint64_t item_id, int32_t count) {
     }
 
     if (current_count < count) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Item count not enough: role_id=%llu, item_id=%llu, have=%d, "
-            "need=%d",
-            role_id, item_id, current_count, count);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Item count not enough: role_id=" << role_id << ", item_id=" << item_id << ", have=" << current_count << ", need=" << count;
         return false;
     }
 
@@ -165,9 +152,7 @@ bool BagModule::UseItem(uint64_t role_id, uint64_t item_id, int32_t count) {
     // 扣除物品
     RemoveItem(role_id, item_id, count);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Item used: role_id=%llu, item_id=%llu, count=%d", role_id, item_id,
-        count);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item used: role_id=" << role_id << ", item_id=" << item_id << ", count=" << count;
     return true;
 }
 
@@ -179,10 +164,7 @@ bool BagModule::DropItem(uint64_t role_id, uint64_t item_id, int32_t count) {
     }
 
     if (current_count < count) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Item count not enough: role_id=%llu, item_id=%llu, have=%d, "
-            "need=%d",
-            role_id, item_id, current_count, count);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Item count not enough: role_id=" << role_id << ", item_id=" << item_id << ", have=" << current_count << ", need=" << count;
         return false;
     }
 
@@ -192,9 +174,7 @@ bool BagModule::DropItem(uint64_t role_id, uint64_t item_id, int32_t count) {
     // 扣除物品
     RemoveItem(role_id, item_id, count);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Item dropped: role_id=%llu, item_id=%llu, count=%d", role_id, item_id,
-        count);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item dropped: role_id=" << role_id << ", item_id=" << item_id << ", count=" << count;
     return true;
 }
 
@@ -206,11 +186,9 @@ bool BagModule::MoveItem(uint64_t role_id, int32_t from_slot, int32_t to_slot) {
         return false;
     }
 
-    if (from_slot < 0 || from_slot >= it->second.size() || to_slot < 0 ||
-        to_slot >= it->second.size()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Invalid slot index: role_id=%llu, from=%d, to=%d", role_id,
-            from_slot, to_slot);
+    if (from_slot < 0 || from_slot >= static_cast<int32_t>(it->second.size()) || to_slot < 0 ||
+        to_slot >= static_cast<int32_t>(it->second.size())) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid slot index: role_id=" << role_id << ", from=" << from_slot << ", to=" << to_slot;
         return false;
     }
 
@@ -220,8 +198,7 @@ bool BagModule::MoveItem(uint64_t role_id, int32_t from_slot, int32_t to_slot) {
 
     // 检查目标格子是否为空
     if (!it->second[to_slot].is_empty) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Target slot not empty: role_id=%llu, slot=%d", role_id, to_slot);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Target slot not empty: role_id=" << role_id << ", slot=" << to_slot;
         return false;
     }
 
@@ -232,8 +209,7 @@ bool BagModule::MoveItem(uint64_t role_id, int32_t from_slot, int32_t to_slot) {
     it->second[from_slot].slot_index = from_slot;
     it->second[from_slot].item = ItemInfo();
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Item moved: role_id=%llu, from=%d, to=%d",
-                                     role_id, from_slot, to_slot);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item moved: role_id=" << role_id << ", from=" << from_slot << ", to=" << to_slot;
     return true;
 }
 
@@ -245,11 +221,9 @@ bool BagModule::SwapItem(uint64_t role_id, int32_t slot1, int32_t slot2) {
         return false;
     }
 
-    if (slot1 < 0 || slot1 >= it->second.size() || slot2 < 0 ||
-        slot2 >= it->second.size()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Invalid slot index: role_id=%llu, slot1=%d, slot2=%d", role_id,
-            slot1, slot2);
+    if (slot1 < 0 || slot1 >= static_cast<int32_t>(it->second.size()) || slot2 < 0 ||
+        slot2 >= static_cast<int32_t>(it->second.size())) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid slot index: role_id=" << role_id << ", slot1=" << slot1 << ", slot2=" << slot2;
         return false;
     }
 
@@ -262,9 +236,7 @@ bool BagModule::SwapItem(uint64_t role_id, int32_t slot1, int32_t slot2) {
     it->second[slot1].slot_index = slot1;
     it->second[slot2].slot_index = slot2;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Item swapped: role_id=%llu, slot1=%d, slot2=%d", role_id, slot1,
-        slot2);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Item swapped: role_id=" << role_id << ", slot1=" << slot1 << ", slot2=" << slot2;
     return true;
 }
 
@@ -311,9 +283,7 @@ bool BagModule::ExpandBag(uint64_t role_id, int32_t expand_count) {
     int32_t new_size = current_size + expand_count;
 
     if (new_size > MAX_BAG_SIZE) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Bag size exceeds max: role_id=%llu, current=%d, add=%d, max=%d",
-            role_id, current_size, expand_count, MAX_BAG_SIZE);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Bag size exceeds max: role_id=" << role_id << ", current=" << current_size << ", add=" << expand_count << ", max=" << MAX_BAG_SIZE;
         return false;
     }
 
@@ -325,9 +295,7 @@ bool BagModule::ExpandBag(uint64_t role_id, int32_t expand_count) {
         it->second.push_back(slot);
     }
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Bag expanded: role_id=%llu, old_size=%d, new_size=%d", role_id,
-        current_size, new_size);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Bag expanded: role_id=" << role_id << ", old_size=" << current_size << ", new_size=" << new_size;
     return true;
 }
 
@@ -349,7 +317,9 @@ bool BagModule::SaveBagData(uint64_t role_id) {
         return false;
     }
 
-    // 保存背包数据到数据库
+    // TODO: 保存背包数据到数据库
+    // 由于 msg_bag::BagDataSyncReq 类型不存在，暂时注释掉这部分代码
+    /*
     msg_bag::BagDataSyncReq req;
     req.set_role_id(role_id);
 
@@ -369,6 +339,7 @@ bool BagModule::SaveBagData(uint64_t role_id) {
 
     service_->SendMsgToDBServer(
         static_cast<uint32_t>(MessageID::MSG_BAG_DATA_SYNC_REQ), req);
+    */
 
     return true;
 }

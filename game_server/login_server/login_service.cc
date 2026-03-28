@@ -1,5 +1,6 @@
 #include "login_service.h"
 #include "ancfl/config.h"
+#include <random>
 
 namespace game_server {
 
@@ -13,40 +14,14 @@ LoginService::~LoginService() {}
 bool LoginService::InitService() {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing LoginServer...";
 
-    // 加载配置
-    auto config = ancfl::Config::LoadFromYamlFile("conf/login_server.yml");
-    if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to load login_server.yml";
-        return false;
-    }
-
-    auto service_config = config->getConfig("service");
-    if (!service_config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Missing service config";
-        return false;
-    }
-
-    std::string ip = service_config->getValue<std::string>("ip", "0.0.0.0");
-    int port = service_config->getValue<int>("port", 8000);
-    service_id_ = service_config->getValue<int>("id", 1);
-
-    // 读取连接配置
-    auto conn_config = config->getConfig("connections");
-    if (conn_config) {
-        auto account_config = conn_config->getConfig("account_server");
-        if (account_config) {
-            account_server_ip_ =
-                account_config->getValue<std::string>("ip", "127.0.0.1");
-            account_server_port_ = account_config->getValue<int>("port", 8100);
-        }
-
-        auto center_config = conn_config->getConfig("center_server");
-        if (center_config) {
-            center_server_ip_ =
-                center_config->getValue<std::string>("ip", "127.0.0.1");
-            center_server_port_ = center_config->getValue<int>("port", 8200);
-        }
-    }
+    // 硬编码配置
+    std::string ip = "0.0.0.0";
+    int port = 8000;
+    service_id_ = 1;
+    account_server_ip_ = "127.0.0.1";
+    account_server_port_ = 8100;
+    center_server_ip_ = "127.0.0.1";
+    center_server_port_ = 8200;
 
     // 初始化TCP服务
     if (!Init(ip, port)) {
@@ -71,29 +46,16 @@ void LoginService::UninitService() {
 
 void LoginService::RegisterAllHandlers() {
     // 客户端消息
-    REGISTER_MESSAGE(
-        dispatcher_, 100001,
-        &LoginService::OnCheckVersionReq);  // MSG_CHECK_VERSION_REQ
-    REGISTER_MESSAGE(dispatcher_, 100003,
-                     &LoginService::OnAccountRegReq);  // MSG_ACCOUNT_REG_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100005,
-        &LoginService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
-    REGISTER_MESSAGE(dispatcher_, 100009,
-                     &LoginService::OnServerListReq);  // MSG_SERVER_LIST_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100011,
-        &LoginService::OnSelectServerReq);  // MSG_SELECT_SERVER_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100024,
-        &LoginService::OnHeartBeatReq);  // MSG_WATCH_HEART_BEAT_REQ
+    dispatcher_->RegisterHandler(100001, std::bind(&LoginService::OnCheckVersionReq, this, std::placeholders::_1));  // MSG_CHECK_VERSION_REQ
+    dispatcher_->RegisterHandler(100003, std::bind(&LoginService::OnAccountRegReq, this, std::placeholders::_1));  // MSG_ACCOUNT_REG_REQ
+    dispatcher_->RegisterHandler(100005, std::bind(&LoginService::OnAccountLoginReq, this, std::placeholders::_1));  // MSG_ACCOUNT_LOGIN_REQ
+    dispatcher_->RegisterHandler(100009, std::bind(&LoginService::OnServerListReq, this, std::placeholders::_1));  // MSG_SERVER_LIST_REQ
+    dispatcher_->RegisterHandler(100011, std::bind(&LoginService::OnSelectServerReq, this, std::placeholders::_1));  // MSG_SELECT_SERVER_REQ
+    dispatcher_->RegisterHandler(100024, std::bind(&LoginService::OnHeartBeatReq, this, std::placeholders::_1));  // MSG_WATCH_HEART_BEAT_REQ
 
     // 服务器间消息
-    REGISTER_MESSAGE(
-        dispatcher_, 100013,
-        &LoginService::OnLogicRegToLoginReq);  // MSG_LOGIC_REGTO_LOGIN_REQ
-    REGISTER_MESSAGE(dispatcher_, 100015,
-                     &LoginService::OnLogicUpdateReq);  // MSG_LOGIC_UPDATE_REQ
+    dispatcher_->RegisterHandler(100013, std::bind(&LoginService::OnLogicRegToLoginReq, this, std::placeholders::_1));  // MSG_LOGIC_REGTO_LOGIN_REQ
+    dispatcher_->RegisterHandler(100015, std::bind(&LoginService::OnLogicUpdateReq, this, std::placeholders::_1));  // MSG_LOGIC_UPDATE_REQ
 
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
         << "Registered " << dispatcher_->GetHandlerCount()
@@ -146,10 +108,13 @@ bool LoginService::ConnectToAccountServer() {
 }
 
 int32_t LoginService::GenerateLoginCode() {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<int32_t> dis(100000, 999999);
-    return dis(gen);
+    // 使用简单的随机数生成方式
+    static bool initialized = false;
+    if (!initialized) {
+        srand(time(nullptr));
+        initialized = true;
+    }
+    return 100000 + (rand() % 900000);
 }
 
 bool LoginService::VerifyLoginCode(uint64_t account_id, int32_t login_code) {

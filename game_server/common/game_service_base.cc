@@ -18,11 +18,11 @@ GameServiceBase::~GameServiceBase() {
 void GameServiceBase::MainLoop() {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << service_name_ << " started main loop";
 
-    int64_t last_tick = ancfl::GetCurrentMs();
+    int64_t last_tick = ancfl::GetCurrentMS();
     const int64_t frame_interval = 50; // 20 FPS
 
     while (!stop_flag_) {
-        int64_t now = ancfl::GetCurrentMs();
+        int64_t now = ancfl::GetCurrentMS();
         int64_t elapsed = now - last_tick;
 
         if (elapsed >= frame_interval) {

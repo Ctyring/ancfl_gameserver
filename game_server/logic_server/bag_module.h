@@ -2,6 +2,8 @@
 #define __BAG_MODULE_H__
 
 #include <unordered_map>
+#include <vector>
+#include <mutex>
 
 namespace game_server {
 

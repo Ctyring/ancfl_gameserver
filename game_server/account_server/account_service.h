@@ -23,7 +23,8 @@ struct AccountInfo {
 // 账号服务器服务类
 class AccountService : public GameServiceBase {
 public:
-    SERVICE_SINGLETON(AccountService);
+    AccountService();
+    ~AccountService();
 
     // 初始化服务
     virtual bool InitService() override;

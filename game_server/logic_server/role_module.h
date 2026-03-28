@@ -2,6 +2,7 @@
 #define __ROLE_MODULE_H__
 
 #include <unordered_map>
+#include <mutex>
 #include "role_data.h"
 
 namespace game_server {

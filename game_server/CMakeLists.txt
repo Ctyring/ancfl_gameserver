@@ -15,6 +15,8 @@ include_directories(..)
 include_directories(/yaml-cpp/include)
 include_directories(/usr/local/include)
 link_directories(/yaml-cpp/lib)
+link_directories(/root/ancfl/ancfl/lib)
+link_directories(/root/ancfl/ancfl_gameserver/lib)
 
 # 查找依赖包
 find_package(Protobuf REQUIRED)
@@ -46,6 +48,15 @@ set(PROTO_FILES
     proto/msg_bag.proto
     proto/msg_equip.proto
     proto/msg_battle.proto
+    proto/msg_guild.proto
+    proto/msg_activity.proto
+    proto/msg_task.proto
+    proto/msg_mail.proto
+    proto/msg_friend.proto
+    proto/msg_shop.proto
+    proto/msg_monitor.proto
+    proto/msg_log.proto
+    proto/msg_cross.proto
 )
 
 set(PROTO_SRCS)
@@ -65,7 +76,7 @@ add_custom_target(protobuf_compile ALL
     COMMAND ${Protobuf_PROTOC_EXECUTABLE}
     --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/proto
     --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto
-    msg_id.proto msg_base.proto msg_account.proto msg_role.proto msg_bag.proto msg_equip.proto msg_battle.proto
+    msg_id.proto msg_base.proto msg_account.proto msg_role.proto msg_bag.proto msg_equip.proto msg_battle.proto msg_guild.proto msg_activity.proto msg_task.proto msg_mail.proto msg_friend.proto msg_shop.proto msg_monitor.proto msg_log.proto msg_cross.proto
     DEPENDS ${PROTO_FILES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/proto
     COMMENT "Generating protobuf files"
@@ -100,13 +111,11 @@ set(LIBS
     yaml-cpp
     ${PROTOBUF_LIBRARIES}
     ${OPENSSL_LIBRARIES}
-    libjsoncpp_static.a
+    jsoncpp
     ${ZLIB_LIBRARIES}
     sqlite3
     tinyxml2
     mysqlclient
-    mysqlclient_r
-    zookeeper_mt
     event
     hiredis_vip
     jemalloc

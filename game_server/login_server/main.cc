@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
     // 创建工作线程池
     ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
 
-    // 获取登录服务实例
-    LoginService* service = LoginService::GetInstance();
+    // 创建登录服务实例
+    auto service = std::make_shared<LoginService>();
 
     // 初始化服务
     if (!service->InitService()) {

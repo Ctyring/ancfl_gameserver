@@ -23,7 +23,8 @@ namespace game_server {
 // 逻辑服务类
 class LogicService : public GameServiceBase {
    public:
-    SERVICE_SINGLETON(LogicService);
+    LogicService();
+    ~LogicService();
 
     virtual bool InitService() override;
     virtual void UninitService() override;
@@ -49,6 +50,9 @@ class LogicService : public GameServiceBase {
     bool InitSharedMemory();
     RoleData* AllocateRoleData();
     void FreeRoleData(RoleData* data);
+    
+    // 生成角色ID
+    uint64_t GetNextRoleId();
 
     // 获取各模块指针
     RoleModule* GetRoleModule() { return &role_module_; }

@@ -1,4 +1,5 @@
 #include "log_server.h"
+#include "ancfl/ancfl.h"
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -8,7 +9,7 @@ namespace game_server {
 LogServer* g_log_server = nullptr;
 
 LogServer::LogServer()
-    : is_running_(false), stop_flag_(false), log_retention_days_(30) {}
+    : stop_flag_(false), is_running_(false), log_retention_days_(30) {}
 
 LogServer::~LogServer() {
     Stop();
@@ -21,9 +22,7 @@ bool LogServer::Init(const std::string& config_file) {
     // 创建日志目录
     // TODO: 创建目录
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Log server initializing: config=%s, log_dir=%s", config_file.c_str(),
-        log_dir_.c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Log server initializing: config=" << config_file.c_str() << ", log_dir=" << log_dir_.c_str();
     return true;
 }
 
@@ -40,7 +39,7 @@ bool LogServer::Start() {
 
     g_log_server = this;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Log server started");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Log server started";
     return true;
 }
 
@@ -68,7 +67,7 @@ void LogServer::Stop() {
     g_log_server = nullptr;
     is_running_ = false;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Log server stopped");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Log server stopped";
 }
 
 bool LogServer::IsRunning() {
@@ -83,8 +82,7 @@ bool LogServer::WriteLog(const LogRecord& record) {
 
     // 写入数据库
     if (!WriteToDatabase(record)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Failed to write log to database: log_id=%lld", record.log_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to write log to database: log_id=" << record.log_id;
     }
 
     return true;
@@ -130,13 +128,13 @@ int64_t LogServer::GetRoleLogCount(uint64_t role_id, LogType type) {
 
 bool LogServer::ClearOldLogs(int32_t days) {
     // TODO: 清理旧日志
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Clearing old logs: days=%d", days);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Clearing old logs: days=" << days;
     return true;
 }
 
 bool LogServer::ArchiveLogs(int32_t days) {
     // TODO: 归档旧日志
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Archiving logs: days=%d", days);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Archiving logs: days=" << days;
     return true;
 }
 
@@ -319,8 +317,7 @@ bool LogServer::WriteToFile(const LogRecord& record) {
     }
 
     if (!it->second.is_open()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to open log file: %s",
-                                          filepath.c_str());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to open log file: " << filepath.c_str();
         return false;
     }
 

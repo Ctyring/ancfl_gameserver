@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <mutex>
 
 namespace game_server {
 
@@ -19,16 +20,11 @@ enum class ShopType {
 
 // 商品信息
 struct ShopItem {
-    int32_t item_config_id;
-    int32_t item_count;
+    int32_t config_id;
     int32_t price_type;
     int32_t price;
     int32_t discount;
-    int32_t limit_count;
-    int32_t sold_count;
-    int32_t require_level;
-    int32_t require_vip;
-    bool is_sold_out;
+    int32_t buy_limit;
 };
 
 // 商店信息
@@ -50,25 +46,6 @@ struct PurchaseRecord {
     time_t buy_time;
 };
 
-// 神秘商店商品
-struct MysteryShopItem {
-    int32_t slot_index;
-    int32_t item_config_id;
-    int32_t item_count;
-    int32_t price_type;
-    int32_t price;
-    int32_t discount;
-    bool is_bought;
-};
-
-// 神秘商店信息
-struct MysteryShopInfo {
-    int32_t shop_id;
-    std::vector<MysteryShopItem> items;
-    time_t expire_time;
-    int32_t refresh_count;
-};
-
 // 商店模块类
 class ShopModule {
 public:
@@ -84,71 +61,51 @@ public:
     // 购买商品
     bool BuyItem(uint64_t role_id, int32_t shop_id, int32_t item_config_id, int32_t count);
     bool CanBuyItem(uint64_t role_id, int32_t shop_id, int32_t item_config_id, int32_t count);
-    bool CheckBuyConditions(uint64_t role_id, const ShopItem& item);
     
     // 购买限制
-    bool GetItemBuyCount(uint64_t role_id, int32_t shop_id, int32_t item_config_id, int32_t& count);
+    bool GetItemBuyCount(uint64_t role_id, int32_t shop_id, int32_t item_config_id);
     bool AddItemBuyCount(uint64_t role_id, int32_t shop_id, int32_t item_config_id, int32_t count);
-    bool ResetBuyCount(uint64_t role_id, int32_t shop_id);
-    bool ResetAllBuyCount(uint64_t role_id);
-    
-    // 神秘商店
-    bool OpenMysteryShop(uint64_t role_id);
-    bool GetMysteryShop(uint64_t role_id, MysteryShopInfo& info);
-    bool RefreshMysteryShop(uint64_t role_id);
-    bool BuyMysteryItem(uint64_t role_id, int32_t slot_index);
-    bool IsMysteryShopOpen(uint64_t role_id);
-    
-    // 商店刷新
-    bool RefreshShop(int32_t shop_id);
-    bool ManualRefreshShop(uint64_t role_id, int32_t shop_id);
-    int32_t GetRefreshCost(int32_t shop_id, int32_t refresh_count);
     
     // 购买记录
     bool GetPurchaseRecords(uint64_t role_id, std::vector<PurchaseRecord>& records);
-    bool AddPurchaseRecord(uint64_t role_id, const PurchaseRecord& record);
     
-    // 价格计算
-    int32_t CalculatePrice(int32_t base_price, int32_t discount);
-    bool CheckMoneyEnough(uint64_t role_id, int32_t price_type, int32_t price);
-    bool DeductMoney(uint64_t role_id, int32_t price_type, int32_t price);
-    
-    // 商店数据加载和保存
-    bool LoadShopData(uint64_t role_id);
+    // 数据持久化
     bool SaveShopData(uint64_t role_id);
-    
-    // 定时刷新
-    void OnTimer();
-    
+    bool LoadShopData(uint64_t role_id);
+
 private:
+    // 获取商店商品
+    bool GetShopItem(int32_t shop_id, int32_t item_config_id, ShopItem& item);
+    
+    // 计算价格
+    bool CalculatePrice(int32_t base_price, int32_t discount);
+    
+    // 检查货币是否足够
+    bool CheckMoneyEnough(uint64_t role_id, int32_t price_type, int32_t amount);
+    
+    // 扣除货币
+    bool DeductMoney(uint64_t role_id, int32_t price_type, int32_t amount);
+    
     // 加载商店配置
     bool LoadShopConfigs();
     
-    // 获取商品信息
-    bool GetShopItem(int32_t shop_id, int32_t item_config_id, ShopItem& item);
+    // 服务指针
+    LogicService* service_;
     
-    // 生成神秘商店商品
-    bool GenerateMysteryShopItems(uint64_t role_id);
-    
-    // 商店配置缓存
+    // 商店配置
     std::unordered_map<int32_t, ShopInfo> shop_configs_;
     
-    // 玩家购买记录缓存
+    // 购买数量缓存
     std::unordered_map<uint64_t, std::unordered_map<int32_t, std::unordered_map<int32_t, int32_t>>> buy_count_cache_;
-    std::unordered_map<uint64_t, MysteryShopInfo> mystery_shop_cache_;
-    std::unordered_map<uint64_t, std::vector<PurchaseRecord>> purchase_records_cache_;
     
-    // 逻辑服务指针
-    LogicService* service_;
+    // 购买记录缓存
+    std::unordered_map<uint64_t, std::vector<PurchaseRecord>> purchase_records_cache_;
     
     // 互斥锁
     std::mutex cache_mutex_;
     
-    // 神秘商店持续时间（秒）
-    static const int32_t MYSTERY_SHOP_DURATION = 7200; // 2小时
-    
-    // 神秘商店商品数量
-    static const int32_t MYSTERY_SHOP_ITEM_COUNT = 6;
+    // 常量
+    static constexpr int32_t MAX_PURCHASE_RECORDS = 100;
 };
 
 } // namespace game_server

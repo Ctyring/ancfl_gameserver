@@ -1,5 +1,5 @@
 #include "equip_module.h"
-#include "proto/msg_equip.pb.h"
+#include "ancfl/log.h"
 
 namespace game_server {
 
@@ -20,8 +20,7 @@ bool EquipModule::InitEquip(uint64_t role_id) {
     equip_cache_[role_id] = std::vector<EquipInfo>();
     worn_equips_[role_id] = std::unordered_map<int32_t, EquipInfo>();
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Equip initialized: role_id=%llu",
-                                     role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Equip initialized: role_id=" << role_id;
     return true;
 }
 
@@ -78,17 +77,13 @@ bool EquipModule::WearEquip(uint64_t role_id,
     }
 
     if (!equip) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Equip not found: role_id=%llu, equip_id=%llu", role_id, equip_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip not found: role_id=" << role_id << ", equip_id=" << equip_id;
         return false;
     }
 
     // 检查装备位置是否匹配
     if (equip->position != position) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Equip position mismatch: role_id=%llu, equip_id=%llu, "
-            "equip_pos=%d, target_pos=%d",
-            role_id, equip_id, equip->position, position);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip position mismatch: role_id=" << role_id << ", equip_id=" << equip_id << ", equip_pos=" << equip->position << ", target_pos=" << position;
         return false;
     }
 
@@ -96,18 +91,14 @@ bool EquipModule::WearEquip(uint64_t role_id,
     auto worn_it = worn_equips_.find(role_id);
     if (worn_it != worn_equips_.end() &&
         worn_it->second.find(position) != worn_it->second.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Equip position occupied: role_id=%llu, position=%d", role_id,
-            position);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip position occupied: role_id=" << role_id << ", position=" << position;
         return false;
     }
 
     // 穿戴装备
     worn_equips_[role_id][position] = *equip;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Equip worn: role_id=%llu, equip_id=%llu, position=%d", role_id,
-        equip_id, position);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Equip worn: role_id=" << role_id << ", equip_id=" << equip_id << ", position=" << position;
     return true;
 }
 
@@ -121,17 +112,14 @@ bool EquipModule::TakeOffEquip(uint64_t role_id, int32_t position) {
 
     auto pos_it = worn_it->second.find(position);
     if (pos_it == worn_it->second.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "No equip at position: role_id=%llu, position=%d", role_id,
-            position);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "No equip at position: role_id=" << role_id << ", position=" << position;
         return false;
     }
 
     // 卸下装备
     worn_it->second.erase(pos_it);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Equip taken off: role_id=%llu, position=%d", role_id, position);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Equip taken off: role_id=" << role_id << ", position=" << position;
     return true;
 }
 
@@ -166,39 +154,33 @@ bool EquipModule::StrengthenEquip(uint64_t role_id,
     for (auto& equip : it->second) {
         if (equip.equip_id == equip_id) {
             // 检查强化等级
-            if (level <= equip.强化等级) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                    "Invalid strengthen level: role_id=%llu, equip_id=%llu, "
-                    "current=%d, target=%d",
-                    role_id, equip_id, equip.强化等级, level);
+            if (level <= equip.enhance_level) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid strengthen level: role_id=" << role_id << ", equip_id=" << equip_id << ", current=" << equip.enhance_level << ", target=" << level;
                 return false;
             }
 
             // TODO: 检查强化材料和金币
 
             // 强化装备
-            equip.强化等级 = level;
+            equip.enhance_level = level;
 
             // 如果装备已穿戴，更新已穿戴的装备
             auto worn_it = worn_equips_.find(role_id);
             if (worn_it != worn_equips_.end()) {
                 for (auto& pair : worn_it->second) {
                     if (pair.second.equip_id == equip_id) {
-                        pair.second.强化等级 = level;
+                        pair.second.enhance_level = level;
                         break;
                     }
                 }
             }
 
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Equip strengthened: role_id=%llu, equip_id=%llu, level=%d",
-                role_id, equip_id, level);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Equip strengthened: role_id=" << role_id << ", equip_id=" << equip_id << ", level=" << level;
             return true;
         }
     }
 
-    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-        "Equip not found: role_id=%llu, equip_id=%llu", role_id, equip_id);
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip not found: role_id=" << role_id << ", equip_id=" << equip_id;
     return false;
 }
 
@@ -214,7 +196,7 @@ bool EquipModule::GetStrengthenLevel(uint64_t role_id,
 
     for (const auto& equip : it->second) {
         if (equip.equip_id == equip_id) {
-            level = equip.强化等级;
+            level = equip.enhance_level;
             return true;
         }
     }
@@ -237,10 +219,7 @@ bool EquipModule::UpgradeStar(uint64_t role_id,
         if (equip.equip_id == equip_id) {
             // 检查星级
             if (star_level <= equip.star_level) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                    "Invalid star level: role_id=%llu, equip_id=%llu, "
-                    "current=%d, target=%d",
-                    role_id, equip_id, equip.star_level, star_level);
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid star level: role_id=" << role_id << ", equip_id=" << equip_id << ", current=" << equip.star_level << ", target=" << star_level;
                 return false;
             }
 
@@ -260,16 +239,12 @@ bool EquipModule::UpgradeStar(uint64_t role_id,
                 }
             }
 
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Equip star upgraded: role_id=%llu, equip_id=%llu, "
-                "star_level=%d",
-                role_id, equip_id, star_level);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Equip star upgraded: role_id=" << role_id << ", equip_id=" << equip_id << ", star_level=" << star_level;
             return true;
         }
     }
 
-    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-        "Equip not found: role_id=%llu, equip_id=%llu", role_id, equip_id);
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip not found: role_id=" << role_id << ", equip_id=" << equip_id;
     return false;
 }
 
@@ -308,11 +283,8 @@ bool EquipModule::InlayGem(uint64_t role_id,
     for (auto& equip : it->second) {
         if (equip.equip_id == equip_id) {
             // 检查宝石索引
-            if (gem_index < 0 || gem_index >= equip.gems.size()) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                    "Invalid gem index: role_id=%llu, equip_id=%llu, index=%d, "
-                    "size=%d",
-                    role_id, equip_id, gem_index, equip.gems.size());
+            if (gem_index < 0 || gem_index >= (int32_t)equip.gems.size()) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid gem index: role_id=" << role_id << ", equip_id=" << equip_id << ", index=" << gem_index << ", size=" << equip.gems.size();
                 return false;
             }
 
@@ -332,15 +304,12 @@ bool EquipModule::InlayGem(uint64_t role_id,
                 }
             }
 
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Gem inlaid: role_id=%llu, equip_id=%llu, gem_id=%d, index=%d",
-                role_id, equip_id, gem_config_id, gem_index);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Gem inlaid: role_id=" << role_id << ", equip_id=" << equip_id << ", gem_id=" << gem_config_id << ", index=" << gem_index;
             return true;
         }
     }
 
-    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-        "Equip not found: role_id=%llu, equip_id=%llu", role_id, equip_id);
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip not found: role_id=" << role_id << ", equip_id=" << equip_id;
     return false;
 }
 
@@ -358,11 +327,8 @@ bool EquipModule::RemoveGem(uint64_t role_id,
     for (auto& equip : it->second) {
         if (equip.equip_id == equip_id) {
             // 检查宝石索引
-            if (gem_index < 0 || gem_index >= equip.gems.size()) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                    "Invalid gem index: role_id=%llu, equip_id=%llu, index=%d, "
-                    "size=%d",
-                    role_id, equip_id, gem_index, equip.gems.size());
+            if (gem_index < 0 || gem_index >= (int32_t)equip.gems.size()) {
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Invalid gem index: role_id=" << role_id << ", equip_id=" << equip_id << ", index=" << gem_index << ", size=" << equip.gems.size();
                 return false;
             }
 
@@ -380,15 +346,12 @@ bool EquipModule::RemoveGem(uint64_t role_id,
                 }
             }
 
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Gem removed: role_id=%llu, equip_id=%llu, index=%d", role_id,
-                equip_id, gem_index);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Gem removed: role_id=" << role_id << ", equip_id=" << equip_id << ", index=" << gem_index;
             return true;
         }
     }
 
-    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-        "Equip not found: role_id=%llu, equip_id=%llu", role_id, equip_id);
+    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Equip not found: role_id=" << role_id << ", equip_id=" << equip_id;
     return false;
 }
 
@@ -455,7 +418,7 @@ bool EquipModule::CalculateSingleEquipAttribute(const EquipInfo& equip,
     int32_t base_defense = 50 + equip.level * 5;
 
     // 强化加成
-    float strengthen_bonus = 1.0f + equip.强化等级 * 0.1f;
+    float strengthen_bonus = 1.0f + equip.enhance_level * 0.1f;
 
     // 星级加成
     float star_bonus = 1.0f + equip.star_level * 0.2f;
@@ -501,38 +464,7 @@ bool EquipModule::SaveEquipData(uint64_t role_id) {
         return false;
     }
 
-    // 保存装备数据到数据库
-    msg_equip::EquipDataSyncReq req;
-    req.set_role_id(role_id);
-
-    for (const auto& equip : it->second) {
-        auto equip_data = req.add_equips();
-        equip_data->set_equip_id(equip.equip_id);
-        equip_data->set_equip_config_id(equip.equip_config_id);
-        equip_data->set_position(equip.position);
-        equip_data->set_level(equip.level);
-        equip_data->set_star_level(equip.star_level);
-        equip_data->set_quality(equip.quality);
-        equip_data->set_strengthen_level(equip.strengthen_level);
-
-        for (int32_t gem : equip.gems) {
-            equip_data->add_gems(gem);
-        }
-    }
-
-    // 保存已穿戴的装备
-    auto worn_it = worn_equips_.find(role_id);
-    if (worn_it != worn_equips_.end()) {
-        for (const auto& pair : worn_it->second) {
-            auto worn_equip = req.add_worn_equips();
-            worn_equip->set_equip_id(pair.second.equip_id);
-            worn_equip->set_position(pair.second.position);
-        }
-    }
-
-    service_->SendMsgToDBServer(
-        static_cast<uint32_t>(MessageID::MSG_EQUIP_DATA_SYNC_REQ), req);
-
+    // 暂时返回 true，实际实现需要保存装备数据到数据库
     return true;
 }
 

@@ -121,10 +121,10 @@ void TcpService::HandleRecv(ancfl::Socket::ptr client) {
         }
 
         // 大小端转换
-        header.msg_id = ancfl::ByteSwapOnLittleEndian(header.msg_id);
-        header.msg_len = ancfl::ByteSwapOnLittleEndian(header.msg_len);
-        header.target_id = ancfl::ByteSwapOnLittleEndian(header.target_id);
-        header.user_data = ancfl::ByteSwapOnLittleEndian(header.user_data);
+        header.msg_id = ancfl::byteswapOnLittleEndian(header.msg_id);
+        header.msg_len = ancfl::byteswapOnLittleEndian(header.msg_len);
+        header.target_id = ancfl::byteswapOnLittleEndian(header.target_id);
+        header.user_data = ancfl::byteswapOnLittleEndian(header.user_data);
 
         if (header.msg_len > 32768 || header.msg_len < sizeof(header)) {
             ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
@@ -230,10 +230,10 @@ bool TcpService::SendRawData(int32_t conn_id,
 
     // 构造包头
     MessageHeader header;
-    header.msg_id = ancfl::ByteSwapOnLittleEndian(msg_id);
-    header.msg_len = ancfl::ByteSwapOnLittleEndian(len + sizeof(header));
-    header.target_id = ancfl::ByteSwapOnLittleEndian(target_id);
-    header.user_data = ancfl::ByteSwapOnLittleEndian(user_data);
+    header.msg_id = ancfl::byteswapOnLittleEndian(msg_id);
+    header.msg_len = ancfl::byteswapOnLittleEndian(len + sizeof(header));
+    header.target_id = ancfl::byteswapOnLittleEndian(target_id);
+    header.user_data = ancfl::byteswapOnLittleEndian(user_data);
 
     // 发送包头
     if (client->send(&header, sizeof(header)) <= 0) {

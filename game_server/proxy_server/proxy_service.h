@@ -32,7 +32,8 @@ struct ServerConnection {
 // 网关服务类
 class ProxyService : public GameServiceBase {
    public:
-    SERVICE_SINGLETON(ProxyService);
+    ProxyService();
+    ~ProxyService();
 
     virtual bool InitService() override;
     virtual void UninitService() override;
@@ -70,6 +71,9 @@ class ProxyService : public GameServiceBase {
     void AddLogicServer(const ServerConnection& server);
     void RemoveLogicServer(uint32_t conn_id);
     ServerConnection* GetLogicServer(uint32_t conn_id);
+    
+    // 生成会话ID
+    std::string GenerateSessionId();
 
     // 设置主IOManager（用于网络IO）
     void SetIOManager(ancfl::IOManager* io_manager) {

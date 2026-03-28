@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <mutex>
 
 namespace game_server {
 
@@ -57,6 +58,7 @@ protected:
     int32_t check_code_;
     SharedMemoryStatus status_;
     time_t update_time_;    // 最后一次修改时间
+    mutable std::mutex mutex_;  // 线程安全互斥锁，mutable允许在const方法中使用
 };
 
 // 记录每个数据块的状态
@@ -118,6 +120,7 @@ protected:
 
     using ShareMemoryPageMapping = std::vector<ShareMemoryPage>;
     ShareMemoryPageMapping pages_; // 共享内存页映射
+    std::mutex mutex_;            // 线程安全互斥锁
 
     // 计算数据块在页面中的索引
     bool GetBlockIndex(void* data, int32_t& page_index, int32_t& block_index) const;
@@ -127,6 +130,9 @@ protected:
 
     // 映射共享内存
     void* MapShareMemory(int32_t module_id, int32_t page_index, int32_t size);
+
+    // 通过句柄映射共享内存
+    void* MapShareMemoryByHandle(void* handle, int32_t size);
 
     // 解除映射
     void UnmapShareMemory(void* data, int32_t size);

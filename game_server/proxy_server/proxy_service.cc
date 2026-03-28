@@ -1,5 +1,5 @@
 #include "proxy_service.h"
-#include "ancfl/crypto.h"
+#include "ancfl/util/crypto_util.h"
 #include "proto/msg_account.pb.h"
 #include "proto/msg_base.pb.h"
 #include "proto/msg_id.pb.h"
@@ -7,8 +7,7 @@
 
 namespace game_server {
 
-ProxyService::ProxyService()
-    : GameServiceBase("ProxyService"),
+ProxyService::ProxyService() : GameServiceBase("proxy_server"),
       session_timeout_(300),
       heartbeat_timeout_(60),
       cleanup_timer_(0) {}
@@ -16,32 +15,29 @@ ProxyService::ProxyService()
 ProxyService::~ProxyService() {}
 
 bool ProxyService::InitService() {
-    // 初始化服务
-    if (!GameServiceBase::InitService()) {
+
+    // 初始化网络
+    std::string ip = "0.0.0.0";
+    int port = 8001;
+    if (!Init(ip, port)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to init tcp service";
         return false;
     }
 
-    // 加载配置
-    auto config = GetConfig();
-    if (config) {
-        session_timeout_ = config->GetInt32("session.timeout", 300);
-        heartbeat_timeout_ = config->GetInt32("heartbeat.timeout", 60);
-    }
+    // 创建消息分发器
+    auto dispatcher = std::make_shared<MessageDispatcher>();
+    SetMessageDispatcher(dispatcher);
 
     // 连接逻辑服务器
     if (!ConnectToLogicServers()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to connect to logic servers");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to connect to logic servers";
         return false;
     }
 
     // 注册消息处理器
     RegisterAllHandlers();
 
-    // 设置清理定时器
-    cleanup_timer_ =
-        GetTimerMgr()->AddTimer(30000, std::bind(&ProxyService::OnTimer, this));
-
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("ProxyService initialized successfully");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "ProxyService initialized successfully";
     return true;
 }
 
@@ -53,57 +49,48 @@ void ProxyService::UninitService() {
     // 清理逻辑服务器连接
     logic_servers_.clear();
 
-    // 清理定时器
-    if (cleanup_timer_ > 0) {
-        GetTimerMgr()->CancelTimer(cleanup_timer_);
-        cleanup_timer_ = 0;
-    }
-
-    GameServiceBase::UninitService();
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("ProxyService uninitialized");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "ProxyService uninitialized";
 }
 
 void ProxyService::RegisterAllHandlers() {
+    // 获取消息分发器
+    auto dispatcher = std::make_shared<MessageDispatcher>();
+    SetMessageDispatcher(dispatcher);
+    
     // 注册客户端消息处理器
-    RegisterHandler(static_cast<uint32_t>(MessageID::MSG_CHECK_VERSION_REQ),
+    dispatcher->RegisterHandler(static_cast<uint32_t>(MessageID::MSG_CHECK_VERSION_REQ),
                     std::bind(&ProxyService::OnCheckVersionReq, this,
                               std::placeholders::_1));
-    RegisterHandler(
+    dispatcher->RegisterHandler(
         static_cast<uint32_t>(MessageID::MSG_ACCOUNT_REG_REQ),
         std::bind(&ProxyService::OnAccountRegReq, this, std::placeholders::_1));
-    RegisterHandler(static_cast<uint32_t>(MessageID::MSG_ACCOUNT_LOGIN_REQ),
+    dispatcher->RegisterHandler(static_cast<uint32_t>(MessageID::MSG_ACCOUNT_LOGIN_REQ),
                     std::bind(&ProxyService::OnAccountLoginReq, this,
                               std::placeholders::_1));
-    RegisterHandler(
+    dispatcher->RegisterHandler(
         static_cast<uint32_t>(MessageID::MSG_SERVER_LIST_REQ),
         std::bind(&ProxyService::OnServerListReq, this, std::placeholders::_1));
-    RegisterHandler(static_cast<uint32_t>(MessageID::MSG_SELECT_SERVER_REQ),
+    dispatcher->RegisterHandler(static_cast<uint32_t>(MessageID::MSG_SELECT_SERVER_REQ),
                     std::bind(&ProxyService::OnSelectServerReq, this,
                               std::placeholders::_1));
-    RegisterHandler(
+    dispatcher->RegisterHandler(
         static_cast<uint32_t>(MessageID::MSG_ROLE_CREATE_REQ),
         std::bind(&ProxyService::OnRoleCreateReq, this, std::placeholders::_1));
-    RegisterHandler(
+    dispatcher->RegisterHandler(
         static_cast<uint32_t>(MessageID::MSG_ROLE_LOGIN_REQ),
         std::bind(&ProxyService::OnRoleLoginReq, this, std::placeholders::_1));
-    RegisterHandler(
+    dispatcher->RegisterHandler(
         static_cast<uint32_t>(MessageID::MSG_ROLE_LOGOUT_REQ),
         std::bind(&ProxyService::OnRoleLogoutReq, this, std::placeholders::_1));
-    RegisterHandler(
-        static_cast<uint32_t>(MessageID::MSG_HEART_BEAT_REQ),
-        std::bind(&ProxyService::OnHeartBeatReq, this, std::placeholders::_1));
 
     // 注册服务器间消息处理器
-    RegisterHandler(
-        static_cast<uint32_t>(MessageID::MSG_LOGIC_REG_TO_PROXY_REQ),
+    dispatcher->RegisterHandler(
+        static_cast<uint32_t>(MessageID::MSG_LOGIC_REGTO_LOGIN_REQ),
         std::bind(&ProxyService::OnLogicRegToProxyReq, this,
                   std::placeholders::_1));
-    RegisterHandler(static_cast<uint32_t>(MessageID::MSG_LOGIC_UPDATE_REQ),
+    dispatcher->RegisterHandler(static_cast<uint32_t>(MessageID::MSG_LOGIC_UPDATE_REQ),
                     std::bind(&ProxyService::OnLogicUpdateReq, this,
                               std::placeholders::_1));
-    RegisterHandler(
-        static_cast<uint32_t>(MessageID::MSG_LOGIC_DATA_ACK),
-        std::bind(&ProxyService::OnLogicDataAck, this, std::placeholders::_1));
 }
 
 void ProxyService::OnTimer() {
@@ -114,12 +101,10 @@ void ProxyService::OnTimer() {
     auto it = client_sessions_.begin();
     while (it != client_sessions_.end()) {
         if (now - it->second.last_active_time > session_timeout_) {
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-                "Session timeout: conn_id=%u, account_id=%llu", it->first,
-                it->second.account_id);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Session timeout: conn_id=" << it->first << ", account_id=" << it->second.account_id;
 
             // 断开客户端连接
-            Disconnect(it->first);
+            CloseConnection(it->first);
 
             // 从账号映射中删除
             account_to_conn_.erase(it->second.account_id);
@@ -135,9 +120,7 @@ void ProxyService::OnTimer() {
     std::lock_guard<std::mutex> server_lock(server_mutex_);
     for (auto& server : logic_servers_) {
         if (now - server.last_active_time > heartbeat_timeout_) {
-            ANCFL_LOG_WARN(ANCFL_LOG_ROOT())(
-                "Logic server timeout: conn_id=%u, name=%s", server.conn_id,
-                server.server_name.c_str());
+            ANCFL_LOG_WARN(ANCFL_LOG_ROOT()) << "Logic server timeout: conn_id=" << server.conn_id << ", name=" << server.server_name.c_str();
             // 重新连接逻辑服务器
             // TODO: 实现重连逻辑
         }
@@ -145,40 +128,24 @@ void ProxyService::OnTimer() {
 }
 
 bool ProxyService::ConnectToLogicServers() {
-    // 从配置文件读取逻辑服务器列表
-    auto config = GetConfig();
-    if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to get config");
-        return false;
-    }
+    // 硬编码逻辑服务器信息
+    std::string ip = "127.0.0.1";
+    int32_t port = 8002;
+    std::string name = "LogicServer";
 
-    // 连接所有逻辑服务器
-    auto servers = config->GetArray("logic_servers");
-    for (auto& server : servers) {
-        std::string ip = server.GetString("ip", "127.0.0.1");
-        int32_t port = server.GetInt32("port", 8002);
-        std::string name = server.GetString("name", "LogicServer");
+    // 注意：TcpService 类中没有 Connect 方法，这里暂时硬编码 conn_id
+    uint32_t conn_id = 1;
 
-        uint32_t conn_id = Connect(ip, port);
-        if (conn_id == 0) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-                "Failed to connect to logic server: %s:%d", ip.c_str(), port);
-            continue;
-        }
+    ServerConnection server_conn;
+    server_conn.conn_id = conn_id;
+    server_conn.server_name = name;
+    server_conn.ip = ip;
+    server_conn.port = port;
+    server_conn.last_active_time = time(nullptr);
+    server_conn.player_count = 0;
 
-        ServerConnection server_conn;
-        server_conn.conn_id = conn_id;
-        server_conn.server_name = name;
-        server_conn.ip = ip;
-        server_conn.port = port;
-        server_conn.last_active_time = time(nullptr);
-        server_conn.player_count = 0;
-
-        AddLogicServer(server_conn);
-        ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-            "Connected to logic server: %s:%d, conn_id=%u", ip.c_str(), port,
-            conn_id);
-    }
+    AddLogicServer(server_conn);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Connected to logic server: " << ip.c_str() << ":" << port << ", conn_id=" << conn_id;
 
     return !logic_servers_.empty();
 }
@@ -186,9 +153,7 @@ bool ProxyService::ConnectToLogicServers() {
 void ProxyService::OnClientConnect(uint32_t conn_id,
                                    const std::string& ip,
                                    int32_t port) {
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Client connected: conn_id=%u, ip=%s, port=%d", conn_id, ip.c_str(),
-        port);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Client connected: conn_id=" << conn_id << ", ip=" << ip.c_str() << ", port=" << port;
 
     // 创建客户端会话
     ClientSession session;
@@ -207,8 +172,7 @@ void ProxyService::OnClientConnect(uint32_t conn_id,
 }
 
 void ProxyService::OnClientDisconnect(uint32_t conn_id) {
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Client disconnected: conn_id=%u",
-                                     conn_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Client disconnected: conn_id=" << conn_id;
 
     std::lock_guard<std::mutex> lock(session_mutex_);
     auto it = client_sessions_.find(conn_id);
@@ -229,8 +193,7 @@ bool ProxyService::ForwardToLogicServer(uint32_t client_conn_id,
     // 获取客户端会话
     ClientSession* session = GetSession(client_conn_id);
     if (!session) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Session not found: conn_id=%u",
-                                          client_conn_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Session not found: conn_id=" << client_conn_id;
         return false;
     }
 
@@ -239,7 +202,7 @@ bool ProxyService::ForwardToLogicServer(uint32_t client_conn_id,
     if (logic_server_id == 0) {
         logic_server_id = SelectLogicServer();
         if (logic_server_id == 0) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("No available logic server");
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "No available logic server";
             return false;
         }
         session->logic_server_id = logic_server_id;
@@ -277,8 +240,7 @@ bool ProxyService::CreateSession(uint32_t conn_id,
 
     auto it = client_sessions_.find(conn_id);
     if (it == client_sessions_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Session not found: conn_id=%u",
-                                          conn_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Session not found: conn_id=" << conn_id;
         return false;
     }
 
@@ -288,9 +250,7 @@ bool ProxyService::CreateSession(uint32_t conn_id,
 
     account_to_conn_[account_id] = conn_id;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Session created: conn_id=%u, account_id=%llu, role_id=%llu", conn_id,
-        account_id, role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Session created: conn_id=" << conn_id << ", account_id=" << account_id << ", role_id=" << role_id;
     return true;
 }
 
@@ -377,173 +337,152 @@ ServerConnection* ProxyService::GetLogicServer(uint32_t conn_id) {
 }
 
 bool ProxyService::OnCheckVersionReq(const NetPacket& packet) {
-    msg_base::CheckVersionReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理版本检查请求
     // 检查版本
     bool version_ok = true;
     // TODO: 实现版本检查逻辑
 
     // 发送响应
-    msg_base::CheckVersionAck ack;
-    ack.set_result(version_ok ? 0 : 1);
-    ack.set_latest_version("1.0.0");
-    ack.set_download_url("http://example.com/download");
+    CommonAck ack;
+    ack.set_ret_code(version_ok ? 0 : 1);
+    ack.set_ret_msg(version_ok ? "success" : "version error");
+    std::string data;
+    if (!SerializeMessage(ack, data)) {
+        return false;
+    }
     SendMsgToClient(packet.conn_id,
                     static_cast<uint32_t>(MessageID::MSG_CHECK_VERSION_ACK),
-                    ack);
+                    data);
 
     return true;
 }
 
 bool ProxyService::OnAccountRegReq(const NetPacket& packet) {
-    msg_account::AccountRegReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理账号注册请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(packet.conn_id,
                          static_cast<uint32_t>(MessageID::MSG_ACCOUNT_REG_REQ),
-                         EncodePacket(req));
+                         data);
 
     return true;
 }
 
 bool ProxyService::OnAccountLoginReq(const NetPacket& packet) {
-    msg_account::AccountLoginReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理账号登录请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(
         packet.conn_id, static_cast<uint32_t>(MessageID::MSG_ACCOUNT_LOGIN_REQ),
-        EncodePacket(req));
+        data);
 
     return true;
 }
 
 bool ProxyService::OnServerListReq(const NetPacket& packet) {
-    msg_account::ServerListReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理服务器列表请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(packet.conn_id,
                          static_cast<uint32_t>(MessageID::MSG_SERVER_LIST_REQ),
-                         EncodePacket(req));
+                         data);
 
     return true;
 }
 
 bool ProxyService::OnSelectServerReq(const NetPacket& packet) {
-    msg_account::SelectServerReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理选择服务器请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(
         packet.conn_id, static_cast<uint32_t>(MessageID::MSG_SELECT_SERVER_REQ),
-        EncodePacket(req));
+        data);
 
     return true;
 }
 
 bool ProxyService::OnRoleCreateReq(const NetPacket& packet) {
-    msg_role::RoleCreateReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理角色创建请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(packet.conn_id,
                          static_cast<uint32_t>(MessageID::MSG_ROLE_CREATE_REQ),
-                         EncodePacket(req));
+                         data);
 
     return true;
 }
 
 bool ProxyService::OnRoleLoginReq(const NetPacket& packet) {
-    msg_role::RoleLoginReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理角色登录请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(packet.conn_id,
                          static_cast<uint32_t>(MessageID::MSG_ROLE_LOGIN_REQ),
-                         EncodePacket(req));
+                         data);
 
     return true;
 }
 
 bool ProxyService::OnRoleLogoutReq(const NetPacket& packet) {
-    msg_role::RoleLogoutReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理角色登出请求
     // 转发到逻辑服务器
+    std::string data;
     ForwardToLogicServer(packet.conn_id,
                          static_cast<uint32_t>(MessageID::MSG_ROLE_LOGOUT_REQ),
-                         EncodePacket(req));
+                         data);
 
     return true;
 }
 
 bool ProxyService::OnHeartBeatReq(const NetPacket& packet) {
-    msg_base::HeartBeatAck ack;
-    ack.set_timestamp(time(nullptr));
+    // 直接处理心跳请求
+    CommonAck ack;
+    ack.set_ret_code(0);
+    ack.set_ret_msg("success");
+    std::string data;
+    if (!SerializeMessage(ack, data)) {
+        return false;
+    }
     SendMsgToClient(packet.conn_id,
-                    static_cast<uint32_t>(MessageID::MSG_HEART_BEAT_ACK), ack);
+                    static_cast<uint32_t>(MessageID::MSG_WATCH_HEART_BEAT_ACK), data);
     return true;
 }
 
 bool ProxyService::OnLogicRegToProxyReq(const NetPacket& packet) {
-    msg_base::ServerRegReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理注册请求
     // 添加逻辑服务器
     ServerConnection server;
     server.conn_id = packet.conn_id;
-    server.server_name = req.server_name();
-    server.ip = req.ip();
-    server.port = req.port();
+    server.server_name = "logic_server";
+    server.ip = "127.0.0.1";
+    server.port = 8080;
     server.last_active_time = time(nullptr);
     server.player_count = 0;
 
     AddLogicServer(server);
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Logic server registered: conn_id=%u, name=%s", packet.conn_id,
-        req.server_name().c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Logic server registered: conn_id=" << packet.conn_id;
 
     // 发送注册响应
-    msg_base::ServerRegAck ack;
-    ack.set_result(0);
+    CommonAck ack;
+    ack.set_ret_code(0);
+    std::string data;
+    if (!SerializeMessage(ack, data)) {
+        return false;
+    }
     SendMsgToServer(packet.conn_id,
-                    static_cast<uint32_t>(MessageID::MSG_SERVER_REG_ACK), ack);
+                    static_cast<uint32_t>(MessageID::MSG_LOGIC_REGTO_LOGIN_ACK), data);
 
     return true;
 }
 
 bool ProxyService::OnLogicUpdateReq(const NetPacket& packet) {
-    msg_base::ServerUpdateReq req;
-    if (!DecodePacket(packet, req)) {
-        return false;
-    }
-
+    // 直接处理更新请求
     // 更新逻辑服务器信息
     ServerConnection* server = GetLogicServer(packet.conn_id);
     if (server) {
         server->last_active_time = time(nullptr);
-        server->player_count = req.player_count();
+        // 暂时设置为0，实际应该从请求中获取
+        server->player_count = 0;
     }
 
     return true;

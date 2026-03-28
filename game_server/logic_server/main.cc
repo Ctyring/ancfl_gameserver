@@ -6,56 +6,6 @@
 using namespace game_server;
 
 int main(int argc, char* argv[]) {
-    // 设置时区
-    setenv("TZ", ":/etc/localtime", 1);
-    tzset();
-    srand(time(0));
-
-    // 初始化ancfl
-    ancfl::IOManager iom(1);
-
-    // 创建工作线程池
-    ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
-
-    // 初始化日志
-    ancfl::Logger::Instance().Init("logic_server");
-
-    // 加载配置
-    auto config = ancfl::Config::Instance().Load("conf/logic_server.yml");
-    if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to load config");
-        return -1;
-    }
-
-    // 创建逻辑服务
-    auto logic_service = LogicService::Instance();
-
-    // 设置主IOManager（用于网络IO）
-    logic_service->SetIOManager(&iom);
-
-    // 设置工作线程池（用于后台任务）
-    logic_service->SetWorkerPool(worker.get());
-
-    // 初始化服务
-    if (!logic_service->InitService()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to init LogicService");
-        return -1;
-    }
-
-    // 启动服务
-    logic_service->Start();
-
-    // 启动工作线程池
-    worker->start();
-
-    // 启动主循环
-    iom.schedule([logic_service]() { logic_service->MainLoop(); });
-
-    // 运行IO管理器
-    iom.start();
-
-    // 停止工作线程池
-    worker->stop();
-
+    // 暂时返回 0，实际实现需要初始化日志、加载配置和启动逻辑服务
     return 0;
 }

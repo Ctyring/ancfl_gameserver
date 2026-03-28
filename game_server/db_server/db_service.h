@@ -8,10 +8,42 @@
 
 namespace game_server {
 
+// 账号信息结构
+struct AccountInfo {
+    uint64_t account_id;
+    std::string account_name;
+    std::string password;
+    int32_t channel;
+    int64_t create_time;
+    int64_t last_login_time;
+    int32_t last_login_ip;
+    bool is_sealed;
+    int64_t seal_end_time;
+    bool review;
+};
+
+// 角色信息结构
+struct RoleInfo {
+    uint64_t role_id;
+    uint64_t account_id;
+    int32_t server_id;
+    std::string role_name;
+    int32_t career;
+    int32_t level;
+    int64_t exp;
+    int32_t head_id;
+    int32_t portrait_frame;
+    int64_t create_time;
+    int64_t last_login_time;
+    int8_t is_deleted;
+    int64_t delete_time;
+};
+
 // 数据服务类
 class DBService : public GameServiceBase {
-   public:
-    SERVICE_SINGLETON(DBService);
+public:
+    DBService();
+    ~DBService();
 
     virtual bool InitService() override;
     virtual void UninitService() override;
@@ -22,12 +54,11 @@ class DBService : public GameServiceBase {
     bool ConnectToDatabase();
 
     // 数据操作
-    bool CreateRole(const msg_role::RoleDataSyncReq& req);
-    bool UpdateRole(const msg_role::RoleDataSyncReq& req);
+    bool CreateRole(const RoleInfo& role_info);
+    bool UpdateRole(const RoleInfo& role_info);
     bool DeleteRole(uint64_t role_id);
-    bool GetRoleList(uint64_t account_id,
-                     std::vector<msg_role::RoleInfo>& roles);
-    bool GetRoleData(uint64_t role_id, msg_role::RoleDataSyncReq& data);
+    bool GetRoleList(uint64_t account_id, std::vector<RoleInfo>& roles);
+    bool GetRoleData(uint64_t role_id, RoleInfo& data);
 
     // 账号操作
     bool CreateAccount(const std::string& account_name,
@@ -36,9 +67,9 @@ class DBService : public GameServiceBase {
                        uint64_t& account_id);
     bool VerifyAccount(const std::string& account_name,
                        const std::string& password,
-                       msg_account::AccountInfo& info);
-    bool GetAccountInfo(uint64_t account_id, msg_account::AccountInfo& info);
-    bool SealAccount(uint64_t account_id, int32_t seal_time);
+                       uint64_t& account_id);
+    bool GetAccountInfo(uint64_t account_id, AccountInfo& info);
+    bool SealAccount(uint64_t account_id, int64_t seal_end_time);
     bool UnsealAccount(uint64_t account_id);
     bool IsAccountSealed(uint64_t account_id);
 
@@ -66,46 +97,31 @@ class DBService : public GameServiceBase {
         worker_pool_ = worker_pool;
     }
 
-   private:
+private:
     // 消息处理器
     bool OnDBDataSyncReq(const NetPacket& packet);
     bool OnRoleListReq(const NetPacket& packet);
     bool OnRoleDeleteReq(const NetPacket& packet);
     bool OnAccountCreateReq(const NetPacket& packet);
     bool OnAccountVerifyReq(const NetPacket& packet);
-    bool OnAccountGetInfoReq(const NetPacket& packet);
-    bool OnAccountSealReq(const NetPacket& packet);
-    bool OnAccountUnsealReq(const NetPacket& packet);
-    bool OnAccountIsSealedReq(const NetPacket& packet);
-    bool OnLoginLogReq(const NetPacket& packet);
-    bool OnHeartBeatReq(const NetPacket& packet);
-    bool OnLogicRegToDBReq(const NetPacket& packet);
 
+private:
     // 数据库连接池
-    std::vector<std::shared_ptr<ancfl::MySQL>> db_pool_;
-    std::mutex db_pool_mutex_;
-
-    // 逻辑服务器连接
-    std::unordered_map<uint32_t, std::string> logic_servers_;
-
-    // 配置信息
-    std::string db_host_;
-    int32_t db_port_;
-    std::string db_user_;
-    std::string db_password_;
-    std::string db_name_;
-    int32_t db_pool_size_;
-
-    // 同步定时器
-    int32_t sync_timer_;
+    std::vector<std::shared_ptr<ancfl::MySQL>> db_connections_;
+    std::mutex db_mutex_;
 
     // IO管理器
     ancfl::IOManager* io_manager_;
-
-    // 工作线程池
     ancfl::IOManager* worker_pool_;
+
+    // 数据库配置
+    std::string db_host_;
+    int db_port_;
+    std::string db_user_;
+    std::string db_password_;
+    std::string db_name_;
 };
 
-}  // namespace game_server
+} // namespace game_server
 
-#endif  // __DB_SERVICE_H__
+#endif // __DB_SERVICE_H__

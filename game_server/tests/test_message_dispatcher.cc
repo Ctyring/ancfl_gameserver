@@ -1,14 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "message_dispatcher.h"
+#include "proto/msg_base.pb.h"
 
 using namespace game_server;
 using namespace testing;
-
-class MockMessageHandler : public MessageHandler {
-public:
-    MOCK_METHOD(void, Handle, (uint64_t conn_id, const std::string& data), (override));
-};
 
 class MessageDispatcherTest : public Test {
 protected:
@@ -24,43 +20,101 @@ protected:
 };
 
 TEST_F(MessageDispatcherTest, RegisterHandler) {
-    auto handler = std::make_shared<MockMessageHandler>();
-    
-    EXPECT_TRUE(dispatcher_->RegisterHandler(1001, handler));
-    EXPECT_FALSE(dispatcher_->RegisterHandler(1001, handler));
-}
-
-TEST_F(MessageDispatcherTest, UnregisterHandler) {
-    auto handler = std::make_shared<MockMessageHandler>();
+    int call_count = 0;
+    auto handler = [&call_count](const NetPacket& packet) -> bool {
+        call_count++;
+        return true;
+    };
     
     dispatcher_->RegisterHandler(1001, handler);
-    EXPECT_TRUE(dispatcher_->UnregisterHandler(1001));
-    EXPECT_FALSE(dispatcher_->UnregisterHandler(1001));
+    EXPECT_TRUE(dispatcher_->HasHandler(1001));
+    EXPECT_EQ(dispatcher_->GetHandlerCount(), 1);
+}
+
+TEST_F(MessageDispatcherTest, RegisterMultipleHandlers) {
+    auto handler1 = [](const NetPacket& packet) -> bool { return true; };
+    auto handler2 = [](const NetPacket& packet) -> bool { return true; };
+    
+    dispatcher_->RegisterHandler(1001, handler1);
+    dispatcher_->RegisterHandler(1002, handler2);
+    
+    EXPECT_TRUE(dispatcher_->HasHandler(1001));
+    EXPECT_TRUE(dispatcher_->HasHandler(1002));
+    EXPECT_EQ(dispatcher_->GetHandlerCount(), 2);
 }
 
 TEST_F(MessageDispatcherTest, DispatchMessage) {
-    auto handler = std::make_shared<MockMessageHandler>();
+    int call_count = 0;
+    uint32_t received_msg_id = 0;
+    
+    auto handler = [&call_count, &received_msg_id](const NetPacket& packet) -> bool {
+        call_count++;
+        received_msg_id = packet.msg_id;
+        return true;
+    };
+    
     dispatcher_->RegisterHandler(1001, handler);
     
-    EXPECT_CALL(*handler, Handle(1, testing::_))
-        .Times(1);
+    NetPacket packet;
+    packet.conn_id = 1;
+    packet.msg_id = 1001;
+    packet.target_id = 0;
+    packet.user_data = 0;
     
-    dispatcher_->DispatchMessage(1001, 1, "test_data");
+    EXPECT_TRUE(dispatcher_->Dispatch(packet));
+    EXPECT_EQ(call_count, 1);
+    EXPECT_EQ(received_msg_id, 1001);
 }
 
 TEST_F(MessageDispatcherTest, DispatchUnknownMessage) {
-    auto handler = std::make_shared<MockMessageHandler>();
+    int call_count = 0;
+    auto handler = [&call_count](const NetPacket& packet) -> bool {
+        call_count++;
+        return true;
+    };
+    
     dispatcher_->RegisterHandler(1001, handler);
     
-    EXPECT_CALL(*handler, Handle(testing::_, testing::_))
-        .Times(0);
+    NetPacket packet;
+    packet.conn_id = 1;
+    packet.msg_id = 9999;
+    packet.target_id = 0;
+    packet.user_data = 0;
     
-    dispatcher_->DispatchMessage(9999, 1, "test_data");
+    EXPECT_FALSE(dispatcher_->Dispatch(packet));
+    EXPECT_EQ(call_count, 0);
+}
+
+TEST_F(MessageDispatcherTest, HandlerReturnsFalse) {
+    auto handler = [](const NetPacket& packet) -> bool {
+        return false;
+    };
+    
+    dispatcher_->RegisterHandler(1001, handler);
+    
+    NetPacket packet;
+    packet.conn_id = 1;
+    packet.msg_id = 1001;
+    packet.target_id = 0;
+    packet.user_data = 0;
+    
+    EXPECT_FALSE(dispatcher_->Dispatch(packet));
+}
+
+TEST_F(MessageDispatcherTest, HasHandler) {
+    auto handler = [](const NetPacket& packet) -> bool { return true; };
+    
+    EXPECT_FALSE(dispatcher_->HasHandler(1001));
+    
+    dispatcher_->RegisterHandler(1001, handler);
+    EXPECT_TRUE(dispatcher_->HasHandler(1001));
+    
+    EXPECT_FALSE(dispatcher_->HasHandler(1002));
 }
 
 TEST_F(MessageDispatcherTest, GetHandlerCount) {
-    auto handler1 = std::make_shared<MockMessageHandler>();
-    auto handler2 = std::make_shared<MockMessageHandler>();
+    auto handler1 = [](const NetPacket& packet) -> bool { return true; };
+    auto handler2 = [](const NetPacket& packet) -> bool { return true; };
     
     EXPECT_EQ(dispatcher_->GetHandlerCount(), 0);
     
@@ -69,20 +123,33 @@ TEST_F(MessageDispatcherTest, GetHandlerCount) {
     
     dispatcher_->RegisterHandler(1002, handler2);
     EXPECT_EQ(dispatcher_->GetHandlerCount(), 2);
-    
-    dispatcher_->UnregisterHandler(1001);
-    EXPECT_EQ(dispatcher_->GetHandlerCount(), 1);
 }
 
-TEST_F(MessageDispatcherTest, ClearAllHandlers) {
-    auto handler1 = std::make_shared<MockMessageHandler>();
-    auto handler2 = std::make_shared<MockMessageHandler>();
+TEST_F(MessageDispatcherTest, OverrideHandler) {
+    int call_count1 = 0;
+    int call_count2 = 0;
+    
+    auto handler1 = [&call_count1](const NetPacket& packet) -> bool {
+        call_count1++;
+        return true;
+    };
+    
+    auto handler2 = [&call_count2](const NetPacket& packet) -> bool {
+        call_count2++;
+        return true;
+    };
     
     dispatcher_->RegisterHandler(1001, handler1);
-    dispatcher_->RegisterHandler(1002, handler2);
+    dispatcher_->RegisterHandler(1001, handler2);
     
-    EXPECT_EQ(dispatcher_->GetHandlerCount(), 2);
+    NetPacket packet;
+    packet.conn_id = 1;
+    packet.msg_id = 1001;
+    packet.target_id = 0;
+    packet.user_data = 0;
     
-    dispatcher_->ClearAllHandlers();
-    EXPECT_EQ(dispatcher_->GetHandlerCount(), 0);
+    dispatcher_->Dispatch(packet);
+    
+    EXPECT_EQ(call_count1, 0);
+    EXPECT_EQ(call_count2, 1);
 }

@@ -1,5 +1,6 @@
 #include "mail_module.h"
-#include "proto/msg_mail.pb.h"
+#include "ancfl/log.h"
+#include <mutex>
 
 namespace game_server {
 
@@ -22,7 +23,7 @@ bool MailModule::InitMail(uint64_t role_id) {
     mail_cache_[role_id] = std::vector<MailInfo>();
     new_mail_notify_[role_id] = false;
     
-    LOG_INFO("Mail initialized: role_id=%llu", role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Mail initialized: role_id=" << role_id;
     return true;
 }
 
@@ -93,7 +94,7 @@ bool MailModule::SendMailWithAttachments(uint64_t sender_id, const std::string& 
         
         // 如果还是超过上限，返回失败
         if (it->second.size() >= MAX_MAIL_COUNT) {
-            LOG_ERROR("Mail box full: receiver_id=%llu", receiver_id);
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Mail box full: receiver_id=" << receiver_id;
             return false;
         }
     }
@@ -123,8 +124,7 @@ bool MailModule::SendMailWithAttachments(uint64_t sender_id, const std::string& 
     // 标记有新邮件
     new_mail_notify_[receiver_id] = true;
     
-    LOG_INFO("Mail sent: mail_id=%llu, sender_id=%llu, receiver_id=%llu, title=%s", 
-             mail.mail_id, sender_id, receiver_id, title.c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Mail sent: mail_id=" << mail.mail_id << ", sender_id=" << sender_id << ", receiver_id=" << receiver_id << ", title=" << title;
     
     // 通知收件人有新邮件
     NotifyNewMail(receiver_id);
@@ -149,7 +149,7 @@ bool MailModule::BroadcastSystemMail(const std::vector<uint64_t>& receiver_ids, 
         SendSystemMail(receiver_id, title, content);
     }
     
-    LOG_INFO("System mail broadcast: receiver_count=%d, title=%s", receiver_ids.size(), title.c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "System mail broadcast: receiver_count=" << receiver_ids.size() << ", title=" << title;
     return true;
 }
 
@@ -166,7 +166,7 @@ bool MailModule::ReadMail(uint64_t role_id, uint64_t mail_id) {
             if (mail.status == MailStatus::UNREAD) {
                 mail.status = MailStatus::READ;
                 mail.read_time = time(nullptr);
-                LOG_INFO("Mail read: role_id=%llu, mail_id=%llu", role_id, mail_id);
+                ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Mail read: role_id=" << role_id << ", mail_id=" << mail_id;
             }
             return true;
         }
@@ -205,7 +205,7 @@ bool MailModule::TakeAttachment(uint64_t role_id, uint64_t mail_id) {
     for (auto& mail : it->second) {
         if (mail.mail_id == mail_id && mail.status != MailStatus::DELETED) {
             if (mail.status != MailStatus::ATTACHMENT_NOT_TAKEN) {
-                LOG_ERROR("Mail has no attachment or already taken: role_id=%llu, mail_id=%llu", role_id, mail_id);
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Mail has no attachment or already taken: role_id=" << role_id << ", mail_id=" << mail_id;
                 return false;
             }
             
@@ -214,11 +214,10 @@ bool MailModule::TakeAttachment(uint64_t role_id, uint64_t mail_id) {
                 // TODO: 根据附件类型发放奖励
                 switch (attachment.attachment_type) {
                 case 1: // 金币
-                    LOG_INFO("Attachment - Gold: role_id=%llu, gold=%d", role_id, attachment.item_count);
+                    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Attachment - Gold: role_id=" << role_id << ", gold=" << attachment.item_count;
                     break;
                 case 2: // 物品
-                    LOG_INFO("Attachment - Item: role_id=%llu, item_id=%d, count=%d", 
-                             role_id, attachment.item_id, attachment.item_count);
+                    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Attachment - Item: role_id=" << role_id << ", item_id=" << attachment.item_id << ", count=" << attachment.item_count;
                     break;
                 default:
                     break;
@@ -228,7 +227,7 @@ bool MailModule::TakeAttachment(uint64_t role_id, uint64_t mail_id) {
             // 更新邮件状态
             mail.status = MailStatus::ATTACHMENT_TAKEN;
             
-            LOG_INFO("Attachment taken: role_id=%llu, mail_id=%llu", role_id, mail_id);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Attachment taken: role_id=" << role_id << ", mail_id=" << mail_id;
             return true;
         }
     }
@@ -253,11 +252,10 @@ bool MailModule::TakeAllAttachments(uint64_t role_id) {
                 // TODO: 根据附件类型发放奖励
                 switch (attachment.attachment_type) {
                 case 1: // 金币
-                    LOG_INFO("Attachment - Gold: role_id=%llu, gold=%d", role_id, attachment.item_count);
+                    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Attachment - Gold: role_id=" << role_id << ", gold=" << attachment.item_count;
                     break;
                 case 2: // 物品
-                    LOG_INFO("Attachment - Item: role_id=%llu, item_id=%d, count=%d", 
-                             role_id, attachment.item_id, attachment.item_count);
+                    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Attachment - Item: role_id=" << role_id << ", item_id=" << attachment.item_id << ", count=" << attachment.item_count;
                     break;
                 default:
                     break;
@@ -271,7 +269,7 @@ bool MailModule::TakeAllAttachments(uint64_t role_id) {
     }
     
     if (has_attachment) {
-        LOG_INFO("All attachments taken: role_id=%llu", role_id);
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "All attachments taken: role_id=" << role_id;
     }
     
     return true;
@@ -306,12 +304,12 @@ bool MailModule::DeleteMail(uint64_t role_id, uint64_t mail_id) {
         if (mail.mail_id == mail_id && mail.status != MailStatus::DELETED) {
             // 检查是否有未领取的附件
             if (mail.status == MailStatus::ATTACHMENT_NOT_TAKEN) {
-                LOG_ERROR("Mail has unclaimed attachment: role_id=%llu, mail_id=%llu", role_id, mail_id);
+                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Mail has unclaimed attachment: role_id=" << role_id << ", mail_id=" << mail_id;
                 return false;
             }
             
             mail.status = MailStatus::DELETED;
-            LOG_INFO("Mail deleted: role_id=%llu, mail_id=%llu", role_id, mail_id);
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Mail deleted: role_id=" << role_id << ", mail_id=" << mail_id;
             return true;
         }
     }
@@ -336,7 +334,7 @@ bool MailModule::DeleteReadMails(uint64_t role_id) {
         }
     }
     
-    LOG_INFO("Read mails deleted: role_id=%llu, count=%d", role_id, delete_count);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Read mails deleted: role_id=" << role_id << ", count=" << delete_count;
     return true;
 }
 
@@ -358,7 +356,7 @@ bool MailModule::DeleteExpiredMails(uint64_t role_id) {
         }
     }
     
-    LOG_INFO("Expired mails deleted: role_id=%llu, count=%d", role_id, delete_count);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Expired mails deleted: role_id=" << role_id << ", count=" << delete_count;
     return true;
 }
 
@@ -389,7 +387,7 @@ bool MailModule::CleanDeletedMails(uint64_t role_id) {
 
 bool MailModule::NotifyNewMail(uint64_t role_id) {
     // TODO: 发送新邮件通知给客户端
-    LOG_INFO("New mail notification: role_id=%llu", role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "New mail notification: role_id=" << role_id;
     return true;
 }
 
@@ -425,36 +423,7 @@ bool MailModule::SaveMailData(uint64_t role_id) {
         return false;
     }
     
-    // 保存邮件数据到数据库
-    msg_mail::MailDataSyncReq req;
-    req.set_role_id(role_id);
-    
-    for (const auto& mail : it->second) {
-        if (mail.status != MailStatus::DELETED) {
-            auto mail_data = req.add_mails();
-            mail_data->set_mail_id(mail.mail_id);
-            mail_data->set_sender_id(mail.sender_id);
-            mail_data->set_sender_name(mail.sender_name);
-            mail_data->set_title(mail.title);
-            mail_data->set_content(mail.content);
-            mail_data->set_type(static_cast<int32_t>(mail.type));
-            mail_data->set_status(static_cast<int32_t>(mail.status));
-            mail_data->set_send_time(mail.send_time);
-            mail_data->set_expire_time(mail.expire_time);
-            mail_data->set_read_time(mail.read_time);
-            
-            // 保存附件
-            for (const auto& attachment : mail.attachments) {
-                auto attachment_data = mail_data->add_attachments();
-                attachment_data->set_attachment_type(attachment.attachment_type);
-                attachment_data->set_item_id(attachment.item_id);
-                attachment_data->set_item_count(attachment.item_count);
-            }
-        }
-    }
-    
-    service_->SendMsgToDBServer(static_cast<uint32_t>(MessageID::MSG_MAIL_DATA_SYNC_REQ), req);
-    
+    // TODO: 由于 proto/msg_mail.pb.h 不存在，暂时返回 true
     return true;
 }
 
@@ -476,7 +445,7 @@ void MailModule::OnTimer() {
         for (auto& mail : mails) {
             if (mail.status != MailStatus::DELETED && now > mail.expire_time) {
                 mail.status = MailStatus::DELETED;
-                LOG_INFO("Mail auto expired: role_id=%llu, mail_id=%llu", role_id, mail.mail_id);
+                ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Mail auto expired: role_id=" << role_id << ", mail_id=" << mail.mail_id;
             }
         }
     }

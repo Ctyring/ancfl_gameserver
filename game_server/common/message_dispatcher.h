@@ -50,7 +50,7 @@ public:
 
 private:
     std::unordered_map<uint32_t, MessageHandler> handlers_;
-    ancfl::Mutex mutex_;
+    mutable ancfl::Mutex mutex_;
 };
 
 // 消息处理器基类

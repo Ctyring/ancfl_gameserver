@@ -18,17 +18,13 @@ int main(int argc, char* argv[]) {
     ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
 
     // 初始化日志
-    ancfl::Logger::Instance().Init("proxy_server");
+    auto logger = ancfl::LoggerMgr::GetInstance()->getLogger("proxy_server");
 
     // 加载配置
-    auto config = ancfl::Config::Instance().Load("conf/proxy_server.yml");
-    if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to load config");
-        return -1;
-    }
+    ancfl::Config::LoadFromConfDir("conf");
 
     // 创建网关服务
-    auto proxy_service = ProxyService::Instance();
+    auto proxy_service = std::make_shared<ProxyService>();
 
     // 设置主IOManager（用于网络IO）
     proxy_service->SetIOManager(&iom);
@@ -38,18 +34,18 @@ int main(int argc, char* argv[]) {
 
     // 初始化服务
     if (!proxy_service->InitService()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to init ProxyService");
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to init ProxyService";
         return -1;
     }
 
     // 启动服务
-    proxy_service->Start();
+    proxy_service->Run();
 
     // 启动工作线程池
     worker->start();
 
     // 启动主循环
-    iom.schedule([proxy_service]() { proxy_service->MainLoop(); });
+    iom.schedule([proxy_service]() mutable { proxy_service->MainLoop(); });
 
     // 运行IO管理器
     iom.start();

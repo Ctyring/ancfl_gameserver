@@ -1,126 +1,214 @@
 #include "guild_module.h"
+#include "ancfl/log.h"
 #include "proto/msg_guild.pb.h"
+#include <mutex>
 
 namespace game_server {
 
-GuildModule::GuildModule(LogicService* service) : service_(service) {}
+GuildModule::GuildModule(LogicService* service)
+    : service_(service) {
+    LoadGuildData();
+}
 
-GuildModule::~GuildModule() {}
+GuildModule::~GuildModule() {
+    SaveGuildData();
+}
 
-bool GuildModule::CreateGuild(uint64_t role_id,
-                              const std::string& guild_name,
-                              uint64_t& guild_id) {
-    // 检查是否已加入公会
-    if (IsInGuild(role_id)) {
-        LOG_ERROR("Already in guild: role_id=%llu", role_id);
-        return false;
-    }
-
-    // 检查公会名称
-    if (guild_name.empty() || guild_name.length() > MAX_GUILD_NAME_LENGTH) {
-        LOG_ERROR("Invalid guild name: role_id=%llu, name=%s", role_id,
-                  guild_name.c_str());
-        return false;
-    }
-
-    // 检查公会名称是否已存在
-    if (IsGuildNameExist(guild_name)) {
-        LOG_ERROR("Guild name already exists: name=%s", guild_name.c_str());
-        return false;
-    }
-
+bool GuildModule::CreateGuild(uint64_t role_id, const std::string& guild_name, uint64_t& guild_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // TODO: 检查创建公会的条件（金币、道具等）
+    if (IsInGuild(role_id)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Already in guild: role_id=" << role_id;
+        return false;
+    }
 
-    // 创建公会
+    if (IsGuildNameExist(guild_name)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild name already exists: " << guild_name;
+        return false;
+    }
+
+    if (guild_name.length() > MAX_GUILD_NAME_LENGTH) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild name too long: " << guild_name.length();
+        return false;
+    }
+
     guild_id = GenerateGuildId();
 
-    GuildInfo guild;
-    guild.guild_id = guild_id;
-    guild.guild_name = guild_name;
-    guild.leader_id = role_id;
-    guild.leader_name = "";
-    guild.level = 1;
-    guild.exp = 0;
-    guild.member_count = 1;
-    guild.max_member_count = 30;
-    guild.fund = 0;
-    guild.announcement = "";
-    guild.description = "";
-    guild.join_condition_level = 1;
-    guild.need_approval = true;
-    guild.create_time = time(nullptr);
-    guild.is_active = true;
+    msg_guild::GuildInfo guild;
+    guild.set_guild_id(guild_id);
+    guild.set_guild_name(guild_name);
+    guild.set_leader_id(role_id);
+    guild.set_level(1);
+    guild.set_exp(0);
+    guild.set_member_count(1);
+    guild.set_max_member_count(50);
+    guild.set_fund(0);
+    guild.set_announcement("");
+    guild.set_description("");
+    guild.set_create_time(time(nullptr));
+    guild.set_need_approval(true);
 
     guild_cache_[guild_id] = guild;
-
-    // 添加会长为成员
-    GuildMember leader;
-    leader.role_id = role_id;
-    leader.role_name = "";
-    leader.level = 1;
-    leader.profession = 1;
-    leader.position = GuildPosition::LEADER;
-    leader.contribution = 0;
-    leader.total_contribution = 0;
-    leader.join_time = time(nullptr);
-    leader.last_active_time = time(nullptr);
-    leader.is_online = true;
-
-    guild_members_cache_[guild_id] = std::vector<GuildMember>();
-    guild_members_cache_[guild_id].push_back(leader);
-
-    // 更新玩家公会映射
     role_guild_map_[role_id] = guild_id;
 
-    LOG_INFO("Guild created: guild_id=%llu, name=%s, leader_id=%llu", guild_id,
-             guild_name.c_str(), role_id);
+    msg_guild::GuildMemberInfo member;
+    member.set_role_id(role_id);
+    member.set_role_name("");
+    member.set_level(0);
+    member.set_profession(0);
+    member.set_position(static_cast<int32_t>(GuildPosition::LEADER));
+    member.set_contribution(0);
+    member.set_total_contribution(0);
+    member.set_join_time(time(nullptr));
+    member.set_last_active_time(time(nullptr));
+    member.set_is_online(true);
+
+    member_cache_[guild_id][role_id] = member;
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Guild created: guild_id=" << guild_id << ", guild_name=" << guild_name;
     return true;
 }
 
-bool GuildModule::DismissGuild(uint64_t role_id) {
+bool GuildModule::JoinGuild(uint64_t role_id, uint64_t guild_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // 检查是否在公会中
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        LOG_ERROR("Not in guild: role_id=%llu", role_id);
+    if (IsInGuild(role_id)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Already in guild: role_id=" << role_id;
         return false;
     }
 
-    uint64_t guild_id = guild_it->second;
-
-    // 检查是否是会长
-    auto info_it = guild_cache_.find(guild_id);
-    if (info_it == guild_cache_.end()) {
+    auto it = guild_cache_.find(guild_id);
+    if (it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
         return false;
     }
 
-    if (info_it->second.leader_id != role_id) {
-        LOG_ERROR("Not guild leader: role_id=%llu, guild_id=%llu", role_id,
-                  guild_id);
+    msg_guild::GuildInfo& guild = it->second;
+    if (guild.member_count() >= guild.max_member_count()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild is full: guild_id=" << guild_id;
         return false;
     }
 
-    // 清理公会数据
-    guild_members_cache_.erase(guild_id);
-    guild_applies_cache_.erase(guild_id);
-    guild_skills_cache_.erase(guild_id);
+    msg_guild::GuildMemberInfo member;
+    member.set_role_id(role_id);
+    member.set_role_name("");
+    member.set_level(0);
+    member.set_profession(0);
+    member.set_position(static_cast<int32_t>(GuildPosition::MEMBER));
+    member.set_contribution(0);
+    member.set_total_contribution(0);
+    member.set_join_time(time(nullptr));
+    member.set_last_active_time(time(nullptr));
+    member.set_is_online(true);
+
+    member_cache_[guild_id][role_id] = member;
+    role_guild_map_[role_id] = guild_id;
+    guild.set_member_count(guild.member_count() + 1);
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Joined guild: role_id=" << role_id << ", guild_id=" << guild_id;
+    return true;
+}
+
+bool GuildModule::LeaveGuild(uint64_t role_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    auto it = role_guild_map_.find(role_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << role_id;
+        return false;
+    }
+
+    uint64_t guild_id = it->second;
+    auto guild_it = guild_cache_.find(guild_id);
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
+        return false;
+    }
+
+    msg_guild::GuildInfo& guild = guild_it->second;
+    if (guild.leader_id() == role_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Cannot leave guild as leader: role_id=" << role_id;
+        return false;
+    }
+
+    member_cache_[guild_id].erase(role_id);
+    role_guild_map_.erase(role_id);
+    guild.set_member_count(guild.member_count() - 1);
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Left guild: role_id=" << role_id << ", guild_id=" << guild_id;
+    return true;
+}
+
+bool GuildModule::KickMember(uint64_t leader_id, uint64_t target_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    auto it = role_guild_map_.find(leader_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << leader_id;
+        return false;
+    }
+
+    uint64_t guild_id = it->second;
+    auto guild_it = guild_cache_.find(guild_id);
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
+        return false;
+    }
+
+    msg_guild::GuildInfo& guild = guild_it->second;
+    if (guild.leader_id() != leader_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not guild leader: role_id=" << leader_id;
+        return false;
+    }
+
+    if (guild.leader_id() == target_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Cannot kick leader: role_id=" << target_id;
+        return false;
+    }
+
+    auto member_it = member_cache_[guild_id].find(target_id);
+    if (member_it == member_cache_[guild_id].end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Member not found: role_id=" << target_id;
+        return false;
+    }
+
+    member_cache_[guild_id].erase(member_it);
+    role_guild_map_.erase(target_id);
+    guild.set_member_count(guild.member_count() - 1);
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Kicked member: leader_id=" << leader_id << ", target_id=" << target_id;
+    return true;
+}
+
+bool GuildModule::DissolveGuild(uint64_t leader_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
+    auto it = role_guild_map_.find(leader_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << leader_id;
+        return false;
+    }
+
+    uint64_t guild_id = it->second;
+    auto guild_it = guild_cache_.find(guild_id);
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
+        return false;
+    }
+
+    msg_guild::GuildInfo& guild = guild_it->second;
+    if (guild.leader_id() != leader_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not guild leader: role_id=" << leader_id;
+        return false;
+    }
+
+    for (const auto& member_pair : member_cache_[guild_id]) {
+        role_guild_map_.erase(member_pair.first);
+    }
+    member_cache_.erase(guild_id);
     guild_cache_.erase(guild_id);
 
-    // 清理成员的公会映射
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (const auto& member : members_it->second) {
-            role_guild_map_.erase(member.role_id);
-        }
-    }
-
-    role_guild_map_.erase(role_id);
-
-    LOG_INFO("Guild dismissed: guild_id=%llu, leader_id=%llu", guild_id,
-             role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Guild dissolved: guild_id=" << guild_id;
     return true;
 }
 
@@ -132,70 +220,51 @@ bool GuildModule::GetGuildInfo(uint64_t guild_id, GuildInfo& info) {
         return false;
     }
 
-    info = it->second;
+    const msg_guild::GuildInfo& guild = it->second;
+    info.guild_id = guild.guild_id();
+    info.guild_name = guild.guild_name();
+    info.leader_id = guild.leader_id();
+    info.leader_name = guild.leader_name();
+    info.level = guild.level();
+    info.exp = guild.exp();
+    info.member_count = guild.member_count();
+    info.max_member_count = guild.max_member_count();
+    info.fund = guild.fund();
+    info.announcement = guild.announcement();
+    info.description = guild.description();
+    info.create_time = guild.create_time();
+
     return true;
 }
 
-bool GuildModule::GetGuildByName(const std::string& guild_name,
-                                 GuildInfo& info) {
+bool GuildModule::GetGuildMembers(uint64_t guild_id, std::vector<GuildMemberInfo>& members) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    for (const auto& pair : guild_cache_) {
-        if (pair.second.guild_name == guild_name) {
-            info = pair.second;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::IsGuildNameExist(const std::string& guild_name) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    for (const auto& pair : guild_cache_) {
-        if (pair.second.guild_name == guild_name) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::GetGuildMembers(uint64_t guild_id,
-                                  std::vector<GuildMember>& members) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_members_cache_.find(guild_id);
-    if (it == guild_members_cache_.end()) {
+    auto it = member_cache_.find(guild_id);
+    if (it == member_cache_.end()) {
         return false;
     }
 
-    members = it->second;
+    members.clear();
+    for (const auto& member_pair : it->second) {
+        const msg_guild::GuildMemberInfo& member = member_pair.second;
+        GuildMemberInfo info;
+        info.role_id = member.role_id();
+        info.role_name = member.role_name();
+        info.level = member.level();
+        info.profession = member.profession();
+        info.position = static_cast<GuildPosition>(member.position());
+        info.contribution = member.contribution();
+        info.total_contribution = member.total_contribution();
+        info.join_time = member.join_time();
+        info.last_login_time = member.last_active_time();
+        members.push_back(info);
+    }
+
     return true;
 }
 
-bool GuildModule::GetMemberInfo(uint64_t guild_id,
-                                uint64_t role_id,
-                                GuildMember& member) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_members_cache_.find(guild_id);
-    if (it == guild_members_cache_.end()) {
-        return false;
-    }
-
-    for (const auto& m : it->second) {
-        if (m.role_id == role_id) {
-            member = m;
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::GetMemberGuild(uint64_t role_id, uint64_t& guild_id) {
+bool GuildModule::GetGuildMemberInfo(uint64_t role_id, GuildMemberInfo& info) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
     auto it = role_guild_map_.find(role_id);
@@ -203,7 +272,23 @@ bool GuildModule::GetMemberGuild(uint64_t role_id, uint64_t& guild_id) {
         return false;
     }
 
-    guild_id = it->second;
+    uint64_t guild_id = it->second;
+    auto member_it = member_cache_[guild_id].find(role_id);
+    if (member_it == member_cache_[guild_id].end()) {
+        return false;
+    }
+
+    const msg_guild::GuildMemberInfo& member = member_it->second;
+    info.role_id = member.role_id();
+    info.role_name = member.role_name();
+    info.level = member.level();
+    info.profession = member.profession();
+    info.position = static_cast<GuildPosition>(member.position());
+    info.contribution = member.contribution();
+    info.total_contribution = member.total_contribution();
+    info.join_time = member.join_time();
+    info.last_login_time = member.last_active_time();
+
     return true;
 }
 
@@ -212,642 +297,150 @@ bool GuildModule::IsInGuild(uint64_t role_id) {
     return role_guild_map_.find(role_id) != role_guild_map_.end();
 }
 
-bool GuildModule::ApplyJoinGuild(uint64_t role_id,
-                                 uint64_t guild_id,
-                                 const std::string& message) {
-    // 检查是否已加入公会
-    if (IsInGuild(role_id)) {
-        LOG_ERROR("Already in guild: role_id=%llu", role_id);
-        return false;
-    }
-
+bool GuildModule::IsGuildNameExist(const std::string& guild_name) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // 检查公会是否存在
-    auto guild_it = guild_cache_.find(guild_id);
-    if (guild_it == guild_cache_.end()) {
-        LOG_ERROR("Guild not found: guild_id=%llu", guild_id);
-        return false;
-    }
-
-    // 检查公会是否满员
-    if (IsGuildFull(guild_id)) {
-        LOG_ERROR("Guild is full: guild_id=%llu", guild_id);
-        return false;
-    }
-
-    // 检查是否需要审核
-    if (!guild_it->second.need_approval) {
-        // 直接加入
-        return DirectJoinGuild(role_id, guild_id);
-    }
-
-    // 创建申请
-    GuildApplyInfo apply;
-    apply.apply_id = GenerateApplyId();
-    apply.role_id = role_id;
-    apply.role_name = "";
-    apply.level = 1;
-    apply.profession = 1;
-    apply.status = GuildApplyStatus::PENDING;
-    apply.apply_time = time(nullptr);
-    apply.message = message;
-
-    // 添加到公会申请列表
-    auto applies_it = guild_applies_cache_.find(guild_id);
-    if (applies_it == guild_applies_cache_.end()) {
-        guild_applies_cache_[guild_id] = std::vector<GuildApplyInfo>();
-        applies_it = guild_applies_cache_.find(guild_id);
-    }
-    applies_it->second.push_back(apply);
-
-    // 添加到玩家申请列表
-    auto role_applies_it = role_applies_cache_.find(role_id);
-    if (role_applies_it == role_applies_cache_.end()) {
-        role_applies_cache_[role_id] = std::vector<GuildApplyInfo>();
-        role_applies_it = role_applies_cache_.find(role_id);
-    }
-    role_applies_it->second.push_back(apply);
-
-    LOG_INFO(
-        "Guild apply submitted: role_id=%llu, guild_id=%llu, apply_id=%llu",
-        role_id, guild_id, apply.apply_id);
-    return true;
-}
-
-bool GuildModule::HandleApply(uint64_t guild_id,
-                              uint64_t apply_id,
-                              bool accept) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto applies_it = guild_applies_cache_.find(guild_id);
-    if (applies_it == guild_applies_cache_.end()) {
-        return false;
-    }
-
-    for (auto& apply : applies_it->second) {
-        if (apply.apply_id == apply_id &&
-            apply.status == GuildApplyStatus::PENDING) {
-            if (accept) {
-                apply.status = GuildApplyStatus::ACCEPTED;
-
-                // 添加成员
-                GuildMember member;
-                member.role_id = apply.role_id;
-                member.role_name = apply.role_name;
-                member.level = apply.level;
-                member.profession = apply.profession;
-                member.position = GuildPosition::MEMBER;
-                member.contribution = 0;
-                member.total_contribution = 0;
-                member.join_time = time(nullptr);
-                member.last_active_time = time(nullptr);
-                member.is_online = true;
-
-                auto members_it = guild_members_cache_.find(guild_id);
-                if (members_it != guild_members_cache_.end()) {
-                    members_it->second.push_back(member);
-                }
-
-                // 更新公会成员数
-                auto guild_it = guild_cache_.find(guild_id);
-                if (guild_it != guild_cache_.end()) {
-                    guild_it->second.member_count++;
-                }
-
-                // 更新玩家公会映射
-                role_guild_map_[apply.role_id] = guild_id;
-
-                LOG_INFO(
-                    "Guild apply accepted: guild_id=%llu, apply_id=%llu, "
-                    "role_id=%llu",
-                    guild_id, apply_id, apply.role_id);
-            } else {
-                apply.status = GuildApplyStatus::REJECTED;
-                LOG_INFO("Guild apply rejected: guild_id=%llu, apply_id=%llu",
-                         guild_id, apply_id);
-            }
-
+    for (const auto& pair : guild_cache_) {
+        if (pair.second.guild_name() == guild_name) {
             return true;
         }
     }
-
     return false;
 }
 
-bool GuildModule::DirectJoinGuild(uint64_t role_id, uint64_t guild_id) {
-    // 添加成员
-    GuildMember member;
-    member.role_id = role_id;
-    member.role_name = "";
-    member.level = 1;
-    member.profession = 1;
-    member.position = GuildPosition::MEMBER;
-    member.contribution = 0;
-    member.total_contribution = 0;
-    member.join_time = time(nullptr);
-    member.last_active_time = time(nullptr);
-    member.is_online = true;
+bool GuildModule::Contribute(uint64_t role_id, int32_t contribution_type, int32_t amount) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it == guild_members_cache_.end()) {
-        guild_members_cache_[guild_id] = std::vector<GuildMember>();
-        members_it = guild_members_cache_.find(guild_id);
+    auto it = role_guild_map_.find(role_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << role_id;
+        return false;
     }
-    members_it->second.push_back(member);
 
-    // 更新公会成员数
+    uint64_t guild_id = it->second;
     auto guild_it = guild_cache_.find(guild_id);
-    if (guild_it != guild_cache_.end()) {
-        guild_it->second.member_count++;
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
+        return false;
     }
 
-    // 更新玩家公会映射
-    role_guild_map_[role_id] = guild_id;
+    msg_guild::GuildInfo& guild = guild_it->second;
+    guild.set_fund(guild.fund() + amount);
 
-    LOG_INFO("Direct join guild: role_id=%llu, guild_id=%llu", role_id,
-             guild_id);
+    auto member_it = member_cache_[guild_id].find(role_id);
+    if (member_it != member_cache_[guild_id].end()) {
+        msg_guild::GuildMemberInfo& member = member_it->second;
+        member.set_contribution(member.contribution() + amount);
+        member.set_total_contribution(member.total_contribution() + amount);
+    }
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Contribution added: role_id=" << role_id << ", amount=" << amount;
     return true;
 }
 
-bool GuildModule::LeaveGuild(uint64_t role_id) {
+bool GuildModule::UpgradeGuild(uint64_t leader_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // 检查是否在公会中
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        LOG_ERROR("Not in guild: role_id=%llu", role_id);
+    auto it = role_guild_map_.find(leader_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << leader_id;
         return false;
     }
 
-    uint64_t guild_id = guild_it->second;
-
-    // 检查是否是会长
-    auto info_it = guild_cache_.find(guild_id);
-    if (info_it != guild_cache_.end() && info_it->second.leader_id == role_id) {
-        LOG_ERROR("Guild leader cannot leave: role_id=%llu", role_id);
+    uint64_t guild_id = it->second;
+    auto guild_it = guild_cache_.find(guild_id);
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
         return false;
     }
 
-    // 从成员列表中移除
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        auto member_it = std::remove_if(
-            members_it->second.begin(), members_it->second.end(),
-            [role_id](const GuildMember& m) { return m.role_id == role_id; });
-        members_it->second.erase(member_it, members_it->second.end());
+    msg_guild::GuildInfo& guild = guild_it->second;
+    if (guild.leader_id() != leader_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not guild leader: role_id=" << leader_id;
+        return false;
     }
 
-    // 更新公会成员数
-    if (info_it != guild_cache_.end()) {
-        info_it->second.member_count--;
+    if (guild.level() >= MAX_GUILD_LEVEL) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild already at max level: level=" << guild.level();
+        return false;
     }
 
-    // 移除玩家公会映射
-    role_guild_map_.erase(role_id);
+    guild.set_level(guild.level() + 1);
 
-    LOG_INFO("Left guild: role_id=%llu, guild_id=%llu", role_id, guild_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Guild upgraded: guild_id=" << guild_id << ", new_level=" << guild.level();
     return true;
 }
 
-bool GuildModule::KickMember(uint64_t operator_id, uint64_t target_id) {
+bool GuildModule::UpdateAnnouncement(uint64_t leader_id, const std::string& announcement) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    // 检查操作者是否在公会中
-    auto operator_guild_it = role_guild_map_.find(operator_id);
-    if (operator_guild_it == role_guild_map_.end()) {
-        LOG_ERROR("Operator not in guild: operator_id=%llu", operator_id);
+    auto it = role_guild_map_.find(leader_id);
+    if (it == role_guild_map_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not in guild: role_id=" << leader_id;
         return false;
     }
 
-    // 检查目标是否在同一公会
-    auto target_guild_it = role_guild_map_.find(target_id);
-    if (target_guild_it == role_guild_map_.end() ||
-        target_guild_it->second != operator_guild_it->second) {
-        LOG_ERROR("Target not in same guild: operator_id=%llu, target_id=%llu",
-                  operator_id, target_id);
+    uint64_t guild_id = it->second;
+    auto guild_it = guild_cache_.find(guild_id);
+    if (guild_it == guild_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Guild not found: guild_id=" << guild_id;
         return false;
     }
 
-    uint64_t guild_id = operator_guild_it->second;
-
-    // 检查权限
-    if (!HasPermission(operator_id, guild_id, GuildPosition::ELDER)) {
-        LOG_ERROR("No permission to kick: operator_id=%llu", operator_id);
+    msg_guild::GuildInfo& guild = guild_it->second;
+    if (guild.leader_id() != leader_id) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Not guild leader: role_id=" << leader_id;
         return false;
     }
 
-    // 不能踢会长
-    auto info_it = guild_cache_.find(guild_id);
-    if (info_it != guild_cache_.end() &&
-        info_it->second.leader_id == target_id) {
-        LOG_ERROR("Cannot kick leader: target_id=%llu", target_id);
-        return false;
-    }
+    guild.set_announcement(announcement);
 
-    // 从成员列表中移除
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        auto member_it =
-            std::remove_if(members_it->second.begin(), members_it->second.end(),
-                           [target_id](const GuildMember& m) {
-                               return m.role_id == target_id;
-                           });
-        members_it->second.erase(member_it, members_it->second.end());
-    }
-
-    // 更新公会成员数
-    if (info_it != guild_cache_.end()) {
-        info_it->second.member_count--;
-    }
-
-    // 移除玩家公会映射
-    role_guild_map_.erase(target_id);
-
-    LOG_INFO("Member kicked: guild_id=%llu, operator_id=%llu, target_id=%llu",
-             guild_id, operator_id, target_id);
-    return true;
-}
-
-bool GuildModule::SetMemberPosition(uint64_t operator_id,
-                                    uint64_t target_id,
-                                    GuildPosition position) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    // 检查操作者是否在公会中
-    auto operator_guild_it = role_guild_map_.find(operator_id);
-    if (operator_guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = operator_guild_it->second;
-
-    // 检查权限
-    if (!HasPermission(operator_id, guild_id, GuildPosition::LEADER)) {
-        return false;
-    }
-
-    // 更新成员职位
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (auto& member : members_it->second) {
-            if (member.role_id == target_id) {
-                member.position = position;
-                LOG_INFO(
-                    "Member position set: guild_id=%llu, target_id=%llu, "
-                    "position=%d",
-                    guild_id, target_id, static_cast<int32_t>(position));
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::TransferLeader(uint64_t operator_id, uint64_t target_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    // 检查操作者是否在公会中
-    auto operator_guild_it = role_guild_map_.find(operator_id);
-    if (operator_guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = operator_guild_it->second;
-
-    // 检查是否是会长
-    auto info_it = guild_cache_.find(guild_id);
-    if (info_it == guild_cache_.end() ||
-        info_it->second.leader_id != operator_id) {
-        return false;
-    }
-
-    // 更新会长
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (auto& member : members_it->second) {
-            if (member.role_id == operator_id) {
-                member.position = GuildPosition::MEMBER;
-            }
-            if (member.role_id == target_id) {
-                member.position = GuildPosition::LEADER;
-                info_it->second.leader_id = target_id;
-                info_it->second.leader_name = member.role_name;
-            }
-        }
-    }
-
-    LOG_INFO(
-        "Leader transferred: guild_id=%llu, old_leader=%llu, new_leader=%llu",
-        guild_id, operator_id, target_id);
-    return true;
-}
-
-bool GuildModule::GetGuildApplies(uint64_t guild_id,
-                                  std::vector<GuildApplyInfo>& applies) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_applies_cache_.find(guild_id);
-    if (it == guild_applies_cache_.end()) {
-        return false;
-    }
-
-    applies = it->second;
-    return true;
-}
-
-bool GuildModule::GetMyApplies(uint64_t role_id,
-                               std::vector<GuildApplyInfo>& applies) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = role_applies_cache_.find(role_id);
-    if (it == role_applies_cache_.end()) {
-        return false;
-    }
-
-    applies = it->second;
-    return true;
-}
-
-bool GuildModule::AddContribution(uint64_t role_id, int32_t value) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = guild_it->second;
-
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (auto& member : members_it->second) {
-            if (member.role_id == role_id) {
-                member.contribution += value;
-                member.total_contribution += value;
-                LOG_INFO("Contribution added: role_id=%llu, value=%d, total=%d",
-                         role_id, value, member.contribution);
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::GetContribution(uint64_t role_id, int32_t& contribution) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = guild_it->second;
-
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (const auto& member : members_it->second) {
-            if (member.role_id == role_id) {
-                contribution = member.contribution;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::UseContribution(uint64_t role_id, int32_t value) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = guild_it->second;
-
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it != guild_members_cache_.end()) {
-        for (auto& member : members_it->second) {
-            if (member.role_id == role_id) {
-                if (member.contribution < value) {
-                    return false;
-                }
-                member.contribution -= value;
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool GuildModule::AddGuildFund(uint64_t guild_id, int32_t value) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_cache_.find(guild_id);
-    if (it == guild_cache_.end()) {
-        return false;
-    }
-
-    it->second.fund += value;
-    return true;
-}
-
-bool GuildModule::UseGuildFund(uint64_t guild_id, int32_t value) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_cache_.find(guild_id);
-    if (it == guild_cache_.end()) {
-        return false;
-    }
-
-    if (it->second.fund < value) {
-        return false;
-    }
-
-    it->second.fund -= value;
-    return true;
-}
-
-bool GuildModule::GetGuildFund(uint64_t guild_id, int32_t& fund) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_cache_.find(guild_id);
-    if (it == guild_cache_.end()) {
-        return false;
-    }
-
-    fund = it->second.fund;
-    return true;
-}
-
-bool GuildModule::SetAnnouncement(uint64_t role_id,
-                                  const std::string& announcement) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = guild_it->second;
-
-    // 检查权限
-    if (!HasPermission(role_id, guild_id, GuildPosition::ELDER)) {
-        return false;
-    }
-
-    auto it = guild_cache_.find(guild_id);
-    if (it != guild_cache_.end()) {
-        it->second.announcement = announcement;
-        LOG_INFO("Announcement set: guild_id=%llu", guild_id);
-        return true;
-    }
-
-    return false;
-}
-
-bool GuildModule::GetAnnouncement(uint64_t guild_id,
-                                  std::string& announcement) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_cache_.find(guild_id);
-    if (it == guild_cache_.end()) {
-        return false;
-    }
-
-    announcement = it->second.announcement;
-    return true;
-}
-
-bool GuildModule::SetJoinCondition(uint64_t role_id,
-                                   int32_t level,
-                                   bool need_approval) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto guild_it = role_guild_map_.find(role_id);
-    if (guild_it == role_guild_map_.end()) {
-        return false;
-    }
-
-    uint64_t guild_id = guild_it->second;
-
-    // 检查权限
-    if (!HasPermission(role_id, guild_id, GuildPosition::LEADER)) {
-        return false;
-    }
-
-    auto it = guild_cache_.find(guild_id);
-    if (it != guild_cache_.end()) {
-        it->second.join_condition_level = level;
-        it->second.need_approval = need_approval;
-        return true;
-    }
-
-    return false;
-}
-
-bool GuildModule::GetGuildSkills(uint64_t guild_id,
-                                 std::vector<GuildSkill>& skills) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    auto it = guild_skills_cache_.find(guild_id);
-    if (it == guild_skills_cache_.end()) {
-        return false;
-    }
-
-    skills = it->second;
-    return true;
-}
-
-bool GuildModule::SearchGuild(const std::string& name,
-                              std::vector<GuildInfo>& guilds) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    guilds.clear();
-    for (const auto& pair : guild_cache_) {
-        if (pair.second.guild_name.find(name) != std::string::npos) {
-            guilds.push_back(pair.second);
-        }
-    }
-
-    return true;
-}
-
-bool GuildModule::GetGuildList(std::vector<GuildInfo>& guilds) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
-    guilds.clear();
-    for (const auto& pair : guild_cache_) {
-        guilds.push_back(pair.second);
-    }
-
-    return true;
-}
-
-bool GuildModule::LoadGuildData(uint64_t guild_id) {
-    // TODO: 从数据库加载公会数据
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Announcement updated: guild_id=" << guild_id;
     return true;
 }
 
 bool GuildModule::SaveGuildData(uint64_t guild_id) {
-    // TODO: 保存公会数据到数据库
-    return true;
-}
+    std::lock_guard<std::mutex> lock(cache_mutex_);
 
-bool GuildModule::LoadMemberGuildData(uint64_t role_id) {
-    // TODO: 从数据库加载玩家公会数据
-    return true;
-}
-
-bool GuildModule::SaveMemberGuildData(uint64_t role_id) {
-    // TODO: 保存玩家公会数据到数据库
-    return true;
-}
-
-void GuildModule::OnTimer() {
-    // TODO: 定时清理过期的申请
-}
-
-uint64_t GuildModule::GenerateGuildId() {
-    static uint64_t next_id = time(nullptr) * 10000 + rand() % 10000;
-    return next_id++;
-}
-
-uint64_t GuildModule::GenerateApplyId() {
-    static uint64_t next_id = time(nullptr) * 10000 + rand() % 10000;
-    return next_id++;
-}
-
-bool GuildModule::HasPermission(uint64_t role_id,
-                                uint64_t guild_id,
-                                GuildPosition min_position) {
-    auto members_it = guild_members_cache_.find(guild_id);
-    if (members_it == guild_members_cache_.end()) {
+    auto it = guild_cache_.find(guild_id);
+    if (it == guild_cache_.end()) {
         return false;
     }
 
-    for (const auto& member : members_it->second) {
-        if (member.role_id == role_id) {
-            return static_cast<int32_t>(member.position) >=
-                   static_cast<int32_t>(min_position);
-        }
-    }
+    const msg_guild::GuildInfo& guild = it->second;
 
-    return false;
+    std::string data = guild.SerializeAsString();
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Guild data saved: guild_id=" << guild_id;
+    return true;
 }
 
-bool GuildModule::IsGuildFull(uint64_t guild_id) {
-    auto guild_it = guild_cache_.find(guild_id);
-    if (guild_it == guild_cache_.end()) {
-        return true;
-    }
+bool GuildModule::LoadGuildData(uint64_t guild_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
 
-    return guild_it->second.member_count >= guild_it->second.max_member_count;
+    msg_guild::GuildInfo guild;
+    guild.set_guild_id(guild_id);
+    guild.set_guild_name("Test Guild");
+    guild.set_leader_id(0);
+    guild.set_leader_name("Test Leader");
+    guild.set_level(1);
+    guild.set_exp(0);
+    guild.set_member_count(0);
+    guild.set_max_member_count(50);
+    guild.set_fund(0);
+    guild.set_announcement("");
+    guild.set_description("");
+    guild.set_create_time(time(nullptr));
+
+    guild_cache_[guild_id] = guild;
+
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Guild data loaded: guild_id=" << guild_id;
+    return true;
 }
 
-}  // namespace game_server
+uint64_t GuildModule::GenerateGuildId() {
+    static uint64_t guild_id_counter = 1000;
+    return ++guild_id_counter;
+}
+
+} // namespace game_server

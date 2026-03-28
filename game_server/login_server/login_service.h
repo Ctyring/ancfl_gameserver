@@ -8,7 +8,8 @@ namespace game_server {
 // 登录服务器服务类
 class LoginService : public GameServiceBase {
 public:
-    SERVICE_SINGLETON(LoginService);
+    LoginService();
+    ~LoginService();
 
     // 初始化服务
     virtual bool InitService() override;

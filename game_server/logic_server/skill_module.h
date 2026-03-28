@@ -3,10 +3,12 @@
 
 #include <unordered_map>
 #include <vector>
+#include <mutex>
 
 namespace game_server {
 
 class LogicService;
+class BuffModule;
 
 // 技能类型
 enum class SkillType {

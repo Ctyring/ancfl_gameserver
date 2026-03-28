@@ -91,7 +91,7 @@ class TcpService : public ancfl::TcpServer {
    protected:
     MessageDispatcher::ptr dispatcher_;
     std::unordered_map<int32_t, ancfl::Socket::ptr> connections_;
-    ancfl::Mutex conn_mutex_;
+    mutable ancfl::Mutex conn_mutex_;
     int32_t next_conn_id_;
     bool running_;
     std::string ip_;

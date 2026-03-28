@@ -12,36 +12,15 @@ AccountService::~AccountService() {}
 bool AccountService::InitService() {
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing AccountServer...";
 
-    // 加载配置
-    auto config = ancfl::Config::LoadFromYamlFile("conf/account_server.yml");
-    if (!config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
-            << "Failed to load account_server.yml";
-        return false;
-    }
-
-    auto service_config = config->getConfig("service");
-    if (!service_config) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Missing service config";
-        return false;
-    }
-
-    std::string ip = service_config->getValue<std::string>("ip", "0.0.0.0");
-    int port = service_config->getValue<int>("port", 8100);
-    service_id_ = service_config->getValue<int>("id", 2);
-
-    // 加载数据库配置
-    auto db_config = ancfl::Config::LoadFromYamlFile("conf/server.yml");
-    if (db_config) {
-        auto db = db_config->getConfig("database");
-        if (db) {
-            db_host_ = db->getValue<std::string>("host", "127.0.0.1");
-            db_port_ = db->getValue<int>("port", 3306);
-            db_user_ = db->getValue<std::string>("user", "root");
-            db_password_ = db->getValue<std::string>("password", "123456");
-            db_name_ = db->getValue<std::string>("dbname", "game_server");
-        }
-    }
+    // 硬编码配置
+    std::string ip = "0.0.0.0";
+    int port = 8100;
+    service_id_ = 2;
+    db_host_ = "127.0.0.1";
+    db_port_ = 3306;
+    db_user_ = "root";
+    db_password_ = "12345678";
+    db_name_ = "game_server";
 
     // 初始化数据库
     if (!InitDatabase()) {
@@ -73,17 +52,10 @@ void AccountService::UninitService() {
 
 void AccountService::RegisterAllHandlers() {
     // 注册消息处理器
-    REGISTER_MESSAGE(dispatcher_, 100003,
-                     &AccountService::OnAccountRegReq);  // MSG_ACCOUNT_REG_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100005,
-        &AccountService::OnAccountLoginReq);  // MSG_ACCOUNT_LOGIN_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100039,
-        &AccountService::OnSealAccountReq);  // MSG_SEAL_ACCOUNT_REQ
-    REGISTER_MESSAGE(
-        dispatcher_, 100024,
-        &AccountService::OnHeartBeatReq);  // MSG_WATCH_HEART_BEAT_REQ
+    dispatcher_->RegisterHandler(100003, std::bind(&AccountService::OnAccountRegReq, this, std::placeholders::_1));  // MSG_ACCOUNT_REG_REQ
+    dispatcher_->RegisterHandler(100005, std::bind(&AccountService::OnAccountLoginReq, this, std::placeholders::_1));  // MSG_ACCOUNT_LOGIN_REQ
+    dispatcher_->RegisterHandler(100039, std::bind(&AccountService::OnSealAccountReq, this, std::placeholders::_1));  // MSG_SEAL_ACCOUNT_REQ
+    dispatcher_->RegisterHandler(100024, std::bind(&AccountService::OnHeartBeatReq, this, std::placeholders::_1));  // MSG_WATCH_HEART_BEAT_REQ
 
     ANCFL_LOG_INFO(ANCFL_LOG_ROOT())
         << "Registered " << dispatcher_->GetHandlerCount()
@@ -96,10 +68,17 @@ void AccountService::OnTimer() {
 }
 
 bool AccountService::InitDatabase() {
-    mysql_.reset(new ancfl::MySQL());
+    // 构建 MySQL 连接参数
+    std::map<std::string, std::string> args;
+    args["host"] = db_host_;
+    args["port"] = std::to_string(db_port_);
+    args["user"] = db_user_;
+    args["passwd"] = db_password_;
+    args["dbname"] = db_name_;
 
-    if (!mysql_->connect(db_host_, db_user_, db_password_, db_name_,
-                         db_port_)) {
+    mysql_.reset(new ancfl::MySQL(args));
+
+    if (!mysql_->connect()) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
             << "Failed to connect to MySQL: " << db_host_ << ":" << db_port_;
         return false;
@@ -111,13 +90,12 @@ bool AccountService::InitDatabase() {
 
 void AccountService::CloseDatabase() {
     if (mysql_) {
-        mysql_->close();
         mysql_.reset();
     }
 }
 
 std::string AccountService::MD5Encrypt(const std::string& input) {
-    return ancfl::MD5(input).toHex();
+    return ancfl::md5(input);
 }
 
 bool AccountService::CreateAccount(const std::string& account_name,
@@ -125,7 +103,8 @@ bool AccountService::CreateAccount(const std::string& account_name,
                                    int32_t channel,
                                    uint64_t& account_id) {
     // 检查账号名是否已存在
-    if (GetAccountInfo(account_name, AccountInfo())) {
+    AccountInfo info;
+    if (GetAccountInfo(account_name, info)) {
         ANCFL_LOG_WARN(ANCFL_LOG_ROOT())
             << "Account already exists: " << account_name;
         return false;
@@ -140,7 +119,7 @@ bool AccountService::CreateAccount(const std::string& account_name,
     snprintf(sql, sizeof(sql),
              "INSERT INTO account (account_name, password, channel, "
              "create_time, last_login_time, is_sealed) "
-             "VALUES ('%s', '%s', %d, %lld, %lld, 0)",
+             "VALUES ('%s', '%s', %d, %ld, %ld, 0)",
              account_name.c_str(), encrypted_password.c_str(), channel, now,
              now);
 
@@ -204,7 +183,7 @@ bool AccountService::VerifyAccount(const std::string& account_name,
              account_name.c_str());
 
     auto result = mysql_->query(sql);
-    if (!result || result->getRowCount() == 0) {
+    if (!result || result->getDataCount() == 0) {
         return false;
     }
 
@@ -212,13 +191,13 @@ bool AccountService::VerifyAccount(const std::string& account_name,
     info.account_id = result->getInt64(0);
     info.account_name = result->getString(1);
     info.password = result->getString(2);
-    info.channel = result->getInt(3);
+    info.channel = result->getInt32(3);
     info.create_time = result->getInt64(4);
     info.last_login_time = result->getInt64(5);
-    info.last_login_ip = result->getInt(6);
-    info.is_sealed = result->getInt(7) != 0;
+    info.last_login_ip = result->getInt32(6);
+    info.is_sealed = result->getInt32(7) != 0;
     info.seal_end_time = result->getInt64(8);
-    info.review = result->getInt(9) != 0;
+    info.review = result->getInt32(9) != 0;
 
     // 验证密码
     std::string encrypted_password = MD5Encrypt(password);
@@ -252,11 +231,11 @@ bool AccountService::GetAccountInfo(uint64_t account_id, AccountInfo& info) {
     snprintf(sql, sizeof(sql),
              "SELECT account_id, account_name, password, channel, create_time, "
              "last_login_time, last_login_ip, is_sealed, seal_end_time, review "
-             "FROM account WHERE account_id = %llu",
+             "FROM account WHERE account_id = %lu",
              account_id);
 
     auto result = mysql_->query(sql);
-    if (!result || result->getRowCount() == 0) {
+    if (!result || result->getDataCount() == 0) {
         return false;
     }
 
@@ -264,13 +243,13 @@ bool AccountService::GetAccountInfo(uint64_t account_id, AccountInfo& info) {
     info.account_id = result->getInt64(0);
     info.account_name = result->getString(1);
     info.password = result->getString(2);
-    info.channel = result->getInt(3);
+    info.channel = result->getInt32(3);
     info.create_time = result->getInt64(4);
     info.last_login_time = result->getInt64(5);
-    info.last_login_ip = result->getInt(6);
-    info.is_sealed = result->getInt(7) != 0;
+    info.last_login_ip = result->getInt32(6);
+    info.is_sealed = result->getInt32(7) != 0;
     info.seal_end_time = result->getInt64(8);
-    info.review = result->getInt(9) != 0;
+    info.review = result->getInt32(9) != 0;
 
     // 更新缓存
     {
@@ -306,7 +285,7 @@ bool AccountService::GetAccountInfo(const std::string& account_name,
              account_name.c_str());
 
     auto result = mysql_->query(sql);
-    if (!result || result->getRowCount() == 0) {
+    if (!result || result->getDataCount() == 0) {
         return false;
     }
 
@@ -314,13 +293,13 @@ bool AccountService::GetAccountInfo(const std::string& account_name,
     info.account_id = result->getInt64(0);
     info.account_name = result->getString(1);
     info.password = result->getString(2);
-    info.channel = result->getInt(3);
+    info.channel = result->getInt32(3);
     info.create_time = result->getInt64(4);
     info.last_login_time = result->getInt64(5);
-    info.last_login_ip = result->getInt(6);
-    info.is_sealed = result->getInt(7) != 0;
+    info.last_login_ip = result->getInt32(6);
+    info.is_sealed = result->getInt32(7) != 0;
     info.seal_end_time = result->getInt64(8);
-    info.review = result->getInt(9) != 0;
+    info.review = result->getInt32(9) != 0;
 
     // 更新缓存
     {
@@ -337,8 +316,8 @@ bool AccountService::SealAccount(uint64_t account_id, int32_t seal_time) {
 
     char sql[256];
     snprintf(sql, sizeof(sql),
-             "UPDATE account SET is_sealed = 1, seal_end_time = %lld WHERE "
-             "account_id = %llu",
+             "UPDATE account SET is_sealed = 1, seal_end_time = %ld WHERE "
+             "account_id = %lu",
              seal_end_time, account_id);
 
     if (!mysql_->execute(sql)) {
@@ -366,7 +345,7 @@ bool AccountService::UnsealAccount(uint64_t account_id) {
     char sql[256];
     snprintf(sql, sizeof(sql),
              "UPDATE account SET is_sealed = 0, seal_end_time = 0 WHERE "
-             "account_id = %llu",
+             "account_id = %lu",
              account_id);
 
     if (!mysql_->execute(sql)) {
@@ -420,7 +399,7 @@ bool AccountService::RecordLoginLog(uint64_t account_id,
     snprintf(sql, sizeof(sql),
              "INSERT INTO account_login_log (account_id, login_time, login_ip, "
              "channel, version, uuid, idfa, imodel, imei) "
-             "VALUES (%llu, %lld, %d, %d, '%s', '%s', '%s', '%s', '%s')",
+             "VALUES (%lu, %ld, %d, %d, '%s', '%s', '%s', '%s', '%s')",
              account_id, time(nullptr), ip, channel, version.c_str(),
              uuid.c_str(), idfa.c_str(), imodel.c_str(), imei.c_str());
 

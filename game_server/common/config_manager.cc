@@ -1,4 +1,5 @@
 #include "config_manager.h"
+#include "ancfl/ancfl.h"
 #include <iostream>
 #include <sstream>
 
@@ -24,17 +25,14 @@ bool ConfigManager::Init(const std::string& db_path) {
     // 打开SQLite数据库
     int ret = sqlite3_open(db_path.c_str(), &db_);
     if (ret != SQLITE_OK) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Failed to open database: %s, error: %s", db_path.c_str(),
-            sqlite3_errmsg(db_));
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to open database: " << db_path.c_str() << ", error: " << sqlite3_errmsg(db_);
         return false;
     }
 
     initialized_ = true;
     g_config_manager = this;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Config manager initialized: db=%s",
-                                     db_path.c_str());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Config manager initialized: db=" << db_path.c_str();
     return true;
 }
 
@@ -49,14 +47,12 @@ bool ConfigManager::LoadConfig(const std::string& table_name) {
     std::string sql = "PRAGMA table_info(" + table_name + ")";
     std::vector<ConfigRow> columns_info;
     if (!ExecuteQuery(sql, columns_info)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to get table info: %s",
-                                          table_name.c_str());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to get table info: " << table_name.c_str();
         return false;
     }
 
     if (columns_info.empty()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Table not found: %s",
-                                          table_name.c_str());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Table not found: " << table_name.c_str();
         return false;
     }
 
@@ -75,8 +71,7 @@ bool ConfigManager::LoadConfig(const std::string& table_name) {
     // 查询数据
     sql = "SELECT * FROM " + table_name;
     if (!ExecuteQuery(sql, table.rows)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to load config: %s",
-                                          table_name.c_str());
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to load config: " << table_name.c_str();
         return false;
     }
 
@@ -91,8 +86,7 @@ bool ConfigManager::LoadConfig(const std::string& table_name) {
     // 缓存配置表
     config_cache_[table_name] = table;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Config loaded: table=%s, rows=%d",
-                                     table_name.c_str(), table.rows.size());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Config loaded: table=" << table_name.c_str() << ", rows=" << table.rows.size();
     return true;
 }
 
@@ -104,8 +98,7 @@ bool ConfigManager::LoadAllConfigs() {
 
     for (const auto& name : table_names) {
         if (!LoadConfig(name)) {
-            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Failed to load config: %s",
-                                              name.c_str());
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to load config: " << name.c_str();
         }
     }
 
@@ -276,9 +269,7 @@ bool ConfigManager::ExecuteQuery(const std::string& sql,
     sqlite3_stmt* stmt = nullptr;
     int ret = sqlite3_prepare_v2(db_, sql.c_str(), -1, &stmt, nullptr);
     if (ret != SQLITE_OK) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Failed to prepare SQL: %s, error: %s", sql.c_str(),
-            sqlite3_errmsg(db_));
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to prepare SQL: " << sql.c_str() << ", error: " << sqlite3_errmsg(db_);
         return false;
     }
 

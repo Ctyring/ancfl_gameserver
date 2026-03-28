@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <mutex>
 
 namespace game_server {
 
@@ -19,6 +20,7 @@ enum class FriendStatus {
 
 // 好友关系类型
 enum class FriendRelationType {
+    NONE = 0,       // 无关系
     FRIEND = 1,     // 好友
     BLACKLIST = 2,  // 黑名单
     RECENT = 3      // 最近联系人
@@ -39,22 +41,18 @@ struct FriendInfo {
     int32_t profession;
     FriendStatus status;
     FriendRelationType relation_type;
-    time_t add_time;
-    int32_t intimacy;
-    std::string remark;
-    bool is_online;
+    time_t last_login_time;
+    time_t friend_since;
 };
 
 // 好友申请信息
 struct FriendApplyInfo {
     uint64_t apply_id;
-    uint64_t applicant_id;
-    std::string applicant_name;
-    int32_t applicant_level;
-    int32_t applicant_profession;
-    FriendApplyStatus status;
-    time_t apply_time;
+    uint64_t requester_id;
+    uint64_t target_id;
     std::string message;
+    FriendApplyStatus status;
+    time_t send_time;
 };
 
 // 好友模块类
@@ -70,87 +68,60 @@ class FriendModule {
 
     // 添加好友
     bool AddFriend(uint64_t role_id, uint64_t friend_id);
-    bool ApplyAddFriend(uint64_t role_id,
-                        uint64_t target_id,
-                        const std::string& message);
-    bool HandleFriendApply(uint64_t role_id, uint64_t apply_id, bool accept);
+    bool SendFriendRequest(uint64_t role_id, uint64_t target_id, const std::string& message);
+    bool RespondToFriendRequest(uint64_t role_id, uint64_t apply_id, bool accept);
 
     // 删除好友
     bool RemoveFriend(uint64_t role_id, uint64_t friend_id);
-    bool DeleteFriend(uint64_t role_id, uint64_t friend_id);
 
     // 好友申请
-    bool GetFriendApplies(uint64_t role_id,
-                          std::vector<FriendApplyInfo>& applies);
-    bool GetSentFriendApplies(uint64_t role_id,
-                              std::vector<FriendApplyInfo>& applies);
-
-    // 黑名单
-    bool AddToBlacklist(uint64_t role_id, uint64_t target_id);
-    bool RemoveFromBlacklist(uint64_t role_id, uint64_t target_id);
-    bool GetBlacklist(uint64_t role_id, std::vector<FriendInfo>& blacklist);
-    bool IsInBlacklist(uint64_t role_id, uint64_t target_id);
+    bool GetFriendRequests(uint64_t role_id, std::vector<FriendApplyInfo>& requests);
 
     // 最近联系人
-    bool AddRecentContact(uint64_t role_id, uint64_t contact_id);
-    bool GetRecentContacts(uint64_t role_id, std::vector<FriendInfo>& contacts);
-    bool ClearRecentContacts(uint64_t role_id);
+    bool GetRecentPlayers(uint64_t role_id, std::vector<FriendInfo>& players);
+    bool AddRecentPlayer(uint64_t role_id, uint64_t player_id, const std::string& player_name, int32_t level, int32_t profession);
+    bool DeleteRecentPlayer(uint64_t role_id, uint64_t player_id);
 
     // 好友状态
-    bool UpdateFriendStatus(uint64_t role_id, FriendStatus status);
-    bool NotifyFriendStatusChange(uint64_t role_id, FriendStatus status);
-    bool IsFriend(uint64_t role_id, uint64_t target_id);
+    bool UpdateFriendStatus(uint64_t role_id, uint64_t friend_id, FriendStatus status);
 
-    // 亲密度
-    bool AddIntimacy(uint64_t role_id, uint64_t friend_id, int32_t value);
-    bool GetIntimacy(uint64_t role_id, uint64_t friend_id, int32_t& intimacy);
-
-    // 备注
-    bool SetRemark(uint64_t role_id,
-                   uint64_t friend_id,
-                   const std::string& remark);
-    bool GetRemark(uint64_t role_id, uint64_t friend_id, std::string& remark);
-
-    // 推荐好友
-    bool GetRecommendedFriends(uint64_t role_id,
-                               std::vector<FriendInfo>& friends);
-    bool SearchFriend(const std::string& name,
-                      std::vector<FriendInfo>& friends);
-
-    // 好友数据加载和保存
-    bool LoadFriendData(uint64_t role_id);
+    // 数据持久化
     bool SaveFriendData(uint64_t role_id);
-
-    // 定时清理
-    void OnTimer();
+    bool LoadFriendData(uint64_t role_id);
 
    private:
+    // 检查好友数量限制
+    bool CheckFriendLimit(uint64_t role_id);
+
     // 生成申请ID
     uint64_t GenerateApplyId();
 
-    // 检查好友数量上限
-    bool CheckFriendLimit(uint64_t role_id);
+    // 服务指针
+    LogicService* service_;
 
     // 好友缓存
     std::unordered_map<uint64_t, std::vector<FriendInfo>> friend_cache_;
+
+    // 好友申请缓存
     std::unordered_map<uint64_t, std::vector<FriendApplyInfo>> apply_cache_;
-    std::unordered_map<uint64_t, std::vector<FriendApplyInfo>>
-        sent_apply_cache_;
+
+    // 发送的好友申请缓存
+    std::unordered_map<uint64_t, std::vector<FriendApplyInfo>> sent_apply_cache_;
+
+    // 最近联系人缓存
     std::unordered_map<uint64_t, std::vector<FriendInfo>> recent_cache_;
 
-    // 逻辑服务指针
-    LogicService* service_;
+    // 黑名单缓存
+    std::unordered_map<uint64_t, std::unordered_set<uint64_t>> blacklist_cache_;
 
     // 互斥锁
     std::mutex cache_mutex_;
 
-    // 好友数量上限
-    static const int32_t MAX_FRIEND_COUNT = 100;
-    static const int32_t MAX_BLACKLIST_COUNT = 50;
-    static const int32_t MAX_RECENT_COUNT = 20;
-    static const int32_t MAX_APPLY_COUNT = 50;
+    // 常量
+    static constexpr int32_t MAX_FRIEND_COUNT = 50;
+    static constexpr int32_t MAX_RECENT_COUNT = 20;
 };
 
-}  // namespace game_server
+} // namespace game_server
 
-#endif  // __FRIEND_MODULE_H__
+#endif // __FRIEND_MODULE_H__

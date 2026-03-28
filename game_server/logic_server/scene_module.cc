@@ -1,5 +1,6 @@
 #include "scene_module.h"
 #include <cmath>
+#include "ancfl/log.h"
 #include "proto/msg_battle.pb.h"
 
 namespace game_server {
@@ -29,8 +30,7 @@ bool SceneModule::CreateScene(int32_t scene_config_id, int32_t& scene_id) {
     scene_cache_[scene_id] = info;
     scene_objects_[scene_id] = std::unordered_map<uint64_t, SceneObject>();
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Scene created: scene_id=%d, config_id=%d",
-                                     scene_id, scene_config_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Scene created: scene_id=" << scene_id << ", config_id=" << scene_config_id;
     return true;
 }
 
@@ -40,8 +40,7 @@ bool SceneModule::DestroyScene(int32_t scene_id) {
     // 检查场景是否存在
     auto it = scene_cache_.find(scene_id);
     if (it == scene_cache_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Scene not found: scene_id=%d",
-                                          scene_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene not found: scene_id=" << scene_id;
         return false;
     }
 
@@ -49,7 +48,7 @@ bool SceneModule::DestroyScene(int32_t scene_id) {
     scene_objects_.erase(scene_id);
     scene_cache_.erase(it);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Scene destroyed: scene_id=%d", scene_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Scene destroyed: scene_id=" << scene_id;
     return true;
 }
 
@@ -82,8 +81,7 @@ bool SceneModule::PlayerEnterScene(uint64_t role_id, int32_t scene_id) {
     // 检查场景是否存在
     auto scene_it = scene_cache_.find(scene_id);
     if (scene_it == scene_cache_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Scene not found: scene_id=%d",
-                                          scene_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene not found: scene_id=" << scene_id;
         return false;
     }
 
@@ -97,8 +95,7 @@ bool SceneModule::PlayerEnterScene(uint64_t role_id, int32_t scene_id) {
     }
 
     if (player_count >= scene_it->second.max_player_count) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Scene is full: scene_id=%d, count=%d", scene_id, player_count);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene is full: scene_id=" << scene_id << ", count=" << player_count;
         return false;
     }
 
@@ -138,8 +135,7 @@ bool SceneModule::PlayerEnterScene(uint64_t role_id, int32_t scene_id) {
     objects[role_id] = player;
     player_scene_map_[role_id] = scene_id;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Player entered scene: role_id=%llu, scene_id=%d", role_id, scene_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Player entered scene: role_id=" << role_id << ", scene_id=" << scene_id;
     return true;
 }
 
@@ -149,8 +145,7 @@ bool SceneModule::PlayerLeaveScene(uint64_t role_id) {
     // 查找玩家所在场景
     auto player_it = player_scene_map_.find(role_id);
     if (player_it == player_scene_map_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Player not in any scene: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Player not in any scene: role_id=" << role_id;
         return false;
     }
 
@@ -164,8 +159,7 @@ bool SceneModule::PlayerLeaveScene(uint64_t role_id) {
 
     player_scene_map_.erase(player_it);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Player left scene: role_id=%llu, scene_id=%d", role_id, scene_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Player left scene: role_id=" << role_id << ", scene_id=" << scene_id;
     return true;
 }
 
@@ -186,16 +180,13 @@ bool SceneModule::AddObject(int32_t scene_id, const SceneObject& object) {
 
     auto it = scene_objects_.find(scene_id);
     if (it == scene_objects_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Scene not found: scene_id=%d",
-                                          scene_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene not found: scene_id=" << scene_id;
         return false;
     }
 
     it->second[object.object_id] = object;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Object added to scene: scene_id=%d, object_id=%llu, type=%d", scene_id,
-        object.object_id, static_cast<int32_t>(object.type));
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Object added to scene: scene_id=" << scene_id << ", object_id=" << object.object_id << ", type=" << static_cast<int32_t>(object.type);
     return true;
 }
 
@@ -204,16 +195,13 @@ bool SceneModule::RemoveObject(int32_t scene_id, uint64_t object_id) {
 
     auto it = scene_objects_.find(scene_id);
     if (it == scene_objects_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Scene not found: scene_id=%d",
-                                          scene_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene not found: scene_id=" << scene_id;
         return false;
     }
 
     it->second.erase(object_id);
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Object removed from scene: scene_id=%d, object_id=%llu", scene_id,
-        object_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Object removed from scene: scene_id=" << scene_id << ", object_id=" << object_id;
     return true;
 }
 
@@ -241,8 +229,7 @@ bool SceneModule::UpdateObject(int32_t scene_id, const SceneObject& object) {
 
     auto it = scene_objects_.find(scene_id);
     if (it == scene_objects_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())("Scene not found: scene_id=%d",
-                                          scene_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Scene not found: scene_id=" << scene_id;
         return false;
     }
 
@@ -313,8 +300,7 @@ bool SceneModule::PlayerMove(uint64_t role_id, float target_x, float target_z) {
     // 查找玩家所在场景
     auto player_it = player_scene_map_.find(role_id);
     if (player_it == player_scene_map_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Player not in any scene: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Player not in any scene: role_id=" << role_id;
         return false;
     }
 
@@ -342,9 +328,7 @@ bool SceneModule::PlayerMove(uint64_t role_id, float target_x, float target_z) {
     float dz = target_z - player.position_z;
     player.rotation_y = atan2f(dx, dz) * 180.0f / 3.14159f;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-        "Player move: role_id=%llu, target=(%.2f, %.2f)", role_id, target_x,
-        target_z);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Player move: role_id=" << role_id << ", target=(" << target_x << ", " << target_z << ")";
     return true;
 }
 
@@ -354,8 +338,7 @@ bool SceneModule::PlayerStopMove(uint64_t role_id) {
     // 查找玩家所在场景
     auto player_it = player_scene_map_.find(role_id);
     if (player_it == player_scene_map_.end()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())(
-            "Player not in any scene: role_id=%llu", role_id);
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Player not in any scene: role_id=" << role_id;
         return false;
     }
 
@@ -376,7 +359,7 @@ bool SceneModule::PlayerStopMove(uint64_t role_id) {
     PlayerSceneObject& player = static_cast<PlayerSceneObject&>(obj_it->second);
     player.is_moving = false;
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT())("Player stop move: role_id=%llu", role_id);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Player stop move: role_id=" << role_id;
     return true;
 }
 
@@ -559,8 +542,7 @@ void SceneModule::OnTimer() {
     for (int32_t scene_id : scenes_to_destroy) {
         scene_objects_.erase(scene_id);
         scene_cache_.erase(scene_id);
-        ANCFL_LOG_INFO(ANCFL_LOG_ROOT())(
-            "Auto destroyed empty scene: scene_id=%d", scene_id);
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Auto destroyed empty scene: scene_id=" << scene_id;
     }
 }
 
