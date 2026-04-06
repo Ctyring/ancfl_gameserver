@@ -3,7 +3,7 @@
 namespace game_server {
 
 GameServiceBase::GameServiceBase(const std::string& service_name)
-    : TcpService()
+    : ancfl::TcpServer()
     , service_name_(service_name)
     , service_id_(0)
     , stop_flag_(false)
@@ -30,7 +30,6 @@ void GameServiceBase::MainLoop() {
 
             // 每帧更新
             OnUpdate();
-            Update();
 
             // 每秒定时器
             timer_counter_ += elapsed;
@@ -63,7 +62,7 @@ void GameServiceBase::MainLoop() {
 
 void GameServiceBase::StopService() {
     stop_flag_ = true;
-    Stop();
+    stop();
 }
 
 } // namespace game_server

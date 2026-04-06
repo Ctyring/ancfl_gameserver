@@ -19,7 +19,7 @@ bool BuffModule::AddBuff(uint64_t target_id,
 
     // 获取Buff配置
     BuffConfig config;
-    if (!GetBuffConfig(buff_config_id, config)) {
+    if (!GetBuffConfigInternal(buff_config_id, config)) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Buff config not found: buff_config_id=" << buff_config_id;
         return false;
     }
@@ -31,10 +31,10 @@ bool BuffModule::AddBuff(uint64_t target_id,
             if (buff.buff_config_id == buff_config_id && buff.is_active) {
                 // 堆叠Buff
                 if (buff.stack_count < buff.max_stack) {
-                    StackBuff(target_id, buff.buff_id);
+                    StackBuffInternal(target_id, buff.buff_id);
                 } else {
                     // 刷新Buff时间
-                    RefreshBuff(target_id, buff.buff_id);
+                    RefreshBuffInternal(target_id, buff.buff_id);
                 }
                 return true;
             }
@@ -346,9 +346,8 @@ bool BuffModule::ProcessDotHot(uint64_t target_id) {
     return true;
 }
 
-bool BuffModule::StackBuff(uint64_t target_id, uint64_t buff_id) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool BuffModule::StackBuffInternal(uint64_t target_id, uint64_t buff_id) {
     auto it = buff_cache_.find(target_id);
     if (it == buff_cache_.end()) {
         return false;
@@ -367,9 +366,13 @@ bool BuffModule::StackBuff(uint64_t target_id, uint64_t buff_id) {
     return false;
 }
 
-bool BuffModule::RefreshBuff(uint64_t target_id, uint64_t buff_id) {
+bool BuffModule::StackBuff(uint64_t target_id, uint64_t buff_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
+    return StackBuffInternal(target_id, buff_id);
+}
 
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool BuffModule::RefreshBuffInternal(uint64_t target_id, uint64_t buff_id) {
     auto it = buff_cache_.find(target_id);
     if (it == buff_cache_.end()) {
         return false;
@@ -385,6 +388,11 @@ bool BuffModule::RefreshBuff(uint64_t target_id, uint64_t buff_id) {
     }
 
     return false;
+}
+
+bool BuffModule::RefreshBuff(uint64_t target_id, uint64_t buff_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+    return RefreshBuffInternal(target_id, buff_id);
 }
 
 void BuffModule::OnUpdate() {
@@ -463,17 +471,35 @@ bool BuffModule::SaveBuffData(uint64_t target_id) {
     return true;
 }
 
-bool BuffModule::GetBuffConfig(int32_t buff_config_id, BuffConfig& config) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool BuffModule::GetBuffConfigInternal(int32_t buff_config_id, BuffConfig& config) {
     auto it = buff_configs_.find(buff_config_id);
     if (it == buff_configs_.end()) {
         // TODO: 从配置表加载Buff配置
-        return false;
+        // 暂时返回默认配置
+        config.buff_config_id = buff_config_id;
+        config.buff_name = "Buff_" + std::to_string(buff_config_id);
+        config.type = BuffType::BUFF;
+        config.effect_type = BuffEffectType::ATTACK_UP;
+        config.effect_value = 10;
+        config.duration = 30;
+        config.interval = 0;
+        config.max_stack = 5;
+        config.is_debuff = false;
+        config.can_dispel = true;
+        
+        // 保存到缓存
+        buff_configs_[buff_config_id] = config;
+        return true;
     }
 
     config = it->second;
     return true;
+}
+
+bool BuffModule::GetBuffConfig(int32_t buff_config_id, BuffConfig& config) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+    return GetBuffConfigInternal(buff_config_id, config);
 }
 
 uint64_t BuffModule::GenerateBuffId() {

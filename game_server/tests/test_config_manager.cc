@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "config_manager.h"
+#include "common/config_manager.h"
 #include <sqlite3.h>
 #include <fstream>
 

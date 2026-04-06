@@ -1,181 +1,102 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "logic_server/equip_module.h"
+#include "logic_server/logic_service.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MockLogicServiceForEquip : public LogicService {
-public:
-    MOCK_METHOD(bool, SendToClient, (uint64_t role_id, int32_t msg_id, const std::string& data), (override));
-    MOCK_METHOD(bool, SendToDB, (int32_t msg_id, const std::string& data), (override));
-};
-
-class EquipModuleTest : public Test {
+class EquipModuleTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mock_service_ = new MockLogicServiceForEquip();
-        equip_module_ = new EquipModule(mock_service_);
-        test_role_id_ = 12345;
+        service_ = nullptr;
+        equip_module_ = new EquipModule(service_);
+        test_role_id_ = 123456;
+        equip_module_->InitEquip(test_role_id_);
     }
     
     void TearDown() override {
         delete equip_module_;
-        delete mock_service_;
     }
     
-    MockLogicServiceForEquip* mock_service_;
+    LogicService* service_;
     EquipModule* equip_module_;
     uint64_t test_role_id_;
 };
 
 TEST_F(EquipModuleTest, InitEquip) {
-    EXPECT_TRUE(equip_module_->InitEquip(test_role_id_));
+    EXPECT_TRUE(equip_module_->InitEquip(test_role_id_ + 1));
 }
 
-TEST_F(EquipModuleTest, EquipItem) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip;
-    equip.equip_id = 1001;
-    equip.equip_config_id = 2001;
-    equip.slot = EquipSlot::WEAPON;
-    equip.level = 1;
-    equip.star = 0;
-    
-    EXPECT_TRUE(equip_module_->EquipItem(test_role_id_, equip));
-    
-    EquipInfo equipped;
-    EXPECT_TRUE(equip_module_->GetEquipBySlot(test_role_id_, EquipSlot::WEAPON, equipped));
-    EXPECT_EQ(equipped.equip_config_id, 2001);
+TEST_F(EquipModuleTest, GetEquipList) {
+    std::vector<EquipInfo> equips;
+    EXPECT_TRUE(equip_module_->GetEquipList(test_role_id_, equips));
 }
 
-TEST_F(EquipModuleTest, UnequipItem) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip;
-    equip.equip_id = 1001;
-    equip.equip_config_id = 2001;
-    equip.slot = EquipSlot::WEAPON;
-    
-    equip_module_->EquipItem(test_role_id_, equip);
-    
-    EXPECT_TRUE(equip_module_->UnequipItem(test_role_id_, EquipSlot::WEAPON));
-    
-    EquipInfo equipped;
-    EXPECT_FALSE(equip_module_->GetEquipBySlot(test_role_id_, EquipSlot::WEAPON, equipped));
+TEST_F(EquipModuleTest, WearEquip) {
+    EXPECT_TRUE(equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON));
 }
 
-TEST_F(EquipModuleTest, ReplaceEquip) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip1;
-    equip1.equip_id = 1001;
-    equip1.equip_config_id = 2001;
-    equip1.slot = EquipSlot::WEAPON;
-    
-    EquipInfo equip2;
-    equip2.equip_id = 1002;
-    equip2.equip_config_id = 2002;
-    equip2.slot = EquipSlot::WEAPON;
-    
-    equip_module_->EquipItem(test_role_id_, equip1);
-    EXPECT_TRUE(equip_module_->EquipItem(test_role_id_, equip2));
-    
-    EquipInfo equipped;
-    equip_module_->GetEquipBySlot(test_role_id_, EquipSlot::WEAPON, equipped);
-    EXPECT_EQ(equipped.equip_config_id, 2002);
+TEST_F(EquipModuleTest, TakeOffEquip) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    EXPECT_TRUE(equip_module_->TakeOffEquip(test_role_id_, (int32_t)EquipPosition::WEAPON));
 }
 
-TEST_F(EquipModuleTest, EnhanceEquip) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip;
-    equip.equip_id = 1001;
-    equip.equip_config_id = 2001;
-    equip.slot = EquipSlot::WEAPON;
-    equip.level = 1;
-    
-    equip_module_->EquipItem(test_role_id_, equip);
-    
-    EXPECT_TRUE(equip_module_->EnhanceEquip(test_role_id_, 1001));
-    
-    EquipInfo enhanced;
-    equip_module_->GetEquipById(test_role_id_, 1001, enhanced);
-    EXPECT_EQ(enhanced.level, 2);
-}
-
-TEST_F(EquipModuleTest, StarUpEquip) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip;
-    equip.equip_id = 1001;
-    equip.equip_config_id = 2001;
-    equip.slot = EquipSlot::WEAPON;
-    equip.star = 0;
-    
-    equip_module_->EquipItem(test_role_id_, equip);
-    
-    EXPECT_TRUE(equip_module_->StarUpEquip(test_role_id_, 1001));
-    
-    EquipInfo starred;
-    equip_module_->GetEquipById(test_role_id_, 1001, starred);
-    EXPECT_EQ(starred.star, 1);
-}
-
-TEST_F(EquipModuleTest, GetAllEquips) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip1;
-    equip1.equip_id = 1001;
-    equip1.slot = EquipSlot::WEAPON;
-    
-    EquipInfo equip2;
-    equip2.equip_id = 1002;
-    equip2.slot = EquipSlot::ARMOR;
-    
-    equip_module_->EquipItem(test_role_id_, equip1);
-    equip_module_->EquipItem(test_role_id_, equip2);
+TEST_F(EquipModuleTest, GetWornEquips) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
     
     std::vector<EquipInfo> equips;
-    EXPECT_TRUE(equip_module_->GetAllEquips(test_role_id_, equips));
-    EXPECT_EQ(equips.size(), 2);
+    EXPECT_TRUE(equip_module_->GetWornEquips(test_role_id_, equips));
 }
 
-TEST_F(EquipModuleTest, GetEquipAttributes) {
-    equip_module_->InitEquip(test_role_id_);
-    
-    EquipInfo equip;
-    equip.equip_id = 1001;
-    equip.equip_config_id = 2001;
-    equip.slot = EquipSlot::WEAPON;
-    equip.level = 5;
-    equip.star = 3;
-    
-    equip_module_->EquipItem(test_role_id_, equip);
-    
-    std::unordered_map<std::string, int32_t> attrs;
-    EXPECT_TRUE(equip_module_->GetEquipAttributes(test_role_id_, attrs));
-    EXPECT_GT(attrs.size(), 0);
+TEST_F(EquipModuleTest, StrengthenEquip) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    EXPECT_TRUE(equip_module_->StrengthenEquip(test_role_id_, 1, 5));
 }
 
-TEST_F(EquipModuleTest, CheckSuit) {
-    equip_module_->InitEquip(test_role_id_);
+TEST_F(EquipModuleTest, GetStrengthenLevel) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    equip_module_->StrengthenEquip(test_role_id_, 1, 5);
     
-    EquipInfo equip1;
-    equip1.equip_id = 1001;
-    equip1.suit_id = 1;
-    equip1.slot = EquipSlot::WEAPON;
+    int32_t level = 0;
+    EXPECT_TRUE(equip_module_->GetStrengthenLevel(test_role_id_, 1, level));
+    EXPECT_EQ(level, 5);
+}
+
+TEST_F(EquipModuleTest, UpgradeStar) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    EXPECT_TRUE(equip_module_->UpgradeStar(test_role_id_, 1, 3));
+}
+
+TEST_F(EquipModuleTest, GetStarLevel) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    equip_module_->UpgradeStar(test_role_id_, 1, 3);
     
-    EquipInfo equip2;
-    equip2.equip_id = 1002;
-    equip2.suit_id = 1;
-    equip2.slot = EquipSlot::ARMOR;
+    int32_t star_level = 0;
+    EXPECT_TRUE(equip_module_->GetStarLevel(test_role_id_, 1, star_level));
+    EXPECT_EQ(star_level, 3);
+}
+
+TEST_F(EquipModuleTest, InlayGem) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    EXPECT_TRUE(equip_module_->InlayGem(test_role_id_, 1, 1001, 0));
+}
+
+TEST_F(EquipModuleTest, GetGems) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    equip_module_->InlayGem(test_role_id_, 1, 1001, 0);
     
-    equip_module_->EquipItem(test_role_id_, equip1);
-    equip_module_->EquipItem(test_role_id_, equip2);
+    std::vector<int32_t> gems;
+    EXPECT_TRUE(equip_module_->GetGems(test_role_id_, 1, gems));
+}
+
+TEST_F(EquipModuleTest, RemoveGem) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
+    equip_module_->InlayGem(test_role_id_, 1, 1001, 0);
+    EXPECT_TRUE(equip_module_->RemoveGem(test_role_id_, 1, 0));
+}
+
+TEST_F(EquipModuleTest, CalculateEquipAttribute) {
+    equip_module_->WearEquip(test_role_id_, 1, (int32_t)EquipPosition::WEAPON);
     
-    int32_t suit_count = 0;
-    EXPECT_TRUE(equip_module_->GetSuitCount(test_role_id_, 1, suit_count));
-    EXPECT_EQ(suit_count, 2);
+    EquipAttribute attr;
+    EXPECT_TRUE(equip_module_->CalculateEquipAttribute(test_role_id_, attr));
 }

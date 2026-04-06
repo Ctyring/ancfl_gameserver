@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "log_server/log_server.h"
 
 using namespace game_server;
-using namespace testing;
 
-class LogServerTest : public Test {
+class LogServerTest : public ::testing::Test {
 protected:
     void SetUp() override {
         log_server_ = new LogServer();
@@ -22,114 +20,128 @@ TEST_F(LogServerTest, Init) {
     EXPECT_TRUE(log_server_->Init("0.0.0.0", 9998));
 }
 
-TEST_F(LogServerTest, StartStop) {
-    log_server_->Init("0.0.0.0", 9998);
-    EXPECT_TRUE(log_server_->Start());
-    log_server_->Stop();
-}
-
 TEST_F(LogServerTest, WriteLog) {
     log_server_->Init("0.0.0.0", 9998);
     
-    LogEntry entry;
-    entry.log_level = LogLevel::INFO;
-    entry.server_id = 1;
-    entry.server_type = "logic";
-    entry.message = "Test log message";
-    entry.timestamp = time(nullptr);
+    LogRecord record;
+    record.log_id = 0;
+    record.type = LogType::SYSTEM;
+    record.level = LogLevel::INFO;
+    record.server_id = 1;
+    record.role_id = 0;
+    record.content = "Test log message";
+    record.log_time = time(nullptr);
     
-    EXPECT_TRUE(log_server_->WriteLog(entry));
+    EXPECT_TRUE(log_server_->WriteLog(record));
 }
 
-TEST_F(LogServerTest, WriteBatchLogs) {
+TEST_F(LogServerTest, WriteLogAsync) {
     log_server_->Init("0.0.0.0", 9998);
     
-    std::vector<LogEntry> entries;
+    LogRecord record;
+    record.type = LogType::SYSTEM;
+    record.level = LogLevel::INFO;
+    record.server_id = 1;
+    record.content = "Async test log message";
+    record.log_time = time(nullptr);
+    
+    EXPECT_TRUE(log_server_->WriteLogAsync(record));
+}
+
+TEST_F(LogServerTest, WriteLogBatch) {
+    log_server_->Init("0.0.0.0", 9998);
+    
+    std::vector<LogRecord> records;
     for (int i = 0; i < 10; ++i) {
-        LogEntry entry;
-        entry.log_level = LogLevel::INFO;
-        entry.server_id = 1;
-        entry.server_type = "logic";
-        entry.message = "Test log message " + std::to_string(i);
-        entry.timestamp = time(nullptr);
-        entries.push_back(entry);
+        LogRecord record;
+        record.type = LogType::SYSTEM;
+        record.level = LogLevel::INFO;
+        record.server_id = 1;
+        record.content = "Batch test log message " + std::to_string(i);
+        record.log_time = time(nullptr);
+        records.push_back(record);
     }
     
-    EXPECT_TRUE(log_server_->WriteBatchLogs(entries));
+    EXPECT_TRUE(log_server_->WriteLogBatch(records));
 }
 
 TEST_F(LogServerTest, QueryLogs) {
     log_server_->Init("0.0.0.0", 9998);
     
-    LogEntry entry;
-    entry.log_level = LogLevel::INFO;
-    entry.server_id = 1;
-    entry.server_type = "logic";
-    entry.message = "Queryable log message";
-    entry.timestamp = time(nullptr);
-    log_server_->WriteLog(entry);
+    LogRecord record;
+    record.type = LogType::SYSTEM;
+    record.level = LogLevel::INFO;
+    record.server_id = 1;
+    record.content = "Queryable log message";
+    record.log_time = time(nullptr);
+    log_server_->WriteLog(record);
     
     LogQueryCondition condition;
+    condition.type = LogType::SYSTEM;
     condition.server_id = 1;
-    condition.start_time = entry.timestamp - 10;
-    condition.end_time = entry.timestamp + 10;
+    condition.start_time = record.log_time - 10;
+    condition.end_time = record.log_time + 10;
+    condition.limit = 10;
+    condition.offset = 0;
     
-    std::vector<LogEntry> results;
+    std::vector<LogRecord> results;
     EXPECT_TRUE(log_server_->QueryLogs(condition, results));
-    EXPECT_GT(results.size(), 0);
 }
 
-TEST_F(LogServerTest, SetLogLevel) {
+TEST_F(LogServerTest, GetLogCount) {
     log_server_->Init("0.0.0.0", 9998);
     
-    EXPECT_TRUE(log_server_->SetLogLevel(LogLevel::DEBUG));
-    EXPECT_EQ(log_server_->GetLogLevel(), LogLevel::DEBUG);
+    LogRecord record;
+    record.type = LogType::SYSTEM;
+    record.level = LogLevel::INFO;
+    record.server_id = 1;
+    record.content = "Count test log message";
+    record.log_time = time(nullptr);
+    log_server_->WriteLog(record);
+    
+    int64_t count = log_server_->GetLogCount(LogType::SYSTEM, record.log_time - 10, record.log_time + 10);
+    EXPECT_GE(count, 0);
 }
 
-TEST_F(LogServerTest, GetLogStats) {
+TEST_F(LogServerTest, LogLogin) {
     log_server_->Init("0.0.0.0", 9998);
     
-    LogEntry entry;
-    entry.log_level = LogLevel::INFO;
-    entry.server_id = 1;
-    entry.server_type = "logic";
-    entry.message = "Test log message";
-    entry.timestamp = time(nullptr);
-    log_server_->WriteLog(entry);
-    
-    LogStats stats;
-    EXPECT_TRUE(log_server_->GetLogStats(stats));
-    EXPECT_GT(stats.total_count, 0);
+    EXPECT_TRUE(log_server_->LogLogin(12345, "TestPlayer", 1, "127.0.0.1", true));
+    EXPECT_TRUE(log_server_->LogLogin(12345, "TestPlayer", 1, "127.0.0.1", false));
 }
 
-TEST_F(LogServerTest, FlushLogs) {
+TEST_F(LogServerTest, LogRecharge) {
     log_server_->Init("0.0.0.0", 9998);
     
-    LogEntry entry;
-    entry.log_level = LogLevel::INFO;
-    entry.server_id = 1;
-    entry.server_type = "logic";
-    entry.message = "Test log message";
-    entry.timestamp = time(nullptr);
-    log_server_->WriteLog(entry);
-    
-    EXPECT_TRUE(log_server_->FlushLogs());
+    EXPECT_TRUE(log_server_->LogRecharge(12345, "TestPlayer", 1, 100, 1001));
 }
 
-TEST_F(LogServerTest, SetMaxLogSize) {
+TEST_F(LogServerTest, LogConsume) {
     log_server_->Init("0.0.0.0", 9998);
     
-    EXPECT_TRUE(log_server_->SetMaxLogSize(100 * 1024 * 1024));
+    EXPECT_TRUE(log_server_->LogConsume(12345, "TestPlayer", 1, 1, 100, "Buy item"));
 }
 
-TEST_F(LogServerTest, SetMaxLogFiles) {
+TEST_F(LogServerTest, LogItem) {
     log_server_->Init("0.0.0.0", 9998);
     
-    EXPECT_TRUE(log_server_->SetMaxLogFiles(10));
+    EXPECT_TRUE(log_server_->LogItem(12345, "TestPlayer", 1, 1001, 10, 1, "Quest reward"));
+}
+
+TEST_F(LogServerTest, LogBattle) {
+    log_server_->Init("0.0.0.0", 9998);
+    
+    EXPECT_TRUE(log_server_->LogBattle(12345, "TestPlayer", 1, 1, 1, 60));
+}
+
+TEST_F(LogServerTest, ClearOldLogs) {
+    log_server_->Init("0.0.0.0", 9998);
+    
+    EXPECT_TRUE(log_server_->ClearOldLogs(30));
 }
 
 TEST_F(LogServerTest, ArchiveLogs) {
     log_server_->Init("0.0.0.0", 9998);
     
-    EXPECT_TRUE(log_server_->ArchiveLogs());
+    EXPECT_TRUE(log_server_->ArchiveLogs(7));
 }

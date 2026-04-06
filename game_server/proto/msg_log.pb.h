@@ -30,6 +30,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
@@ -46,7 +47,7 @@ struct TableStruct_msg_5flog_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[22]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[9]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -54,119 +55,132 @@ struct TableStruct_msg_5flog_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_msg_5flog_2eproto;
 namespace msg_log {
-class ClearOldLogReq;
-struct ClearOldLogReqDefaultTypeInternal;
-extern ClearOldLogReqDefaultTypeInternal _ClearOldLogReq_default_instance_;
-class ClearOldLogRsp;
-struct ClearOldLogRspDefaultTypeInternal;
-extern ClearOldLogRspDefaultTypeInternal _ClearOldLogRsp_default_instance_;
+class CountLogAck;
+struct CountLogAckDefaultTypeInternal;
+extern CountLogAckDefaultTypeInternal _CountLogAck_default_instance_;
 class CountLogReq;
 struct CountLogReqDefaultTypeInternal;
 extern CountLogReqDefaultTypeInternal _CountLogReq_default_instance_;
-class CountLogRsp;
-struct CountLogRspDefaultTypeInternal;
-extern CountLogRspDefaultTypeInternal _CountLogRsp_default_instance_;
-class LogBattleReq;
-struct LogBattleReqDefaultTypeInternal;
-extern LogBattleReqDefaultTypeInternal _LogBattleReq_default_instance_;
-class LogBattleRsp;
-struct LogBattleRspDefaultTypeInternal;
-extern LogBattleRspDefaultTypeInternal _LogBattleRsp_default_instance_;
-class LogConsumeReq;
-struct LogConsumeReqDefaultTypeInternal;
-extern LogConsumeReqDefaultTypeInternal _LogConsumeReq_default_instance_;
-class LogConsumeRsp;
-struct LogConsumeRspDefaultTypeInternal;
-extern LogConsumeRspDefaultTypeInternal _LogConsumeRsp_default_instance_;
-class LogItemReq;
-struct LogItemReqDefaultTypeInternal;
-extern LogItemReqDefaultTypeInternal _LogItemReq_default_instance_;
-class LogItemRsp;
-struct LogItemRspDefaultTypeInternal;
-extern LogItemRspDefaultTypeInternal _LogItemRsp_default_instance_;
-class LogLoginReq;
-struct LogLoginReqDefaultTypeInternal;
-extern LogLoginReqDefaultTypeInternal _LogLoginReq_default_instance_;
-class LogLoginRsp;
-struct LogLoginRspDefaultTypeInternal;
-extern LogLoginRspDefaultTypeInternal _LogLoginRsp_default_instance_;
-class LogQueryConditionInfo;
-struct LogQueryConditionInfoDefaultTypeInternal;
-extern LogQueryConditionInfoDefaultTypeInternal _LogQueryConditionInfo_default_instance_;
-class LogRechargeReq;
-struct LogRechargeReqDefaultTypeInternal;
-extern LogRechargeReqDefaultTypeInternal _LogRechargeReq_default_instance_;
-class LogRechargeRsp;
-struct LogRechargeRspDefaultTypeInternal;
-extern LogRechargeRspDefaultTypeInternal _LogRechargeRsp_default_instance_;
-class LogRecordInfo;
-struct LogRecordInfoDefaultTypeInternal;
-extern LogRecordInfoDefaultTypeInternal _LogRecordInfo_default_instance_;
+class LogRecord;
+struct LogRecordDefaultTypeInternal;
+extern LogRecordDefaultTypeInternal _LogRecord_default_instance_;
+class QueryLogAck;
+struct QueryLogAckDefaultTypeInternal;
+extern QueryLogAckDefaultTypeInternal _QueryLogAck_default_instance_;
 class QueryLogReq;
 struct QueryLogReqDefaultTypeInternal;
 extern QueryLogReqDefaultTypeInternal _QueryLogReq_default_instance_;
-class QueryLogRsp;
-struct QueryLogRspDefaultTypeInternal;
-extern QueryLogRspDefaultTypeInternal _QueryLogRsp_default_instance_;
-class WriteLogBatchReq;
-struct WriteLogBatchReqDefaultTypeInternal;
-extern WriteLogBatchReqDefaultTypeInternal _WriteLogBatchReq_default_instance_;
-class WriteLogBatchRsp;
-struct WriteLogBatchRspDefaultTypeInternal;
-extern WriteLogBatchRspDefaultTypeInternal _WriteLogBatchRsp_default_instance_;
-class WriteLogReq;
-struct WriteLogReqDefaultTypeInternal;
-extern WriteLogReqDefaultTypeInternal _WriteLogReq_default_instance_;
-class WriteLogRsp;
-struct WriteLogRspDefaultTypeInternal;
-extern WriteLogRspDefaultTypeInternal _WriteLogRsp_default_instance_;
+class SendLogAck;
+struct SendLogAckDefaultTypeInternal;
+extern SendLogAckDefaultTypeInternal _SendLogAck_default_instance_;
+class SendLogBatchAck;
+struct SendLogBatchAckDefaultTypeInternal;
+extern SendLogBatchAckDefaultTypeInternal _SendLogBatchAck_default_instance_;
+class SendLogBatchReq;
+struct SendLogBatchReqDefaultTypeInternal;
+extern SendLogBatchReqDefaultTypeInternal _SendLogBatchReq_default_instance_;
+class SendLogReq;
+struct SendLogReqDefaultTypeInternal;
+extern SendLogReqDefaultTypeInternal _SendLogReq_default_instance_;
 }  // namespace msg_log
 PROTOBUF_NAMESPACE_OPEN
-template<> ::msg_log::ClearOldLogReq* Arena::CreateMaybeMessage<::msg_log::ClearOldLogReq>(Arena*);
-template<> ::msg_log::ClearOldLogRsp* Arena::CreateMaybeMessage<::msg_log::ClearOldLogRsp>(Arena*);
+template<> ::msg_log::CountLogAck* Arena::CreateMaybeMessage<::msg_log::CountLogAck>(Arena*);
 template<> ::msg_log::CountLogReq* Arena::CreateMaybeMessage<::msg_log::CountLogReq>(Arena*);
-template<> ::msg_log::CountLogRsp* Arena::CreateMaybeMessage<::msg_log::CountLogRsp>(Arena*);
-template<> ::msg_log::LogBattleReq* Arena::CreateMaybeMessage<::msg_log::LogBattleReq>(Arena*);
-template<> ::msg_log::LogBattleRsp* Arena::CreateMaybeMessage<::msg_log::LogBattleRsp>(Arena*);
-template<> ::msg_log::LogConsumeReq* Arena::CreateMaybeMessage<::msg_log::LogConsumeReq>(Arena*);
-template<> ::msg_log::LogConsumeRsp* Arena::CreateMaybeMessage<::msg_log::LogConsumeRsp>(Arena*);
-template<> ::msg_log::LogItemReq* Arena::CreateMaybeMessage<::msg_log::LogItemReq>(Arena*);
-template<> ::msg_log::LogItemRsp* Arena::CreateMaybeMessage<::msg_log::LogItemRsp>(Arena*);
-template<> ::msg_log::LogLoginReq* Arena::CreateMaybeMessage<::msg_log::LogLoginReq>(Arena*);
-template<> ::msg_log::LogLoginRsp* Arena::CreateMaybeMessage<::msg_log::LogLoginRsp>(Arena*);
-template<> ::msg_log::LogQueryConditionInfo* Arena::CreateMaybeMessage<::msg_log::LogQueryConditionInfo>(Arena*);
-template<> ::msg_log::LogRechargeReq* Arena::CreateMaybeMessage<::msg_log::LogRechargeReq>(Arena*);
-template<> ::msg_log::LogRechargeRsp* Arena::CreateMaybeMessage<::msg_log::LogRechargeRsp>(Arena*);
-template<> ::msg_log::LogRecordInfo* Arena::CreateMaybeMessage<::msg_log::LogRecordInfo>(Arena*);
+template<> ::msg_log::LogRecord* Arena::CreateMaybeMessage<::msg_log::LogRecord>(Arena*);
+template<> ::msg_log::QueryLogAck* Arena::CreateMaybeMessage<::msg_log::QueryLogAck>(Arena*);
 template<> ::msg_log::QueryLogReq* Arena::CreateMaybeMessage<::msg_log::QueryLogReq>(Arena*);
-template<> ::msg_log::QueryLogRsp* Arena::CreateMaybeMessage<::msg_log::QueryLogRsp>(Arena*);
-template<> ::msg_log::WriteLogBatchReq* Arena::CreateMaybeMessage<::msg_log::WriteLogBatchReq>(Arena*);
-template<> ::msg_log::WriteLogBatchRsp* Arena::CreateMaybeMessage<::msg_log::WriteLogBatchRsp>(Arena*);
-template<> ::msg_log::WriteLogReq* Arena::CreateMaybeMessage<::msg_log::WriteLogReq>(Arena*);
-template<> ::msg_log::WriteLogRsp* Arena::CreateMaybeMessage<::msg_log::WriteLogRsp>(Arena*);
+template<> ::msg_log::SendLogAck* Arena::CreateMaybeMessage<::msg_log::SendLogAck>(Arena*);
+template<> ::msg_log::SendLogBatchAck* Arena::CreateMaybeMessage<::msg_log::SendLogBatchAck>(Arena*);
+template<> ::msg_log::SendLogBatchReq* Arena::CreateMaybeMessage<::msg_log::SendLogBatchReq>(Arena*);
+template<> ::msg_log::SendLogReq* Arena::CreateMaybeMessage<::msg_log::SendLogReq>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace msg_log {
 
+enum LogType : int {
+  LOG_TYPE_LOGIN = 0,
+  LOG_TYPE_LOGOUT = 1,
+  LOG_TYPE_CREATE_ROLE = 2,
+  LOG_TYPE_DELETE_ROLE = 3,
+  LOG_TYPE_RECHARGE = 4,
+  LOG_TYPE_CONSUME = 5,
+  LOG_TYPE_ITEM = 6,
+  LOG_TYPE_TRADE = 7,
+  LOG_TYPE_BATTLE = 8,
+  LOG_TYPE_TASK = 9,
+  LOG_TYPE_GUILD = 10,
+  LOG_TYPE_CHAT = 11,
+  LOG_TYPE_ERROR = 12,
+  LOG_TYPE_SYSTEM = 13,
+  LogType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  LogType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool LogType_IsValid(int value);
+constexpr LogType LogType_MIN = LOG_TYPE_LOGIN;
+constexpr LogType LogType_MAX = LOG_TYPE_SYSTEM;
+constexpr int LogType_ARRAYSIZE = LogType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LogType_descriptor();
+template<typename T>
+inline const std::string& LogType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, LogType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function LogType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    LogType_descriptor(), enum_t_value);
+}
+inline bool LogType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LogType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LogType>(
+    LogType_descriptor(), name, value);
+}
+enum LogLevel : int {
+  LOG_LEVEL_DEBUG = 0,
+  LOG_LEVEL_INFO = 1,
+  LOG_LEVEL_WARN = 2,
+  LOG_LEVEL_ERROR = 3,
+  LOG_LEVEL_FATAL = 4,
+  LogLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  LogLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool LogLevel_IsValid(int value);
+constexpr LogLevel LogLevel_MIN = LOG_LEVEL_DEBUG;
+constexpr LogLevel LogLevel_MAX = LOG_LEVEL_FATAL;
+constexpr int LogLevel_ARRAYSIZE = LogLevel_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* LogLevel_descriptor();
+template<typename T>
+inline const std::string& LogLevel_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, LogLevel>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function LogLevel_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    LogLevel_descriptor(), enum_t_value);
+}
+inline bool LogLevel_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, LogLevel* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<LogLevel>(
+    LogLevel_descriptor(), name, value);
+}
 // ===================================================================
 
-class LogRecordInfo final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogRecordInfo) */ {
+class LogRecord final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogRecord) */ {
  public:
-  inline LogRecordInfo() : LogRecordInfo(nullptr) {}
-  ~LogRecordInfo() override;
-  explicit constexpr LogRecordInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline LogRecord() : LogRecord(nullptr) {}
+  ~LogRecord() override;
+  explicit constexpr LogRecord(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LogRecordInfo(const LogRecordInfo& from);
-  LogRecordInfo(LogRecordInfo&& from) noexcept
-    : LogRecordInfo() {
+  LogRecord(const LogRecord& from);
+  LogRecord(LogRecord&& from) noexcept
+    : LogRecord() {
     *this = ::std::move(from);
   }
 
-  inline LogRecordInfo& operator=(const LogRecordInfo& from) {
+  inline LogRecord& operator=(const LogRecord& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LogRecordInfo& operator=(LogRecordInfo&& from) noexcept {
+  inline LogRecord& operator=(LogRecord&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -189,20 +203,20 @@ class LogRecordInfo final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LogRecordInfo& default_instance() {
+  static const LogRecord& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LogRecordInfo* internal_default_instance() {
-    return reinterpret_cast<const LogRecordInfo*>(
-               &_LogRecordInfo_default_instance_);
+  static inline const LogRecord* internal_default_instance() {
+    return reinterpret_cast<const LogRecord*>(
+               &_LogRecord_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     0;
 
-  friend void swap(LogRecordInfo& a, LogRecordInfo& b) {
+  friend void swap(LogRecord& a, LogRecord& b) {
     a.Swap(&b);
   }
-  inline void Swap(LogRecordInfo* other) {
+  inline void Swap(LogRecord* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -215,7 +229,7 @@ class LogRecordInfo final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LogRecordInfo* other) {
+  void UnsafeArenaSwap(LogRecord* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -223,13 +237,13 @@ class LogRecordInfo final :
 
   // implements Message ----------------------------------------------
 
-  LogRecordInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogRecordInfo>(arena);
+  LogRecord* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<LogRecord>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogRecordInfo& from);
+  void CopyFrom(const LogRecord& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogRecordInfo& from);
+  void MergeFrom(const LogRecord& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -246,15 +260,15 @@ class LogRecordInfo final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LogRecordInfo* other);
+  void InternalSwap(LogRecord* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogRecordInfo";
+    return "msg_log.LogRecord";
   }
   protected:
-  explicit LogRecordInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit LogRecord(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -276,8 +290,8 @@ class LogRecordInfo final :
     kExtraDataFieldNumber = 8,
     kIpFieldNumber = 10,
     kLogIdFieldNumber = 1,
-    kLogTypeFieldNumber = 2,
-    kLogLevelFieldNumber = 3,
+    kTypeFieldNumber = 2,
+    kLevelFieldNumber = 3,
     kRoleIdFieldNumber = 5,
     kLogTimeFieldNumber = 9,
     kServerIdFieldNumber = 4,
@@ -347,22 +361,22 @@ class LogRecordInfo final :
   void _internal_set_log_id(int64_t value);
   public:
 
-  // int32 log_type = 2;
-  void clear_log_type();
-  int32_t log_type() const;
-  void set_log_type(int32_t value);
+  // .msg_log.LogType type = 2;
+  void clear_type();
+  ::msg_log::LogType type() const;
+  void set_type(::msg_log::LogType value);
   private:
-  int32_t _internal_log_type() const;
-  void _internal_set_log_type(int32_t value);
+  ::msg_log::LogType _internal_type() const;
+  void _internal_set_type(::msg_log::LogType value);
   public:
 
-  // int32 log_level = 3;
-  void clear_log_level();
-  int32_t log_level() const;
-  void set_log_level(int32_t value);
+  // .msg_log.LogLevel level = 3;
+  void clear_level();
+  ::msg_log::LogLevel level() const;
+  void set_level(::msg_log::LogLevel value);
   private:
-  int32_t _internal_log_level() const;
-  void _internal_set_log_level(int32_t value);
+  ::msg_log::LogLevel _internal_level() const;
+  void _internal_set_level(::msg_log::LogLevel value);
   public:
 
   // uint64 role_id = 5;
@@ -392,7 +406,7 @@ class LogRecordInfo final :
   void _internal_set_server_id(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:msg_log.LogRecordInfo)
+  // @@protoc_insertion_point(class_scope:msg_log.LogRecord)
  private:
   class _Internal;
 
@@ -404,8 +418,8 @@ class LogRecordInfo final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr extra_data_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
   int64_t log_id_;
-  int32_t log_type_;
-  int32_t log_level_;
+  int type_;
+  int level_;
   uint64_t role_id_;
   int64_t log_time_;
   int32_t server_id_;
@@ -414,24 +428,24 @@ class LogRecordInfo final :
 };
 // -------------------------------------------------------------------
 
-class LogQueryConditionInfo final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogQueryConditionInfo) */ {
+class SendLogReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.SendLogReq) */ {
  public:
-  inline LogQueryConditionInfo() : LogQueryConditionInfo(nullptr) {}
-  ~LogQueryConditionInfo() override;
-  explicit constexpr LogQueryConditionInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SendLogReq() : SendLogReq(nullptr) {}
+  ~SendLogReq() override;
+  explicit constexpr SendLogReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  LogQueryConditionInfo(const LogQueryConditionInfo& from);
-  LogQueryConditionInfo(LogQueryConditionInfo&& from) noexcept
-    : LogQueryConditionInfo() {
+  SendLogReq(const SendLogReq& from);
+  SendLogReq(SendLogReq&& from) noexcept
+    : SendLogReq() {
     *this = ::std::move(from);
   }
 
-  inline LogQueryConditionInfo& operator=(const LogQueryConditionInfo& from) {
+  inline SendLogReq& operator=(const SendLogReq& from) {
     CopyFrom(from);
     return *this;
   }
-  inline LogQueryConditionInfo& operator=(LogQueryConditionInfo&& from) noexcept {
+  inline SendLogReq& operator=(SendLogReq&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -454,20 +468,20 @@ class LogQueryConditionInfo final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const LogQueryConditionInfo& default_instance() {
+  static const SendLogReq& default_instance() {
     return *internal_default_instance();
   }
-  static inline const LogQueryConditionInfo* internal_default_instance() {
-    return reinterpret_cast<const LogQueryConditionInfo*>(
-               &_LogQueryConditionInfo_default_instance_);
+  static inline const SendLogReq* internal_default_instance() {
+    return reinterpret_cast<const SendLogReq*>(
+               &_SendLogReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     1;
 
-  friend void swap(LogQueryConditionInfo& a, LogQueryConditionInfo& b) {
+  friend void swap(SendLogReq& a, SendLogReq& b) {
     a.Swap(&b);
   }
-  inline void Swap(LogQueryConditionInfo* other) {
+  inline void Swap(SendLogReq* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -480,7 +494,7 @@ class LogQueryConditionInfo final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(LogQueryConditionInfo* other) {
+  void UnsafeArenaSwap(SendLogReq* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -488,13 +502,13 @@ class LogQueryConditionInfo final :
 
   // implements Message ----------------------------------------------
 
-  LogQueryConditionInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogQueryConditionInfo>(arena);
+  SendLogReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SendLogReq>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogQueryConditionInfo& from);
+  void CopyFrom(const SendLogReq& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogQueryConditionInfo& from);
+  void MergeFrom(const SendLogReq& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -511,227 +525,15 @@ class LogQueryConditionInfo final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(LogQueryConditionInfo* other);
+  void InternalSwap(SendLogReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogQueryConditionInfo";
+    return "msg_log.SendLogReq";
   }
   protected:
-  explicit LogQueryConditionInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kLogTypeFieldNumber = 1,
-    kServerIdFieldNumber = 2,
-    kRoleIdFieldNumber = 3,
-    kStartTimeFieldNumber = 4,
-    kEndTimeFieldNumber = 5,
-    kLimitFieldNumber = 6,
-    kOffsetFieldNumber = 7,
-  };
-  // int32 log_type = 1;
-  void clear_log_type();
-  int32_t log_type() const;
-  void set_log_type(int32_t value);
-  private:
-  int32_t _internal_log_type() const;
-  void _internal_set_log_type(int32_t value);
-  public:
-
-  // int32 server_id = 2;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // uint64 role_id = 3;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int64 start_time = 4;
-  void clear_start_time();
-  int64_t start_time() const;
-  void set_start_time(int64_t value);
-  private:
-  int64_t _internal_start_time() const;
-  void _internal_set_start_time(int64_t value);
-  public:
-
-  // int64 end_time = 5;
-  void clear_end_time();
-  int64_t end_time() const;
-  void set_end_time(int64_t value);
-  private:
-  int64_t _internal_end_time() const;
-  void _internal_set_end_time(int64_t value);
-  public:
-
-  // int32 limit = 6;
-  void clear_limit();
-  int32_t limit() const;
-  void set_limit(int32_t value);
-  private:
-  int32_t _internal_limit() const;
-  void _internal_set_limit(int32_t value);
-  public:
-
-  // int32 offset = 7;
-  void clear_offset();
-  int32_t offset() const;
-  void set_offset(int32_t value);
-  private:
-  int32_t _internal_offset() const;
-  void _internal_set_offset(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogQueryConditionInfo)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t log_type_;
-  int32_t server_id_;
-  uint64_t role_id_;
-  int64_t start_time_;
-  int64_t end_time_;
-  int32_t limit_;
-  int32_t offset_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class WriteLogReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.WriteLogReq) */ {
- public:
-  inline WriteLogReq() : WriteLogReq(nullptr) {}
-  ~WriteLogReq() override;
-  explicit constexpr WriteLogReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  WriteLogReq(const WriteLogReq& from);
-  WriteLogReq(WriteLogReq&& from) noexcept
-    : WriteLogReq() {
-    *this = ::std::move(from);
-  }
-
-  inline WriteLogReq& operator=(const WriteLogReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline WriteLogReq& operator=(WriteLogReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const WriteLogReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const WriteLogReq* internal_default_instance() {
-    return reinterpret_cast<const WriteLogReq*>(
-               &_WriteLogReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    2;
-
-  friend void swap(WriteLogReq& a, WriteLogReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(WriteLogReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(WriteLogReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  WriteLogReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<WriteLogReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const WriteLogReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const WriteLogReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(WriteLogReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.WriteLogReq";
-  }
-  protected:
-  explicit WriteLogReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SendLogReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -750,55 +552,55 @@ class WriteLogReq final :
   enum : int {
     kRecordFieldNumber = 1,
   };
-  // .msg_log.LogRecordInfo record = 1;
+  // .msg_log.LogRecord record = 1;
   bool has_record() const;
   private:
   bool _internal_has_record() const;
   public:
   void clear_record();
-  const ::msg_log::LogRecordInfo& record() const;
-  PROTOBUF_NODISCARD ::msg_log::LogRecordInfo* release_record();
-  ::msg_log::LogRecordInfo* mutable_record();
-  void set_allocated_record(::msg_log::LogRecordInfo* record);
+  const ::msg_log::LogRecord& record() const;
+  PROTOBUF_NODISCARD ::msg_log::LogRecord* release_record();
+  ::msg_log::LogRecord* mutable_record();
+  void set_allocated_record(::msg_log::LogRecord* record);
   private:
-  const ::msg_log::LogRecordInfo& _internal_record() const;
-  ::msg_log::LogRecordInfo* _internal_mutable_record();
+  const ::msg_log::LogRecord& _internal_record() const;
+  ::msg_log::LogRecord* _internal_mutable_record();
   public:
   void unsafe_arena_set_allocated_record(
-      ::msg_log::LogRecordInfo* record);
-  ::msg_log::LogRecordInfo* unsafe_arena_release_record();
+      ::msg_log::LogRecord* record);
+  ::msg_log::LogRecord* unsafe_arena_release_record();
 
-  // @@protoc_insertion_point(class_scope:msg_log.WriteLogReq)
+  // @@protoc_insertion_point(class_scope:msg_log.SendLogReq)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::msg_log::LogRecordInfo* record_;
+  ::msg_log::LogRecord* record_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
 // -------------------------------------------------------------------
 
-class WriteLogRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.WriteLogRsp) */ {
+class SendLogAck final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.SendLogAck) */ {
  public:
-  inline WriteLogRsp() : WriteLogRsp(nullptr) {}
-  ~WriteLogRsp() override;
-  explicit constexpr WriteLogRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SendLogAck() : SendLogAck(nullptr) {}
+  ~SendLogAck() override;
+  explicit constexpr SendLogAck(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  WriteLogRsp(const WriteLogRsp& from);
-  WriteLogRsp(WriteLogRsp&& from) noexcept
-    : WriteLogRsp() {
+  SendLogAck(const SendLogAck& from);
+  SendLogAck(SendLogAck&& from) noexcept
+    : SendLogAck() {
     *this = ::std::move(from);
   }
 
-  inline WriteLogRsp& operator=(const WriteLogRsp& from) {
+  inline SendLogAck& operator=(const SendLogAck& from) {
     CopyFrom(from);
     return *this;
   }
-  inline WriteLogRsp& operator=(WriteLogRsp&& from) noexcept {
+  inline SendLogAck& operator=(SendLogAck&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -821,20 +623,20 @@ class WriteLogRsp final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const WriteLogRsp& default_instance() {
+  static const SendLogAck& default_instance() {
     return *internal_default_instance();
   }
-  static inline const WriteLogRsp* internal_default_instance() {
-    return reinterpret_cast<const WriteLogRsp*>(
-               &_WriteLogRsp_default_instance_);
+  static inline const SendLogAck* internal_default_instance() {
+    return reinterpret_cast<const SendLogAck*>(
+               &_SendLogAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    2;
 
-  friend void swap(WriteLogRsp& a, WriteLogRsp& b) {
+  friend void swap(SendLogAck& a, SendLogAck& b) {
     a.Swap(&b);
   }
-  inline void Swap(WriteLogRsp* other) {
+  inline void Swap(SendLogAck* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -847,7 +649,7 @@ class WriteLogRsp final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(WriteLogRsp* other) {
+  void UnsafeArenaSwap(SendLogAck* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -855,13 +657,13 @@ class WriteLogRsp final :
 
   // implements Message ----------------------------------------------
 
-  WriteLogRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<WriteLogRsp>(arena);
+  SendLogAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SendLogAck>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const WriteLogRsp& from);
+  void CopyFrom(const SendLogAck& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const WriteLogRsp& from);
+  void MergeFrom(const SendLogAck& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -878,15 +680,15 @@ class WriteLogRsp final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(WriteLogRsp* other);
+  void InternalSwap(SendLogAck* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.WriteLogRsp";
+    return "msg_log.SendLogAck";
   }
   protected:
-  explicit WriteLogRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SendLogAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -924,7 +726,7 @@ class WriteLogRsp final :
   void _internal_set_result(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:msg_log.WriteLogRsp)
+  // @@protoc_insertion_point(class_scope:msg_log.SendLogAck)
  private:
   class _Internal;
 
@@ -938,24 +740,24 @@ class WriteLogRsp final :
 };
 // -------------------------------------------------------------------
 
-class WriteLogBatchReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.WriteLogBatchReq) */ {
+class SendLogBatchReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.SendLogBatchReq) */ {
  public:
-  inline WriteLogBatchReq() : WriteLogBatchReq(nullptr) {}
-  ~WriteLogBatchReq() override;
-  explicit constexpr WriteLogBatchReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SendLogBatchReq() : SendLogBatchReq(nullptr) {}
+  ~SendLogBatchReq() override;
+  explicit constexpr SendLogBatchReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  WriteLogBatchReq(const WriteLogBatchReq& from);
-  WriteLogBatchReq(WriteLogBatchReq&& from) noexcept
-    : WriteLogBatchReq() {
+  SendLogBatchReq(const SendLogBatchReq& from);
+  SendLogBatchReq(SendLogBatchReq&& from) noexcept
+    : SendLogBatchReq() {
     *this = ::std::move(from);
   }
 
-  inline WriteLogBatchReq& operator=(const WriteLogBatchReq& from) {
+  inline SendLogBatchReq& operator=(const SendLogBatchReq& from) {
     CopyFrom(from);
     return *this;
   }
-  inline WriteLogBatchReq& operator=(WriteLogBatchReq&& from) noexcept {
+  inline SendLogBatchReq& operator=(SendLogBatchReq&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -978,20 +780,20 @@ class WriteLogBatchReq final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const WriteLogBatchReq& default_instance() {
+  static const SendLogBatchReq& default_instance() {
     return *internal_default_instance();
   }
-  static inline const WriteLogBatchReq* internal_default_instance() {
-    return reinterpret_cast<const WriteLogBatchReq*>(
-               &_WriteLogBatchReq_default_instance_);
+  static inline const SendLogBatchReq* internal_default_instance() {
+    return reinterpret_cast<const SendLogBatchReq*>(
+               &_SendLogBatchReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    3;
 
-  friend void swap(WriteLogBatchReq& a, WriteLogBatchReq& b) {
+  friend void swap(SendLogBatchReq& a, SendLogBatchReq& b) {
     a.Swap(&b);
   }
-  inline void Swap(WriteLogBatchReq* other) {
+  inline void Swap(SendLogBatchReq* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1004,7 +806,7 @@ class WriteLogBatchReq final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(WriteLogBatchReq* other) {
+  void UnsafeArenaSwap(SendLogBatchReq* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1012,13 +814,13 @@ class WriteLogBatchReq final :
 
   // implements Message ----------------------------------------------
 
-  WriteLogBatchReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<WriteLogBatchReq>(arena);
+  SendLogBatchReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SendLogBatchReq>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const WriteLogBatchReq& from);
+  void CopyFrom(const SendLogBatchReq& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const WriteLogBatchReq& from);
+  void MergeFrom(const SendLogBatchReq& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -1035,15 +837,15 @@ class WriteLogBatchReq final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(WriteLogBatchReq* other);
+  void InternalSwap(SendLogBatchReq* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.WriteLogBatchReq";
+    return "msg_log.SendLogBatchReq";
   }
   protected:
-  explicit WriteLogBatchReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SendLogBatchReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -1062,55 +864,55 @@ class WriteLogBatchReq final :
   enum : int {
     kRecordsFieldNumber = 1,
   };
-  // repeated .msg_log.LogRecordInfo records = 1;
+  // repeated .msg_log.LogRecord records = 1;
   int records_size() const;
   private:
   int _internal_records_size() const;
   public:
   void clear_records();
-  ::msg_log::LogRecordInfo* mutable_records(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >*
+  ::msg_log::LogRecord* mutable_records(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >*
       mutable_records();
   private:
-  const ::msg_log::LogRecordInfo& _internal_records(int index) const;
-  ::msg_log::LogRecordInfo* _internal_add_records();
+  const ::msg_log::LogRecord& _internal_records(int index) const;
+  ::msg_log::LogRecord* _internal_add_records();
   public:
-  const ::msg_log::LogRecordInfo& records(int index) const;
-  ::msg_log::LogRecordInfo* add_records();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >&
+  const ::msg_log::LogRecord& records(int index) const;
+  ::msg_log::LogRecord* add_records();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >&
       records() const;
 
-  // @@protoc_insertion_point(class_scope:msg_log.WriteLogBatchReq)
+  // @@protoc_insertion_point(class_scope:msg_log.SendLogBatchReq)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo > records_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord > records_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
 // -------------------------------------------------------------------
 
-class WriteLogBatchRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.WriteLogBatchRsp) */ {
+class SendLogBatchAck final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.SendLogBatchAck) */ {
  public:
-  inline WriteLogBatchRsp() : WriteLogBatchRsp(nullptr) {}
-  ~WriteLogBatchRsp() override;
-  explicit constexpr WriteLogBatchRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline SendLogBatchAck() : SendLogBatchAck(nullptr) {}
+  ~SendLogBatchAck() override;
+  explicit constexpr SendLogBatchAck(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  WriteLogBatchRsp(const WriteLogBatchRsp& from);
-  WriteLogBatchRsp(WriteLogBatchRsp&& from) noexcept
-    : WriteLogBatchRsp() {
+  SendLogBatchAck(const SendLogBatchAck& from);
+  SendLogBatchAck(SendLogBatchAck&& from) noexcept
+    : SendLogBatchAck() {
     *this = ::std::move(from);
   }
 
-  inline WriteLogBatchRsp& operator=(const WriteLogBatchRsp& from) {
+  inline SendLogBatchAck& operator=(const SendLogBatchAck& from) {
     CopyFrom(from);
     return *this;
   }
-  inline WriteLogBatchRsp& operator=(WriteLogBatchRsp&& from) noexcept {
+  inline SendLogBatchAck& operator=(SendLogBatchAck&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1133,20 +935,20 @@ class WriteLogBatchRsp final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const WriteLogBatchRsp& default_instance() {
+  static const SendLogBatchAck& default_instance() {
     return *internal_default_instance();
   }
-  static inline const WriteLogBatchRsp* internal_default_instance() {
-    return reinterpret_cast<const WriteLogBatchRsp*>(
-               &_WriteLogBatchRsp_default_instance_);
+  static inline const SendLogBatchAck* internal_default_instance() {
+    return reinterpret_cast<const SendLogBatchAck*>(
+               &_SendLogBatchAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    4;
 
-  friend void swap(WriteLogBatchRsp& a, WriteLogBatchRsp& b) {
+  friend void swap(SendLogBatchAck& a, SendLogBatchAck& b) {
     a.Swap(&b);
   }
-  inline void Swap(WriteLogBatchRsp* other) {
+  inline void Swap(SendLogBatchAck* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1159,7 +961,7 @@ class WriteLogBatchRsp final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(WriteLogBatchRsp* other) {
+  void UnsafeArenaSwap(SendLogBatchAck* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1167,13 +969,13 @@ class WriteLogBatchRsp final :
 
   // implements Message ----------------------------------------------
 
-  WriteLogBatchRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<WriteLogBatchRsp>(arena);
+  SendLogBatchAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SendLogBatchAck>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const WriteLogBatchRsp& from);
+  void CopyFrom(const SendLogBatchAck& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const WriteLogBatchRsp& from);
+  void MergeFrom(const SendLogBatchAck& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -1190,15 +992,15 @@ class WriteLogBatchRsp final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(WriteLogBatchRsp* other);
+  void InternalSwap(SendLogBatchAck* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.WriteLogBatchRsp";
+    return "msg_log.SendLogBatchAck";
   }
   protected:
-  explicit WriteLogBatchRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit SendLogBatchAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -1217,6 +1019,7 @@ class WriteLogBatchRsp final :
   enum : int {
     kResultFieldNumber = 1,
     kSuccessCountFieldNumber = 2,
+    kFailedCountFieldNumber = 3,
   };
   // int32 result = 1;
   void clear_result();
@@ -1236,7 +1039,16 @@ class WriteLogBatchRsp final :
   void _internal_set_success_count(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:msg_log.WriteLogBatchRsp)
+  // int32 failed_count = 3;
+  void clear_failed_count();
+  int32_t failed_count() const;
+  void set_failed_count(int32_t value);
+  private:
+  int32_t _internal_failed_count() const;
+  void _internal_set_failed_count(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:msg_log.SendLogBatchAck)
  private:
   class _Internal;
 
@@ -1245,6 +1057,7 @@ class WriteLogBatchRsp final :
   typedef void DestructorSkippable_;
   int32_t result_;
   int32_t success_count_;
+  int32_t failed_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
@@ -1298,7 +1111,7 @@ class QueryLogReq final :
                &_QueryLogReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    5;
 
   friend void swap(QueryLogReq& a, QueryLogReq& b) {
     a.Swap(&b);
@@ -1372,25 +1185,76 @@ class QueryLogReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kConditionFieldNumber = 1,
+    kTypeFieldNumber = 1,
+    kServerIdFieldNumber = 2,
+    kRoleIdFieldNumber = 3,
+    kStartTimeFieldNumber = 4,
+    kEndTimeFieldNumber = 5,
+    kLimitFieldNumber = 6,
+    kOffsetFieldNumber = 7,
   };
-  // .msg_log.LogQueryConditionInfo condition = 1;
-  bool has_condition() const;
+  // .msg_log.LogType type = 1;
+  void clear_type();
+  ::msg_log::LogType type() const;
+  void set_type(::msg_log::LogType value);
   private:
-  bool _internal_has_condition() const;
+  ::msg_log::LogType _internal_type() const;
+  void _internal_set_type(::msg_log::LogType value);
   public:
-  void clear_condition();
-  const ::msg_log::LogQueryConditionInfo& condition() const;
-  PROTOBUF_NODISCARD ::msg_log::LogQueryConditionInfo* release_condition();
-  ::msg_log::LogQueryConditionInfo* mutable_condition();
-  void set_allocated_condition(::msg_log::LogQueryConditionInfo* condition);
+
+  // int32 server_id = 2;
+  void clear_server_id();
+  int32_t server_id() const;
+  void set_server_id(int32_t value);
   private:
-  const ::msg_log::LogQueryConditionInfo& _internal_condition() const;
-  ::msg_log::LogQueryConditionInfo* _internal_mutable_condition();
+  int32_t _internal_server_id() const;
+  void _internal_set_server_id(int32_t value);
   public:
-  void unsafe_arena_set_allocated_condition(
-      ::msg_log::LogQueryConditionInfo* condition);
-  ::msg_log::LogQueryConditionInfo* unsafe_arena_release_condition();
+
+  // uint64 role_id = 3;
+  void clear_role_id();
+  uint64_t role_id() const;
+  void set_role_id(uint64_t value);
+  private:
+  uint64_t _internal_role_id() const;
+  void _internal_set_role_id(uint64_t value);
+  public:
+
+  // int64 start_time = 4;
+  void clear_start_time();
+  int64_t start_time() const;
+  void set_start_time(int64_t value);
+  private:
+  int64_t _internal_start_time() const;
+  void _internal_set_start_time(int64_t value);
+  public:
+
+  // int64 end_time = 5;
+  void clear_end_time();
+  int64_t end_time() const;
+  void set_end_time(int64_t value);
+  private:
+  int64_t _internal_end_time() const;
+  void _internal_set_end_time(int64_t value);
+  public:
+
+  // int32 limit = 6;
+  void clear_limit();
+  int32_t limit() const;
+  void set_limit(int32_t value);
+  private:
+  int32_t _internal_limit() const;
+  void _internal_set_limit(int32_t value);
+  public:
+
+  // int32 offset = 7;
+  void clear_offset();
+  int32_t offset() const;
+  void set_offset(int32_t value);
+  private:
+  int32_t _internal_offset() const;
+  void _internal_set_offset(int32_t value);
+  public:
 
   // @@protoc_insertion_point(class_scope:msg_log.QueryLogReq)
  private:
@@ -1399,30 +1263,36 @@ class QueryLogReq final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::msg_log::LogQueryConditionInfo* condition_;
+  int type_;
+  int32_t server_id_;
+  uint64_t role_id_;
+  int64_t start_time_;
+  int64_t end_time_;
+  int32_t limit_;
+  int32_t offset_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
 // -------------------------------------------------------------------
 
-class QueryLogRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.QueryLogRsp) */ {
+class QueryLogAck final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.QueryLogAck) */ {
  public:
-  inline QueryLogRsp() : QueryLogRsp(nullptr) {}
-  ~QueryLogRsp() override;
-  explicit constexpr QueryLogRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline QueryLogAck() : QueryLogAck(nullptr) {}
+  ~QueryLogAck() override;
+  explicit constexpr QueryLogAck(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  QueryLogRsp(const QueryLogRsp& from);
-  QueryLogRsp(QueryLogRsp&& from) noexcept
-    : QueryLogRsp() {
+  QueryLogAck(const QueryLogAck& from);
+  QueryLogAck(QueryLogAck&& from) noexcept
+    : QueryLogAck() {
     *this = ::std::move(from);
   }
 
-  inline QueryLogRsp& operator=(const QueryLogRsp& from) {
+  inline QueryLogAck& operator=(const QueryLogAck& from) {
     CopyFrom(from);
     return *this;
   }
-  inline QueryLogRsp& operator=(QueryLogRsp&& from) noexcept {
+  inline QueryLogAck& operator=(QueryLogAck&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1445,20 +1315,20 @@ class QueryLogRsp final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const QueryLogRsp& default_instance() {
+  static const QueryLogAck& default_instance() {
     return *internal_default_instance();
   }
-  static inline const QueryLogRsp* internal_default_instance() {
-    return reinterpret_cast<const QueryLogRsp*>(
-               &_QueryLogRsp_default_instance_);
+  static inline const QueryLogAck* internal_default_instance() {
+    return reinterpret_cast<const QueryLogAck*>(
+               &_QueryLogAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    6;
 
-  friend void swap(QueryLogRsp& a, QueryLogRsp& b) {
+  friend void swap(QueryLogAck& a, QueryLogAck& b) {
     a.Swap(&b);
   }
-  inline void Swap(QueryLogRsp* other) {
+  inline void Swap(QueryLogAck* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1471,7 +1341,7 @@ class QueryLogRsp final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(QueryLogRsp* other) {
+  void UnsafeArenaSwap(QueryLogAck* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1479,13 +1349,13 @@ class QueryLogRsp final :
 
   // implements Message ----------------------------------------------
 
-  QueryLogRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<QueryLogRsp>(arena);
+  QueryLogAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<QueryLogAck>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const QueryLogRsp& from);
+  void CopyFrom(const QueryLogAck& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const QueryLogRsp& from);
+  void MergeFrom(const QueryLogAck& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -1502,15 +1372,15 @@ class QueryLogRsp final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(QueryLogRsp* other);
+  void InternalSwap(QueryLogAck* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.QueryLogRsp";
+    return "msg_log.QueryLogAck";
   }
   protected:
-  explicit QueryLogRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit QueryLogAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -1527,27 +1397,26 @@ class QueryLogRsp final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kLogsFieldNumber = 2,
+    kRecordsFieldNumber = 2,
     kResultFieldNumber = 1,
-    kTotalCountFieldNumber = 3,
   };
-  // repeated .msg_log.LogRecordInfo logs = 2;
-  int logs_size() const;
+  // repeated .msg_log.LogRecord records = 2;
+  int records_size() const;
   private:
-  int _internal_logs_size() const;
+  int _internal_records_size() const;
   public:
-  void clear_logs();
-  ::msg_log::LogRecordInfo* mutable_logs(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >*
-      mutable_logs();
+  void clear_records();
+  ::msg_log::LogRecord* mutable_records(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >*
+      mutable_records();
   private:
-  const ::msg_log::LogRecordInfo& _internal_logs(int index) const;
-  ::msg_log::LogRecordInfo* _internal_add_logs();
+  const ::msg_log::LogRecord& _internal_records(int index) const;
+  ::msg_log::LogRecord* _internal_add_records();
   public:
-  const ::msg_log::LogRecordInfo& logs(int index) const;
-  ::msg_log::LogRecordInfo* add_logs();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >&
-      logs() const;
+  const ::msg_log::LogRecord& records(int index) const;
+  ::msg_log::LogRecord* add_records();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >&
+      records() const;
 
   // int32 result = 1;
   void clear_result();
@@ -1558,25 +1427,15 @@ class QueryLogRsp final :
   void _internal_set_result(int32_t value);
   public:
 
-  // int32 total_count = 3;
-  void clear_total_count();
-  int32_t total_count() const;
-  void set_total_count(int32_t value);
-  private:
-  int32_t _internal_total_count() const;
-  void _internal_set_total_count(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.QueryLogRsp)
+  // @@protoc_insertion_point(class_scope:msg_log.QueryLogAck)
  private:
   class _Internal;
 
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo > logs_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord > records_;
   int32_t result_;
-  int32_t total_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
@@ -1630,7 +1489,7 @@ class CountLogReq final :
                &_CountLogReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    7;
 
   friend void swap(CountLogReq& a, CountLogReq& b) {
     a.Swap(&b);
@@ -1704,11 +1563,40 @@ class CountLogReq final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kStartTimeFieldNumber = 2,
-    kEndTimeFieldNumber = 3,
-    kLogTypeFieldNumber = 1,
+    kTypeFieldNumber = 1,
+    kServerIdFieldNumber = 2,
+    kRoleIdFieldNumber = 3,
+    kStartTimeFieldNumber = 4,
+    kEndTimeFieldNumber = 5,
   };
-  // int64 start_time = 2;
+  // .msg_log.LogType type = 1;
+  void clear_type();
+  ::msg_log::LogType type() const;
+  void set_type(::msg_log::LogType value);
+  private:
+  ::msg_log::LogType _internal_type() const;
+  void _internal_set_type(::msg_log::LogType value);
+  public:
+
+  // int32 server_id = 2;
+  void clear_server_id();
+  int32_t server_id() const;
+  void set_server_id(int32_t value);
+  private:
+  int32_t _internal_server_id() const;
+  void _internal_set_server_id(int32_t value);
+  public:
+
+  // uint64 role_id = 3;
+  void clear_role_id();
+  uint64_t role_id() const;
+  void set_role_id(uint64_t value);
+  private:
+  uint64_t _internal_role_id() const;
+  void _internal_set_role_id(uint64_t value);
+  public:
+
+  // int64 start_time = 4;
   void clear_start_time();
   int64_t start_time() const;
   void set_start_time(int64_t value);
@@ -1717,22 +1605,13 @@ class CountLogReq final :
   void _internal_set_start_time(int64_t value);
   public:
 
-  // int64 end_time = 3;
+  // int64 end_time = 5;
   void clear_end_time();
   int64_t end_time() const;
   void set_end_time(int64_t value);
   private:
   int64_t _internal_end_time() const;
   void _internal_set_end_time(int64_t value);
-  public:
-
-  // int32 log_type = 1;
-  void clear_log_type();
-  int32_t log_type() const;
-  void set_log_type(int32_t value);
-  private:
-  int32_t _internal_log_type() const;
-  void _internal_set_log_type(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:msg_log.CountLogReq)
@@ -1742,32 +1621,34 @@ class CountLogReq final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  int type_;
+  int32_t server_id_;
+  uint64_t role_id_;
   int64_t start_time_;
   int64_t end_time_;
-  int32_t log_type_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
 };
 // -------------------------------------------------------------------
 
-class CountLogRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.CountLogRsp) */ {
+class CountLogAck final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.CountLogAck) */ {
  public:
-  inline CountLogRsp() : CountLogRsp(nullptr) {}
-  ~CountLogRsp() override;
-  explicit constexpr CountLogRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline CountLogAck() : CountLogAck(nullptr) {}
+  ~CountLogAck() override;
+  explicit constexpr CountLogAck(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  CountLogRsp(const CountLogRsp& from);
-  CountLogRsp(CountLogRsp&& from) noexcept
-    : CountLogRsp() {
+  CountLogAck(const CountLogAck& from);
+  CountLogAck(CountLogAck&& from) noexcept
+    : CountLogAck() {
     *this = ::std::move(from);
   }
 
-  inline CountLogRsp& operator=(const CountLogRsp& from) {
+  inline CountLogAck& operator=(const CountLogAck& from) {
     CopyFrom(from);
     return *this;
   }
-  inline CountLogRsp& operator=(CountLogRsp&& from) noexcept {
+  inline CountLogAck& operator=(CountLogAck&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -1790,20 +1671,20 @@ class CountLogRsp final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const CountLogRsp& default_instance() {
+  static const CountLogAck& default_instance() {
     return *internal_default_instance();
   }
-  static inline const CountLogRsp* internal_default_instance() {
-    return reinterpret_cast<const CountLogRsp*>(
-               &_CountLogRsp_default_instance_);
+  static inline const CountLogAck* internal_default_instance() {
+    return reinterpret_cast<const CountLogAck*>(
+               &_CountLogAck_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    8;
 
-  friend void swap(CountLogRsp& a, CountLogRsp& b) {
+  friend void swap(CountLogAck& a, CountLogAck& b) {
     a.Swap(&b);
   }
-  inline void Swap(CountLogRsp* other) {
+  inline void Swap(CountLogAck* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -1816,7 +1697,7 @@ class CountLogRsp final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(CountLogRsp* other) {
+  void UnsafeArenaSwap(CountLogAck* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -1824,13 +1705,13 @@ class CountLogRsp final :
 
   // implements Message ----------------------------------------------
 
-  CountLogRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<CountLogRsp>(arena);
+  CountLogAck* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<CountLogAck>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const CountLogRsp& from);
+  void CopyFrom(const CountLogAck& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const CountLogRsp& from);
+  void MergeFrom(const CountLogAck& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -1847,15 +1728,15 @@ class CountLogRsp final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(CountLogRsp* other);
+  void InternalSwap(CountLogAck* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.CountLogRsp";
+    return "msg_log.CountLogAck";
   }
   protected:
-  explicit CountLogRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit CountLogAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -1893,7 +1774,7 @@ class CountLogRsp final :
   void _internal_set_result(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:msg_log.CountLogRsp)
+  // @@protoc_insertion_point(class_scope:msg_log.CountLogAck)
  private:
   class _Internal;
 
@@ -1901,2073 +1782,6 @@ class CountLogRsp final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   int64_t count_;
-  int32_t result_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ClearOldLogReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.ClearOldLogReq) */ {
- public:
-  inline ClearOldLogReq() : ClearOldLogReq(nullptr) {}
-  ~ClearOldLogReq() override;
-  explicit constexpr ClearOldLogReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  ClearOldLogReq(const ClearOldLogReq& from);
-  ClearOldLogReq(ClearOldLogReq&& from) noexcept
-    : ClearOldLogReq() {
-    *this = ::std::move(from);
-  }
-
-  inline ClearOldLogReq& operator=(const ClearOldLogReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ClearOldLogReq& operator=(ClearOldLogReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ClearOldLogReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const ClearOldLogReq* internal_default_instance() {
-    return reinterpret_cast<const ClearOldLogReq*>(
-               &_ClearOldLogReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    10;
-
-  friend void swap(ClearOldLogReq& a, ClearOldLogReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ClearOldLogReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ClearOldLogReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ClearOldLogReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ClearOldLogReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ClearOldLogReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ClearOldLogReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ClearOldLogReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.ClearOldLogReq";
-  }
-  protected:
-  explicit ClearOldLogReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kDaysFieldNumber = 1,
-  };
-  // int32 days = 1;
-  void clear_days();
-  int32_t days() const;
-  void set_days(int32_t value);
-  private:
-  int32_t _internal_days() const;
-  void _internal_set_days(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.ClearOldLogReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t days_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class ClearOldLogRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.ClearOldLogRsp) */ {
- public:
-  inline ClearOldLogRsp() : ClearOldLogRsp(nullptr) {}
-  ~ClearOldLogRsp() override;
-  explicit constexpr ClearOldLogRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  ClearOldLogRsp(const ClearOldLogRsp& from);
-  ClearOldLogRsp(ClearOldLogRsp&& from) noexcept
-    : ClearOldLogRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline ClearOldLogRsp& operator=(const ClearOldLogRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline ClearOldLogRsp& operator=(ClearOldLogRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const ClearOldLogRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const ClearOldLogRsp* internal_default_instance() {
-    return reinterpret_cast<const ClearOldLogRsp*>(
-               &_ClearOldLogRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    11;
-
-  friend void swap(ClearOldLogRsp& a, ClearOldLogRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(ClearOldLogRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(ClearOldLogRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  ClearOldLogRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ClearOldLogRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ClearOldLogRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ClearOldLogRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ClearOldLogRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.ClearOldLogRsp";
-  }
-  protected:
-  explicit ClearOldLogRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-    kClearedCountFieldNumber = 2,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // int32 cleared_count = 2;
-  void clear_cleared_count();
-  int32_t cleared_count() const;
-  void set_cleared_count(int32_t value);
-  private:
-  int32_t _internal_cleared_count() const;
-  void _internal_set_cleared_count(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.ClearOldLogRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t result_;
-  int32_t cleared_count_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogLoginReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogLoginReq) */ {
- public:
-  inline LogLoginReq() : LogLoginReq(nullptr) {}
-  ~LogLoginReq() override;
-  explicit constexpr LogLoginReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogLoginReq(const LogLoginReq& from);
-  LogLoginReq(LogLoginReq&& from) noexcept
-    : LogLoginReq() {
-    *this = ::std::move(from);
-  }
-
-  inline LogLoginReq& operator=(const LogLoginReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogLoginReq& operator=(LogLoginReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogLoginReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogLoginReq* internal_default_instance() {
-    return reinterpret_cast<const LogLoginReq*>(
-               &_LogLoginReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    12;
-
-  friend void swap(LogLoginReq& a, LogLoginReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogLoginReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogLoginReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogLoginReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogLoginReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogLoginReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogLoginReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogLoginReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogLoginReq";
-  }
-  protected:
-  explicit LogLoginReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRoleNameFieldNumber = 2,
-    kIpFieldNumber = 4,
-    kRoleIdFieldNumber = 1,
-    kServerIdFieldNumber = 3,
-    kIsLoginFieldNumber = 5,
-  };
-  // string role_name = 2;
-  void clear_role_name();
-  const std::string& role_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_role_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_role_name();
-  PROTOBUF_NODISCARD std::string* release_role_name();
-  void set_allocated_role_name(std::string* role_name);
-  private:
-  const std::string& _internal_role_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_role_name(const std::string& value);
-  std::string* _internal_mutable_role_name();
-  public:
-
-  // string ip = 4;
-  void clear_ip();
-  const std::string& ip() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_ip(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_ip();
-  PROTOBUF_NODISCARD std::string* release_ip();
-  void set_allocated_ip(std::string* ip);
-  private:
-  const std::string& _internal_ip() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_ip(const std::string& value);
-  std::string* _internal_mutable_ip();
-  public:
-
-  // uint64 role_id = 1;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int32 server_id = 3;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // bool is_login = 5;
-  void clear_is_login();
-  bool is_login() const;
-  void set_is_login(bool value);
-  private:
-  bool _internal_is_login() const;
-  void _internal_set_is_login(bool value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogLoginReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ip_;
-  uint64_t role_id_;
-  int32_t server_id_;
-  bool is_login_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogLoginRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogLoginRsp) */ {
- public:
-  inline LogLoginRsp() : LogLoginRsp(nullptr) {}
-  ~LogLoginRsp() override;
-  explicit constexpr LogLoginRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogLoginRsp(const LogLoginRsp& from);
-  LogLoginRsp(LogLoginRsp&& from) noexcept
-    : LogLoginRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline LogLoginRsp& operator=(const LogLoginRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogLoginRsp& operator=(LogLoginRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogLoginRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogLoginRsp* internal_default_instance() {
-    return reinterpret_cast<const LogLoginRsp*>(
-               &_LogLoginRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    13;
-
-  friend void swap(LogLoginRsp& a, LogLoginRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogLoginRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogLoginRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogLoginRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogLoginRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogLoginRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogLoginRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogLoginRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogLoginRsp";
-  }
-  protected:
-  explicit LogLoginRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogLoginRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t result_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogRechargeReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogRechargeReq) */ {
- public:
-  inline LogRechargeReq() : LogRechargeReq(nullptr) {}
-  ~LogRechargeReq() override;
-  explicit constexpr LogRechargeReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogRechargeReq(const LogRechargeReq& from);
-  LogRechargeReq(LogRechargeReq&& from) noexcept
-    : LogRechargeReq() {
-    *this = ::std::move(from);
-  }
-
-  inline LogRechargeReq& operator=(const LogRechargeReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogRechargeReq& operator=(LogRechargeReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogRechargeReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogRechargeReq* internal_default_instance() {
-    return reinterpret_cast<const LogRechargeReq*>(
-               &_LogRechargeReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    14;
-
-  friend void swap(LogRechargeReq& a, LogRechargeReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogRechargeReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogRechargeReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogRechargeReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogRechargeReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogRechargeReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogRechargeReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogRechargeReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogRechargeReq";
-  }
-  protected:
-  explicit LogRechargeReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRoleNameFieldNumber = 2,
-    kRoleIdFieldNumber = 1,
-    kServerIdFieldNumber = 3,
-    kAmountFieldNumber = 4,
-    kProductIdFieldNumber = 5,
-  };
-  // string role_name = 2;
-  void clear_role_name();
-  const std::string& role_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_role_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_role_name();
-  PROTOBUF_NODISCARD std::string* release_role_name();
-  void set_allocated_role_name(std::string* role_name);
-  private:
-  const std::string& _internal_role_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_role_name(const std::string& value);
-  std::string* _internal_mutable_role_name();
-  public:
-
-  // uint64 role_id = 1;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int32 server_id = 3;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // int32 amount = 4;
-  void clear_amount();
-  int32_t amount() const;
-  void set_amount(int32_t value);
-  private:
-  int32_t _internal_amount() const;
-  void _internal_set_amount(int32_t value);
-  public:
-
-  // int32 product_id = 5;
-  void clear_product_id();
-  int32_t product_id() const;
-  void set_product_id(int32_t value);
-  private:
-  int32_t _internal_product_id() const;
-  void _internal_set_product_id(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogRechargeReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  uint64_t role_id_;
-  int32_t server_id_;
-  int32_t amount_;
-  int32_t product_id_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogRechargeRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogRechargeRsp) */ {
- public:
-  inline LogRechargeRsp() : LogRechargeRsp(nullptr) {}
-  ~LogRechargeRsp() override;
-  explicit constexpr LogRechargeRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogRechargeRsp(const LogRechargeRsp& from);
-  LogRechargeRsp(LogRechargeRsp&& from) noexcept
-    : LogRechargeRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline LogRechargeRsp& operator=(const LogRechargeRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogRechargeRsp& operator=(LogRechargeRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogRechargeRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogRechargeRsp* internal_default_instance() {
-    return reinterpret_cast<const LogRechargeRsp*>(
-               &_LogRechargeRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    15;
-
-  friend void swap(LogRechargeRsp& a, LogRechargeRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogRechargeRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogRechargeRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogRechargeRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogRechargeRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogRechargeRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogRechargeRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogRechargeRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogRechargeRsp";
-  }
-  protected:
-  explicit LogRechargeRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogRechargeRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t result_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogConsumeReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogConsumeReq) */ {
- public:
-  inline LogConsumeReq() : LogConsumeReq(nullptr) {}
-  ~LogConsumeReq() override;
-  explicit constexpr LogConsumeReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogConsumeReq(const LogConsumeReq& from);
-  LogConsumeReq(LogConsumeReq&& from) noexcept
-    : LogConsumeReq() {
-    *this = ::std::move(from);
-  }
-
-  inline LogConsumeReq& operator=(const LogConsumeReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogConsumeReq& operator=(LogConsumeReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogConsumeReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogConsumeReq* internal_default_instance() {
-    return reinterpret_cast<const LogConsumeReq*>(
-               &_LogConsumeReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    16;
-
-  friend void swap(LogConsumeReq& a, LogConsumeReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogConsumeReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogConsumeReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogConsumeReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogConsumeReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogConsumeReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogConsumeReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogConsumeReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogConsumeReq";
-  }
-  protected:
-  explicit LogConsumeReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRoleNameFieldNumber = 2,
-    kReasonFieldNumber = 6,
-    kRoleIdFieldNumber = 1,
-    kServerIdFieldNumber = 3,
-    kTypeFieldNumber = 4,
-    kAmountFieldNumber = 5,
-  };
-  // string role_name = 2;
-  void clear_role_name();
-  const std::string& role_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_role_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_role_name();
-  PROTOBUF_NODISCARD std::string* release_role_name();
-  void set_allocated_role_name(std::string* role_name);
-  private:
-  const std::string& _internal_role_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_role_name(const std::string& value);
-  std::string* _internal_mutable_role_name();
-  public:
-
-  // string reason = 6;
-  void clear_reason();
-  const std::string& reason() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_reason(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_reason();
-  PROTOBUF_NODISCARD std::string* release_reason();
-  void set_allocated_reason(std::string* reason);
-  private:
-  const std::string& _internal_reason() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_reason(const std::string& value);
-  std::string* _internal_mutable_reason();
-  public:
-
-  // uint64 role_id = 1;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int32 server_id = 3;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // int32 type = 4;
-  void clear_type();
-  int32_t type() const;
-  void set_type(int32_t value);
-  private:
-  int32_t _internal_type() const;
-  void _internal_set_type(int32_t value);
-  public:
-
-  // int32 amount = 5;
-  void clear_amount();
-  int32_t amount() const;
-  void set_amount(int32_t value);
-  private:
-  int32_t _internal_amount() const;
-  void _internal_set_amount(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogConsumeReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
-  uint64_t role_id_;
-  int32_t server_id_;
-  int32_t type_;
-  int32_t amount_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogConsumeRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogConsumeRsp) */ {
- public:
-  inline LogConsumeRsp() : LogConsumeRsp(nullptr) {}
-  ~LogConsumeRsp() override;
-  explicit constexpr LogConsumeRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogConsumeRsp(const LogConsumeRsp& from);
-  LogConsumeRsp(LogConsumeRsp&& from) noexcept
-    : LogConsumeRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline LogConsumeRsp& operator=(const LogConsumeRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogConsumeRsp& operator=(LogConsumeRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogConsumeRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogConsumeRsp* internal_default_instance() {
-    return reinterpret_cast<const LogConsumeRsp*>(
-               &_LogConsumeRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    17;
-
-  friend void swap(LogConsumeRsp& a, LogConsumeRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogConsumeRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogConsumeRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogConsumeRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogConsumeRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogConsumeRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogConsumeRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogConsumeRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogConsumeRsp";
-  }
-  protected:
-  explicit LogConsumeRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogConsumeRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t result_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogItemReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogItemReq) */ {
- public:
-  inline LogItemReq() : LogItemReq(nullptr) {}
-  ~LogItemReq() override;
-  explicit constexpr LogItemReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogItemReq(const LogItemReq& from);
-  LogItemReq(LogItemReq&& from) noexcept
-    : LogItemReq() {
-    *this = ::std::move(from);
-  }
-
-  inline LogItemReq& operator=(const LogItemReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogItemReq& operator=(LogItemReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogItemReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogItemReq* internal_default_instance() {
-    return reinterpret_cast<const LogItemReq*>(
-               &_LogItemReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    18;
-
-  friend void swap(LogItemReq& a, LogItemReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogItemReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogItemReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogItemReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogItemReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogItemReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogItemReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogItemReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogItemReq";
-  }
-  protected:
-  explicit LogItemReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRoleNameFieldNumber = 2,
-    kReasonFieldNumber = 7,
-    kRoleIdFieldNumber = 1,
-    kServerIdFieldNumber = 3,
-    kItemIdFieldNumber = 4,
-    kCountFieldNumber = 5,
-    kTypeFieldNumber = 6,
-  };
-  // string role_name = 2;
-  void clear_role_name();
-  const std::string& role_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_role_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_role_name();
-  PROTOBUF_NODISCARD std::string* release_role_name();
-  void set_allocated_role_name(std::string* role_name);
-  private:
-  const std::string& _internal_role_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_role_name(const std::string& value);
-  std::string* _internal_mutable_role_name();
-  public:
-
-  // string reason = 7;
-  void clear_reason();
-  const std::string& reason() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_reason(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_reason();
-  PROTOBUF_NODISCARD std::string* release_reason();
-  void set_allocated_reason(std::string* reason);
-  private:
-  const std::string& _internal_reason() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_reason(const std::string& value);
-  std::string* _internal_mutable_reason();
-  public:
-
-  // uint64 role_id = 1;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int32 server_id = 3;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // int32 item_id = 4;
-  void clear_item_id();
-  int32_t item_id() const;
-  void set_item_id(int32_t value);
-  private:
-  int32_t _internal_item_id() const;
-  void _internal_set_item_id(int32_t value);
-  public:
-
-  // int32 count = 5;
-  void clear_count();
-  int32_t count() const;
-  void set_count(int32_t value);
-  private:
-  int32_t _internal_count() const;
-  void _internal_set_count(int32_t value);
-  public:
-
-  // int32 type = 6;
-  void clear_type();
-  int32_t type() const;
-  void set_type(int32_t value);
-  private:
-  int32_t _internal_type() const;
-  void _internal_set_type(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogItemReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr reason_;
-  uint64_t role_id_;
-  int32_t server_id_;
-  int32_t item_id_;
-  int32_t count_;
-  int32_t type_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogItemRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogItemRsp) */ {
- public:
-  inline LogItemRsp() : LogItemRsp(nullptr) {}
-  ~LogItemRsp() override;
-  explicit constexpr LogItemRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogItemRsp(const LogItemRsp& from);
-  LogItemRsp(LogItemRsp&& from) noexcept
-    : LogItemRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline LogItemRsp& operator=(const LogItemRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogItemRsp& operator=(LogItemRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogItemRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogItemRsp* internal_default_instance() {
-    return reinterpret_cast<const LogItemRsp*>(
-               &_LogItemRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    19;
-
-  friend void swap(LogItemRsp& a, LogItemRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogItemRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogItemRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogItemRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogItemRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogItemRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogItemRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogItemRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogItemRsp";
-  }
-  protected:
-  explicit LogItemRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogItemRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  int32_t result_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogBattleReq final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogBattleReq) */ {
- public:
-  inline LogBattleReq() : LogBattleReq(nullptr) {}
-  ~LogBattleReq() override;
-  explicit constexpr LogBattleReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogBattleReq(const LogBattleReq& from);
-  LogBattleReq(LogBattleReq&& from) noexcept
-    : LogBattleReq() {
-    *this = ::std::move(from);
-  }
-
-  inline LogBattleReq& operator=(const LogBattleReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogBattleReq& operator=(LogBattleReq&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogBattleReq& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogBattleReq* internal_default_instance() {
-    return reinterpret_cast<const LogBattleReq*>(
-               &_LogBattleReq_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    20;
-
-  friend void swap(LogBattleReq& a, LogBattleReq& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogBattleReq* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogBattleReq* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogBattleReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogBattleReq>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogBattleReq& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogBattleReq& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogBattleReq* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogBattleReq";
-  }
-  protected:
-  explicit LogBattleReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kRoleNameFieldNumber = 2,
-    kRoleIdFieldNumber = 1,
-    kServerIdFieldNumber = 3,
-    kBattleTypeFieldNumber = 4,
-    kResultFieldNumber = 5,
-    kDurationFieldNumber = 6,
-  };
-  // string role_name = 2;
-  void clear_role_name();
-  const std::string& role_name() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_role_name(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_role_name();
-  PROTOBUF_NODISCARD std::string* release_role_name();
-  void set_allocated_role_name(std::string* role_name);
-  private:
-  const std::string& _internal_role_name() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_role_name(const std::string& value);
-  std::string* _internal_mutable_role_name();
-  public:
-
-  // uint64 role_id = 1;
-  void clear_role_id();
-  uint64_t role_id() const;
-  void set_role_id(uint64_t value);
-  private:
-  uint64_t _internal_role_id() const;
-  void _internal_set_role_id(uint64_t value);
-  public:
-
-  // int32 server_id = 3;
-  void clear_server_id();
-  int32_t server_id() const;
-  void set_server_id(int32_t value);
-  private:
-  int32_t _internal_server_id() const;
-  void _internal_set_server_id(int32_t value);
-  public:
-
-  // int32 battle_type = 4;
-  void clear_battle_type();
-  int32_t battle_type() const;
-  void set_battle_type(int32_t value);
-  private:
-  int32_t _internal_battle_type() const;
-  void _internal_set_battle_type(int32_t value);
-  public:
-
-  // int32 result = 5;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // int32 duration = 6;
-  void clear_duration();
-  int32_t duration() const;
-  void set_duration(int32_t value);
-  private:
-  int32_t _internal_duration() const;
-  void _internal_set_duration(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogBattleReq)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr role_name_;
-  uint64_t role_id_;
-  int32_t server_id_;
-  int32_t battle_type_;
-  int32_t result_;
-  int32_t duration_;
-  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  friend struct ::TableStruct_msg_5flog_2eproto;
-};
-// -------------------------------------------------------------------
-
-class LogBattleRsp final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:msg_log.LogBattleRsp) */ {
- public:
-  inline LogBattleRsp() : LogBattleRsp(nullptr) {}
-  ~LogBattleRsp() override;
-  explicit constexpr LogBattleRsp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
-
-  LogBattleRsp(const LogBattleRsp& from);
-  LogBattleRsp(LogBattleRsp&& from) noexcept
-    : LogBattleRsp() {
-    *this = ::std::move(from);
-  }
-
-  inline LogBattleRsp& operator=(const LogBattleRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline LogBattleRsp& operator=(LogBattleRsp&& from) noexcept {
-    if (this == &from) return *this;
-    if (GetOwningArena() == from.GetOwningArena()
-  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
-        && GetOwningArena() != nullptr
-  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
-    ) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
-    return GetDescriptor();
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const LogBattleRsp& default_instance() {
-    return *internal_default_instance();
-  }
-  static inline const LogBattleRsp* internal_default_instance() {
-    return reinterpret_cast<const LogBattleRsp*>(
-               &_LogBattleRsp_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    21;
-
-  friend void swap(LogBattleRsp& a, LogBattleRsp& b) {
-    a.Swap(&b);
-  }
-  inline void Swap(LogBattleRsp* other) {
-    if (other == this) return;
-  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() != nullptr &&
-        GetOwningArena() == other->GetOwningArena()) {
-   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
-    if (GetOwningArena() == other->GetOwningArena()) {
-  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
-      InternalSwap(other);
-    } else {
-      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(LogBattleRsp* other) {
-    if (other == this) return;
-    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  LogBattleRsp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<LogBattleRsp>(arena);
-  }
-  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const LogBattleRsp& from);
-  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const LogBattleRsp& from);
-  private:
-  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
-  public:
-  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
-  uint8_t* _InternalSerialize(
-      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(LogBattleRsp* other);
-
-  private:
-  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
-  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "msg_log.LogBattleRsp";
-  }
-  protected:
-  explicit LogBattleRsp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                       bool is_message_owned = false);
-  private:
-  static void ArenaDtor(void* object);
-  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
-  public:
-
-  static const ClassData _class_data_;
-  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
-
-  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // int32 result = 1;
-  void clear_result();
-  int32_t result() const;
-  void set_result(int32_t value);
-  private:
-  int32_t _internal_result() const;
-  void _internal_set_result(int32_t value);
-  public:
-
-  // @@protoc_insertion_point(class_scope:msg_log.LogBattleRsp)
- private:
-  class _Internal;
-
-  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
-  typedef void InternalArenaConstructable_;
-  typedef void DestructorSkippable_;
   int32_t result_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_msg_5flog_2eproto;
@@ -3981,144 +1795,144 @@ class LogBattleRsp final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// LogRecordInfo
+// LogRecord
 
 // int64 log_id = 1;
-inline void LogRecordInfo::clear_log_id() {
+inline void LogRecord::clear_log_id() {
   log_id_ = int64_t{0};
 }
-inline int64_t LogRecordInfo::_internal_log_id() const {
+inline int64_t LogRecord::_internal_log_id() const {
   return log_id_;
 }
-inline int64_t LogRecordInfo::log_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.log_id)
+inline int64_t LogRecord::log_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.log_id)
   return _internal_log_id();
 }
-inline void LogRecordInfo::_internal_set_log_id(int64_t value) {
+inline void LogRecord::_internal_set_log_id(int64_t value) {
   
   log_id_ = value;
 }
-inline void LogRecordInfo::set_log_id(int64_t value) {
+inline void LogRecord::set_log_id(int64_t value) {
   _internal_set_log_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.log_id)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.log_id)
 }
 
-// int32 log_type = 2;
-inline void LogRecordInfo::clear_log_type() {
-  log_type_ = 0;
+// .msg_log.LogType type = 2;
+inline void LogRecord::clear_type() {
+  type_ = 0;
 }
-inline int32_t LogRecordInfo::_internal_log_type() const {
-  return log_type_;
+inline ::msg_log::LogType LogRecord::_internal_type() const {
+  return static_cast< ::msg_log::LogType >(type_);
 }
-inline int32_t LogRecordInfo::log_type() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.log_type)
-  return _internal_log_type();
+inline ::msg_log::LogType LogRecord::type() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.type)
+  return _internal_type();
 }
-inline void LogRecordInfo::_internal_set_log_type(int32_t value) {
+inline void LogRecord::_internal_set_type(::msg_log::LogType value) {
   
-  log_type_ = value;
+  type_ = value;
 }
-inline void LogRecordInfo::set_log_type(int32_t value) {
-  _internal_set_log_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.log_type)
+inline void LogRecord::set_type(::msg_log::LogType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.type)
 }
 
-// int32 log_level = 3;
-inline void LogRecordInfo::clear_log_level() {
-  log_level_ = 0;
+// .msg_log.LogLevel level = 3;
+inline void LogRecord::clear_level() {
+  level_ = 0;
 }
-inline int32_t LogRecordInfo::_internal_log_level() const {
-  return log_level_;
+inline ::msg_log::LogLevel LogRecord::_internal_level() const {
+  return static_cast< ::msg_log::LogLevel >(level_);
 }
-inline int32_t LogRecordInfo::log_level() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.log_level)
-  return _internal_log_level();
+inline ::msg_log::LogLevel LogRecord::level() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.level)
+  return _internal_level();
 }
-inline void LogRecordInfo::_internal_set_log_level(int32_t value) {
+inline void LogRecord::_internal_set_level(::msg_log::LogLevel value) {
   
-  log_level_ = value;
+  level_ = value;
 }
-inline void LogRecordInfo::set_log_level(int32_t value) {
-  _internal_set_log_level(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.log_level)
+inline void LogRecord::set_level(::msg_log::LogLevel value) {
+  _internal_set_level(value);
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.level)
 }
 
 // int32 server_id = 4;
-inline void LogRecordInfo::clear_server_id() {
+inline void LogRecord::clear_server_id() {
   server_id_ = 0;
 }
-inline int32_t LogRecordInfo::_internal_server_id() const {
+inline int32_t LogRecord::_internal_server_id() const {
   return server_id_;
 }
-inline int32_t LogRecordInfo::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.server_id)
+inline int32_t LogRecord::server_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.server_id)
   return _internal_server_id();
 }
-inline void LogRecordInfo::_internal_set_server_id(int32_t value) {
+inline void LogRecord::_internal_set_server_id(int32_t value) {
   
   server_id_ = value;
 }
-inline void LogRecordInfo::set_server_id(int32_t value) {
+inline void LogRecord::set_server_id(int32_t value) {
   _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.server_id)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.server_id)
 }
 
 // uint64 role_id = 5;
-inline void LogRecordInfo::clear_role_id() {
+inline void LogRecord::clear_role_id() {
   role_id_ = uint64_t{0u};
 }
-inline uint64_t LogRecordInfo::_internal_role_id() const {
+inline uint64_t LogRecord::_internal_role_id() const {
   return role_id_;
 }
-inline uint64_t LogRecordInfo::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.role_id)
+inline uint64_t LogRecord::role_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.role_id)
   return _internal_role_id();
 }
-inline void LogRecordInfo::_internal_set_role_id(uint64_t value) {
+inline void LogRecord::_internal_set_role_id(uint64_t value) {
   
   role_id_ = value;
 }
-inline void LogRecordInfo::set_role_id(uint64_t value) {
+inline void LogRecord::set_role_id(uint64_t value) {
   _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.role_id)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.role_id)
 }
 
 // string role_name = 6;
-inline void LogRecordInfo::clear_role_name() {
+inline void LogRecord::clear_role_name() {
   role_name_.ClearToEmpty();
 }
-inline const std::string& LogRecordInfo::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.role_name)
+inline const std::string& LogRecord::role_name() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.role_name)
   return _internal_role_name();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LogRecordInfo::set_role_name(ArgT0&& arg0, ArgT... args) {
+void LogRecord::set_role_name(ArgT0&& arg0, ArgT... args) {
  
  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.role_name)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.role_name)
 }
-inline std::string* LogRecordInfo::mutable_role_name() {
+inline std::string* LogRecord::mutable_role_name() {
   std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogRecordInfo.role_name)
+  // @@protoc_insertion_point(field_mutable:msg_log.LogRecord.role_name)
   return _s;
 }
-inline const std::string& LogRecordInfo::_internal_role_name() const {
+inline const std::string& LogRecord::_internal_role_name() const {
   return role_name_.Get();
 }
-inline void LogRecordInfo::_internal_set_role_name(const std::string& value) {
+inline void LogRecord::_internal_set_role_name(const std::string& value) {
   
   role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::_internal_mutable_role_name() {
+inline std::string* LogRecord::_internal_mutable_role_name() {
   
   return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogRecordInfo.role_name)
+inline std::string* LogRecord::release_role_name() {
+  // @@protoc_insertion_point(field_release:msg_log.LogRecord.role_name)
   return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void LogRecordInfo::set_allocated_role_name(std::string* role_name) {
+inline void LogRecord::set_allocated_role_name(std::string* role_name) {
   if (role_name != nullptr) {
     
   } else {
@@ -4131,45 +1945,45 @@ inline void LogRecordInfo::set_allocated_role_name(std::string* role_name) {
     role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecordInfo.role_name)
+  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecord.role_name)
 }
 
 // string content = 7;
-inline void LogRecordInfo::clear_content() {
+inline void LogRecord::clear_content() {
   content_.ClearToEmpty();
 }
-inline const std::string& LogRecordInfo::content() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.content)
+inline const std::string& LogRecord::content() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.content)
   return _internal_content();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LogRecordInfo::set_content(ArgT0&& arg0, ArgT... args) {
+void LogRecord::set_content(ArgT0&& arg0, ArgT... args) {
  
  content_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.content)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.content)
 }
-inline std::string* LogRecordInfo::mutable_content() {
+inline std::string* LogRecord::mutable_content() {
   std::string* _s = _internal_mutable_content();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogRecordInfo.content)
+  // @@protoc_insertion_point(field_mutable:msg_log.LogRecord.content)
   return _s;
 }
-inline const std::string& LogRecordInfo::_internal_content() const {
+inline const std::string& LogRecord::_internal_content() const {
   return content_.Get();
 }
-inline void LogRecordInfo::_internal_set_content(const std::string& value) {
+inline void LogRecord::_internal_set_content(const std::string& value) {
   
   content_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::_internal_mutable_content() {
+inline std::string* LogRecord::_internal_mutable_content() {
   
   return content_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::release_content() {
-  // @@protoc_insertion_point(field_release:msg_log.LogRecordInfo.content)
+inline std::string* LogRecord::release_content() {
+  // @@protoc_insertion_point(field_release:msg_log.LogRecord.content)
   return content_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void LogRecordInfo::set_allocated_content(std::string* content) {
+inline void LogRecord::set_allocated_content(std::string* content) {
   if (content != nullptr) {
     
   } else {
@@ -4182,45 +1996,45 @@ inline void LogRecordInfo::set_allocated_content(std::string* content) {
     content_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecordInfo.content)
+  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecord.content)
 }
 
 // string extra_data = 8;
-inline void LogRecordInfo::clear_extra_data() {
+inline void LogRecord::clear_extra_data() {
   extra_data_.ClearToEmpty();
 }
-inline const std::string& LogRecordInfo::extra_data() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.extra_data)
+inline const std::string& LogRecord::extra_data() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.extra_data)
   return _internal_extra_data();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LogRecordInfo::set_extra_data(ArgT0&& arg0, ArgT... args) {
+void LogRecord::set_extra_data(ArgT0&& arg0, ArgT... args) {
  
  extra_data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.extra_data)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.extra_data)
 }
-inline std::string* LogRecordInfo::mutable_extra_data() {
+inline std::string* LogRecord::mutable_extra_data() {
   std::string* _s = _internal_mutable_extra_data();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogRecordInfo.extra_data)
+  // @@protoc_insertion_point(field_mutable:msg_log.LogRecord.extra_data)
   return _s;
 }
-inline const std::string& LogRecordInfo::_internal_extra_data() const {
+inline const std::string& LogRecord::_internal_extra_data() const {
   return extra_data_.Get();
 }
-inline void LogRecordInfo::_internal_set_extra_data(const std::string& value) {
+inline void LogRecord::_internal_set_extra_data(const std::string& value) {
   
   extra_data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::_internal_mutable_extra_data() {
+inline std::string* LogRecord::_internal_mutable_extra_data() {
   
   return extra_data_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::release_extra_data() {
-  // @@protoc_insertion_point(field_release:msg_log.LogRecordInfo.extra_data)
+inline std::string* LogRecord::release_extra_data() {
+  // @@protoc_insertion_point(field_release:msg_log.LogRecord.extra_data)
   return extra_data_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void LogRecordInfo::set_allocated_extra_data(std::string* extra_data) {
+inline void LogRecord::set_allocated_extra_data(std::string* extra_data) {
   if (extra_data != nullptr) {
     
   } else {
@@ -4233,65 +2047,65 @@ inline void LogRecordInfo::set_allocated_extra_data(std::string* extra_data) {
     extra_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecordInfo.extra_data)
+  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecord.extra_data)
 }
 
 // int64 log_time = 9;
-inline void LogRecordInfo::clear_log_time() {
+inline void LogRecord::clear_log_time() {
   log_time_ = int64_t{0};
 }
-inline int64_t LogRecordInfo::_internal_log_time() const {
+inline int64_t LogRecord::_internal_log_time() const {
   return log_time_;
 }
-inline int64_t LogRecordInfo::log_time() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.log_time)
+inline int64_t LogRecord::log_time() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.log_time)
   return _internal_log_time();
 }
-inline void LogRecordInfo::_internal_set_log_time(int64_t value) {
+inline void LogRecord::_internal_set_log_time(int64_t value) {
   
   log_time_ = value;
 }
-inline void LogRecordInfo::set_log_time(int64_t value) {
+inline void LogRecord::set_log_time(int64_t value) {
   _internal_set_log_time(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.log_time)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.log_time)
 }
 
 // string ip = 10;
-inline void LogRecordInfo::clear_ip() {
+inline void LogRecord::clear_ip() {
   ip_.ClearToEmpty();
 }
-inline const std::string& LogRecordInfo::ip() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRecordInfo.ip)
+inline const std::string& LogRecord::ip() const {
+  // @@protoc_insertion_point(field_get:msg_log.LogRecord.ip)
   return _internal_ip();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void LogRecordInfo::set_ip(ArgT0&& arg0, ArgT... args) {
+void LogRecord::set_ip(ArgT0&& arg0, ArgT... args) {
  
  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogRecordInfo.ip)
+  // @@protoc_insertion_point(field_set:msg_log.LogRecord.ip)
 }
-inline std::string* LogRecordInfo::mutable_ip() {
+inline std::string* LogRecord::mutable_ip() {
   std::string* _s = _internal_mutable_ip();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogRecordInfo.ip)
+  // @@protoc_insertion_point(field_mutable:msg_log.LogRecord.ip)
   return _s;
 }
-inline const std::string& LogRecordInfo::_internal_ip() const {
+inline const std::string& LogRecord::_internal_ip() const {
   return ip_.Get();
 }
-inline void LogRecordInfo::_internal_set_ip(const std::string& value) {
+inline void LogRecord::_internal_set_ip(const std::string& value) {
   
   ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::_internal_mutable_ip() {
+inline std::string* LogRecord::_internal_mutable_ip() {
   
   return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* LogRecordInfo::release_ip() {
-  // @@protoc_insertion_point(field_release:msg_log.LogRecordInfo.ip)
+inline std::string* LogRecord::release_ip() {
+  // @@protoc_insertion_point(field_release:msg_log.LogRecord.ip)
   return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void LogRecordInfo::set_allocated_ip(std::string* ip) {
+inline void LogRecord::set_allocated_ip(std::string* ip) {
   if (ip != nullptr) {
     
   } else {
@@ -4304,181 +2118,37 @@ inline void LogRecordInfo::set_allocated_ip(std::string* ip) {
     ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecordInfo.ip)
+  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRecord.ip)
 }
 
 // -------------------------------------------------------------------
 
-// LogQueryConditionInfo
+// SendLogReq
 
-// int32 log_type = 1;
-inline void LogQueryConditionInfo::clear_log_type() {
-  log_type_ = 0;
-}
-inline int32_t LogQueryConditionInfo::_internal_log_type() const {
-  return log_type_;
-}
-inline int32_t LogQueryConditionInfo::log_type() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.log_type)
-  return _internal_log_type();
-}
-inline void LogQueryConditionInfo::_internal_set_log_type(int32_t value) {
-  
-  log_type_ = value;
-}
-inline void LogQueryConditionInfo::set_log_type(int32_t value) {
-  _internal_set_log_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.log_type)
-}
-
-// int32 server_id = 2;
-inline void LogQueryConditionInfo::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogQueryConditionInfo::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogQueryConditionInfo::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.server_id)
-  return _internal_server_id();
-}
-inline void LogQueryConditionInfo::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogQueryConditionInfo::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.server_id)
-}
-
-// uint64 role_id = 3;
-inline void LogQueryConditionInfo::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogQueryConditionInfo::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogQueryConditionInfo::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.role_id)
-  return _internal_role_id();
-}
-inline void LogQueryConditionInfo::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogQueryConditionInfo::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.role_id)
-}
-
-// int64 start_time = 4;
-inline void LogQueryConditionInfo::clear_start_time() {
-  start_time_ = int64_t{0};
-}
-inline int64_t LogQueryConditionInfo::_internal_start_time() const {
-  return start_time_;
-}
-inline int64_t LogQueryConditionInfo::start_time() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.start_time)
-  return _internal_start_time();
-}
-inline void LogQueryConditionInfo::_internal_set_start_time(int64_t value) {
-  
-  start_time_ = value;
-}
-inline void LogQueryConditionInfo::set_start_time(int64_t value) {
-  _internal_set_start_time(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.start_time)
-}
-
-// int64 end_time = 5;
-inline void LogQueryConditionInfo::clear_end_time() {
-  end_time_ = int64_t{0};
-}
-inline int64_t LogQueryConditionInfo::_internal_end_time() const {
-  return end_time_;
-}
-inline int64_t LogQueryConditionInfo::end_time() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.end_time)
-  return _internal_end_time();
-}
-inline void LogQueryConditionInfo::_internal_set_end_time(int64_t value) {
-  
-  end_time_ = value;
-}
-inline void LogQueryConditionInfo::set_end_time(int64_t value) {
-  _internal_set_end_time(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.end_time)
-}
-
-// int32 limit = 6;
-inline void LogQueryConditionInfo::clear_limit() {
-  limit_ = 0;
-}
-inline int32_t LogQueryConditionInfo::_internal_limit() const {
-  return limit_;
-}
-inline int32_t LogQueryConditionInfo::limit() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.limit)
-  return _internal_limit();
-}
-inline void LogQueryConditionInfo::_internal_set_limit(int32_t value) {
-  
-  limit_ = value;
-}
-inline void LogQueryConditionInfo::set_limit(int32_t value) {
-  _internal_set_limit(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.limit)
-}
-
-// int32 offset = 7;
-inline void LogQueryConditionInfo::clear_offset() {
-  offset_ = 0;
-}
-inline int32_t LogQueryConditionInfo::_internal_offset() const {
-  return offset_;
-}
-inline int32_t LogQueryConditionInfo::offset() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogQueryConditionInfo.offset)
-  return _internal_offset();
-}
-inline void LogQueryConditionInfo::_internal_set_offset(int32_t value) {
-  
-  offset_ = value;
-}
-inline void LogQueryConditionInfo::set_offset(int32_t value) {
-  _internal_set_offset(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogQueryConditionInfo.offset)
-}
-
-// -------------------------------------------------------------------
-
-// WriteLogReq
-
-// .msg_log.LogRecordInfo record = 1;
-inline bool WriteLogReq::_internal_has_record() const {
+// .msg_log.LogRecord record = 1;
+inline bool SendLogReq::_internal_has_record() const {
   return this != internal_default_instance() && record_ != nullptr;
 }
-inline bool WriteLogReq::has_record() const {
+inline bool SendLogReq::has_record() const {
   return _internal_has_record();
 }
-inline void WriteLogReq::clear_record() {
+inline void SendLogReq::clear_record() {
   if (GetArenaForAllocation() == nullptr && record_ != nullptr) {
     delete record_;
   }
   record_ = nullptr;
 }
-inline const ::msg_log::LogRecordInfo& WriteLogReq::_internal_record() const {
-  const ::msg_log::LogRecordInfo* p = record_;
-  return p != nullptr ? *p : reinterpret_cast<const ::msg_log::LogRecordInfo&>(
-      ::msg_log::_LogRecordInfo_default_instance_);
+inline const ::msg_log::LogRecord& SendLogReq::_internal_record() const {
+  const ::msg_log::LogRecord* p = record_;
+  return p != nullptr ? *p : reinterpret_cast<const ::msg_log::LogRecord&>(
+      ::msg_log::_LogRecord_default_instance_);
 }
-inline const ::msg_log::LogRecordInfo& WriteLogReq::record() const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogReq.record)
+inline const ::msg_log::LogRecord& SendLogReq::record() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogReq.record)
   return _internal_record();
 }
-inline void WriteLogReq::unsafe_arena_set_allocated_record(
-    ::msg_log::LogRecordInfo* record) {
+inline void SendLogReq::unsafe_arena_set_allocated_record(
+    ::msg_log::LogRecord* record) {
   if (GetArenaForAllocation() == nullptr) {
     delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(record_);
   }
@@ -4488,11 +2158,11 @@ inline void WriteLogReq::unsafe_arena_set_allocated_record(
   } else {
     
   }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:msg_log.WriteLogReq.record)
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:msg_log.SendLogReq.record)
 }
-inline ::msg_log::LogRecordInfo* WriteLogReq::release_record() {
+inline ::msg_log::LogRecord* SendLogReq::release_record() {
   
-  ::msg_log::LogRecordInfo* temp = record_;
+  ::msg_log::LogRecord* temp = record_;
   record_ = nullptr;
 #ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
   auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
@@ -4505,34 +2175,34 @@ inline ::msg_log::LogRecordInfo* WriteLogReq::release_record() {
 #endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
   return temp;
 }
-inline ::msg_log::LogRecordInfo* WriteLogReq::unsafe_arena_release_record() {
-  // @@protoc_insertion_point(field_release:msg_log.WriteLogReq.record)
+inline ::msg_log::LogRecord* SendLogReq::unsafe_arena_release_record() {
+  // @@protoc_insertion_point(field_release:msg_log.SendLogReq.record)
   
-  ::msg_log::LogRecordInfo* temp = record_;
+  ::msg_log::LogRecord* temp = record_;
   record_ = nullptr;
   return temp;
 }
-inline ::msg_log::LogRecordInfo* WriteLogReq::_internal_mutable_record() {
+inline ::msg_log::LogRecord* SendLogReq::_internal_mutable_record() {
   
   if (record_ == nullptr) {
-    auto* p = CreateMaybeMessage<::msg_log::LogRecordInfo>(GetArenaForAllocation());
+    auto* p = CreateMaybeMessage<::msg_log::LogRecord>(GetArenaForAllocation());
     record_ = p;
   }
   return record_;
 }
-inline ::msg_log::LogRecordInfo* WriteLogReq::mutable_record() {
-  ::msg_log::LogRecordInfo* _msg = _internal_mutable_record();
-  // @@protoc_insertion_point(field_mutable:msg_log.WriteLogReq.record)
+inline ::msg_log::LogRecord* SendLogReq::mutable_record() {
+  ::msg_log::LogRecord* _msg = _internal_mutable_record();
+  // @@protoc_insertion_point(field_mutable:msg_log.SendLogReq.record)
   return _msg;
 }
-inline void WriteLogReq::set_allocated_record(::msg_log::LogRecordInfo* record) {
+inline void SendLogReq::set_allocated_record(::msg_log::LogRecord* record) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
   if (message_arena == nullptr) {
     delete record_;
   }
   if (record) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::msg_log::LogRecordInfo>::GetOwningArena(record);
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::msg_log::LogRecord>::GetOwningArena(record);
     if (message_arena != submessage_arena) {
       record = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
           message_arena, record, submessage_arena);
@@ -4542,344 +2212,434 @@ inline void WriteLogReq::set_allocated_record(::msg_log::LogRecordInfo* record) 
     
   }
   record_ = record;
-  // @@protoc_insertion_point(field_set_allocated:msg_log.WriteLogReq.record)
+  // @@protoc_insertion_point(field_set_allocated:msg_log.SendLogReq.record)
 }
 
 // -------------------------------------------------------------------
 
-// WriteLogRsp
+// SendLogAck
 
 // int32 result = 1;
-inline void WriteLogRsp::clear_result() {
+inline void SendLogAck::clear_result() {
   result_ = 0;
 }
-inline int32_t WriteLogRsp::_internal_result() const {
+inline int32_t SendLogAck::_internal_result() const {
   return result_;
 }
-inline int32_t WriteLogRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogRsp.result)
+inline int32_t SendLogAck::result() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogAck.result)
   return _internal_result();
 }
-inline void WriteLogRsp::_internal_set_result(int32_t value) {
+inline void SendLogAck::_internal_set_result(int32_t value) {
   
   result_ = value;
 }
-inline void WriteLogRsp::set_result(int32_t value) {
+inline void SendLogAck::set_result(int32_t value) {
   _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.WriteLogRsp.result)
+  // @@protoc_insertion_point(field_set:msg_log.SendLogAck.result)
 }
 
 // int64 log_id = 2;
-inline void WriteLogRsp::clear_log_id() {
+inline void SendLogAck::clear_log_id() {
   log_id_ = int64_t{0};
 }
-inline int64_t WriteLogRsp::_internal_log_id() const {
+inline int64_t SendLogAck::_internal_log_id() const {
   return log_id_;
 }
-inline int64_t WriteLogRsp::log_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogRsp.log_id)
+inline int64_t SendLogAck::log_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogAck.log_id)
   return _internal_log_id();
 }
-inline void WriteLogRsp::_internal_set_log_id(int64_t value) {
+inline void SendLogAck::_internal_set_log_id(int64_t value) {
   
   log_id_ = value;
 }
-inline void WriteLogRsp::set_log_id(int64_t value) {
+inline void SendLogAck::set_log_id(int64_t value) {
   _internal_set_log_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.WriteLogRsp.log_id)
+  // @@protoc_insertion_point(field_set:msg_log.SendLogAck.log_id)
 }
 
 // -------------------------------------------------------------------
 
-// WriteLogBatchReq
+// SendLogBatchReq
 
-// repeated .msg_log.LogRecordInfo records = 1;
-inline int WriteLogBatchReq::_internal_records_size() const {
+// repeated .msg_log.LogRecord records = 1;
+inline int SendLogBatchReq::_internal_records_size() const {
   return records_.size();
 }
-inline int WriteLogBatchReq::records_size() const {
+inline int SendLogBatchReq::records_size() const {
   return _internal_records_size();
 }
-inline void WriteLogBatchReq::clear_records() {
+inline void SendLogBatchReq::clear_records() {
   records_.Clear();
 }
-inline ::msg_log::LogRecordInfo* WriteLogBatchReq::mutable_records(int index) {
-  // @@protoc_insertion_point(field_mutable:msg_log.WriteLogBatchReq.records)
+inline ::msg_log::LogRecord* SendLogBatchReq::mutable_records(int index) {
+  // @@protoc_insertion_point(field_mutable:msg_log.SendLogBatchReq.records)
   return records_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >*
-WriteLogBatchReq::mutable_records() {
-  // @@protoc_insertion_point(field_mutable_list:msg_log.WriteLogBatchReq.records)
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >*
+SendLogBatchReq::mutable_records() {
+  // @@protoc_insertion_point(field_mutable_list:msg_log.SendLogBatchReq.records)
   return &records_;
 }
-inline const ::msg_log::LogRecordInfo& WriteLogBatchReq::_internal_records(int index) const {
+inline const ::msg_log::LogRecord& SendLogBatchReq::_internal_records(int index) const {
   return records_.Get(index);
 }
-inline const ::msg_log::LogRecordInfo& WriteLogBatchReq::records(int index) const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogBatchReq.records)
+inline const ::msg_log::LogRecord& SendLogBatchReq::records(int index) const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogBatchReq.records)
   return _internal_records(index);
 }
-inline ::msg_log::LogRecordInfo* WriteLogBatchReq::_internal_add_records() {
+inline ::msg_log::LogRecord* SendLogBatchReq::_internal_add_records() {
   return records_.Add();
 }
-inline ::msg_log::LogRecordInfo* WriteLogBatchReq::add_records() {
-  ::msg_log::LogRecordInfo* _add = _internal_add_records();
-  // @@protoc_insertion_point(field_add:msg_log.WriteLogBatchReq.records)
+inline ::msg_log::LogRecord* SendLogBatchReq::add_records() {
+  ::msg_log::LogRecord* _add = _internal_add_records();
+  // @@protoc_insertion_point(field_add:msg_log.SendLogBatchReq.records)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >&
-WriteLogBatchReq::records() const {
-  // @@protoc_insertion_point(field_list:msg_log.WriteLogBatchReq.records)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >&
+SendLogBatchReq::records() const {
+  // @@protoc_insertion_point(field_list:msg_log.SendLogBatchReq.records)
   return records_;
 }
 
 // -------------------------------------------------------------------
 
-// WriteLogBatchRsp
+// SendLogBatchAck
 
 // int32 result = 1;
-inline void WriteLogBatchRsp::clear_result() {
+inline void SendLogBatchAck::clear_result() {
   result_ = 0;
 }
-inline int32_t WriteLogBatchRsp::_internal_result() const {
+inline int32_t SendLogBatchAck::_internal_result() const {
   return result_;
 }
-inline int32_t WriteLogBatchRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogBatchRsp.result)
+inline int32_t SendLogBatchAck::result() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogBatchAck.result)
   return _internal_result();
 }
-inline void WriteLogBatchRsp::_internal_set_result(int32_t value) {
+inline void SendLogBatchAck::_internal_set_result(int32_t value) {
   
   result_ = value;
 }
-inline void WriteLogBatchRsp::set_result(int32_t value) {
+inline void SendLogBatchAck::set_result(int32_t value) {
   _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.WriteLogBatchRsp.result)
+  // @@protoc_insertion_point(field_set:msg_log.SendLogBatchAck.result)
 }
 
 // int32 success_count = 2;
-inline void WriteLogBatchRsp::clear_success_count() {
+inline void SendLogBatchAck::clear_success_count() {
   success_count_ = 0;
 }
-inline int32_t WriteLogBatchRsp::_internal_success_count() const {
+inline int32_t SendLogBatchAck::_internal_success_count() const {
   return success_count_;
 }
-inline int32_t WriteLogBatchRsp::success_count() const {
-  // @@protoc_insertion_point(field_get:msg_log.WriteLogBatchRsp.success_count)
+inline int32_t SendLogBatchAck::success_count() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogBatchAck.success_count)
   return _internal_success_count();
 }
-inline void WriteLogBatchRsp::_internal_set_success_count(int32_t value) {
+inline void SendLogBatchAck::_internal_set_success_count(int32_t value) {
   
   success_count_ = value;
 }
-inline void WriteLogBatchRsp::set_success_count(int32_t value) {
+inline void SendLogBatchAck::set_success_count(int32_t value) {
   _internal_set_success_count(value);
-  // @@protoc_insertion_point(field_set:msg_log.WriteLogBatchRsp.success_count)
+  // @@protoc_insertion_point(field_set:msg_log.SendLogBatchAck.success_count)
+}
+
+// int32 failed_count = 3;
+inline void SendLogBatchAck::clear_failed_count() {
+  failed_count_ = 0;
+}
+inline int32_t SendLogBatchAck::_internal_failed_count() const {
+  return failed_count_;
+}
+inline int32_t SendLogBatchAck::failed_count() const {
+  // @@protoc_insertion_point(field_get:msg_log.SendLogBatchAck.failed_count)
+  return _internal_failed_count();
+}
+inline void SendLogBatchAck::_internal_set_failed_count(int32_t value) {
+  
+  failed_count_ = value;
+}
+inline void SendLogBatchAck::set_failed_count(int32_t value) {
+  _internal_set_failed_count(value);
+  // @@protoc_insertion_point(field_set:msg_log.SendLogBatchAck.failed_count)
 }
 
 // -------------------------------------------------------------------
 
 // QueryLogReq
 
-// .msg_log.LogQueryConditionInfo condition = 1;
-inline bool QueryLogReq::_internal_has_condition() const {
-  return this != internal_default_instance() && condition_ != nullptr;
+// .msg_log.LogType type = 1;
+inline void QueryLogReq::clear_type() {
+  type_ = 0;
 }
-inline bool QueryLogReq::has_condition() const {
-  return _internal_has_condition();
+inline ::msg_log::LogType QueryLogReq::_internal_type() const {
+  return static_cast< ::msg_log::LogType >(type_);
 }
-inline void QueryLogReq::clear_condition() {
-  if (GetArenaForAllocation() == nullptr && condition_ != nullptr) {
-    delete condition_;
-  }
-  condition_ = nullptr;
+inline ::msg_log::LogType QueryLogReq::type() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.type)
+  return _internal_type();
 }
-inline const ::msg_log::LogQueryConditionInfo& QueryLogReq::_internal_condition() const {
-  const ::msg_log::LogQueryConditionInfo* p = condition_;
-  return p != nullptr ? *p : reinterpret_cast<const ::msg_log::LogQueryConditionInfo&>(
-      ::msg_log::_LogQueryConditionInfo_default_instance_);
-}
-inline const ::msg_log::LogQueryConditionInfo& QueryLogReq::condition() const {
-  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.condition)
-  return _internal_condition();
-}
-inline void QueryLogReq::unsafe_arena_set_allocated_condition(
-    ::msg_log::LogQueryConditionInfo* condition) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(condition_);
-  }
-  condition_ = condition;
-  if (condition) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:msg_log.QueryLogReq.condition)
-}
-inline ::msg_log::LogQueryConditionInfo* QueryLogReq::release_condition() {
+inline void QueryLogReq::_internal_set_type(::msg_log::LogType value) {
   
-  ::msg_log::LogQueryConditionInfo* temp = condition_;
-  condition_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
+  type_ = value;
 }
-inline ::msg_log::LogQueryConditionInfo* QueryLogReq::unsafe_arena_release_condition() {
-  // @@protoc_insertion_point(field_release:msg_log.QueryLogReq.condition)
+inline void QueryLogReq::set_type(::msg_log::LogType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.type)
+}
+
+// int32 server_id = 2;
+inline void QueryLogReq::clear_server_id() {
+  server_id_ = 0;
+}
+inline int32_t QueryLogReq::_internal_server_id() const {
+  return server_id_;
+}
+inline int32_t QueryLogReq::server_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.server_id)
+  return _internal_server_id();
+}
+inline void QueryLogReq::_internal_set_server_id(int32_t value) {
   
-  ::msg_log::LogQueryConditionInfo* temp = condition_;
-  condition_ = nullptr;
-  return temp;
+  server_id_ = value;
 }
-inline ::msg_log::LogQueryConditionInfo* QueryLogReq::_internal_mutable_condition() {
+inline void QueryLogReq::set_server_id(int32_t value) {
+  _internal_set_server_id(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.server_id)
+}
+
+// uint64 role_id = 3;
+inline void QueryLogReq::clear_role_id() {
+  role_id_ = uint64_t{0u};
+}
+inline uint64_t QueryLogReq::_internal_role_id() const {
+  return role_id_;
+}
+inline uint64_t QueryLogReq::role_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.role_id)
+  return _internal_role_id();
+}
+inline void QueryLogReq::_internal_set_role_id(uint64_t value) {
   
-  if (condition_ == nullptr) {
-    auto* p = CreateMaybeMessage<::msg_log::LogQueryConditionInfo>(GetArenaForAllocation());
-    condition_ = p;
-  }
-  return condition_;
+  role_id_ = value;
 }
-inline ::msg_log::LogQueryConditionInfo* QueryLogReq::mutable_condition() {
-  ::msg_log::LogQueryConditionInfo* _msg = _internal_mutable_condition();
-  // @@protoc_insertion_point(field_mutable:msg_log.QueryLogReq.condition)
-  return _msg;
+inline void QueryLogReq::set_role_id(uint64_t value) {
+  _internal_set_role_id(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.role_id)
 }
-inline void QueryLogReq::set_allocated_condition(::msg_log::LogQueryConditionInfo* condition) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete condition_;
-  }
-  if (condition) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::msg_log::LogQueryConditionInfo>::GetOwningArena(condition);
-    if (message_arena != submessage_arena) {
-      condition = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, condition, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  condition_ = condition;
-  // @@protoc_insertion_point(field_set_allocated:msg_log.QueryLogReq.condition)
+
+// int64 start_time = 4;
+inline void QueryLogReq::clear_start_time() {
+  start_time_ = int64_t{0};
+}
+inline int64_t QueryLogReq::_internal_start_time() const {
+  return start_time_;
+}
+inline int64_t QueryLogReq::start_time() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.start_time)
+  return _internal_start_time();
+}
+inline void QueryLogReq::_internal_set_start_time(int64_t value) {
+  
+  start_time_ = value;
+}
+inline void QueryLogReq::set_start_time(int64_t value) {
+  _internal_set_start_time(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.start_time)
+}
+
+// int64 end_time = 5;
+inline void QueryLogReq::clear_end_time() {
+  end_time_ = int64_t{0};
+}
+inline int64_t QueryLogReq::_internal_end_time() const {
+  return end_time_;
+}
+inline int64_t QueryLogReq::end_time() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.end_time)
+  return _internal_end_time();
+}
+inline void QueryLogReq::_internal_set_end_time(int64_t value) {
+  
+  end_time_ = value;
+}
+inline void QueryLogReq::set_end_time(int64_t value) {
+  _internal_set_end_time(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.end_time)
+}
+
+// int32 limit = 6;
+inline void QueryLogReq::clear_limit() {
+  limit_ = 0;
+}
+inline int32_t QueryLogReq::_internal_limit() const {
+  return limit_;
+}
+inline int32_t QueryLogReq::limit() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.limit)
+  return _internal_limit();
+}
+inline void QueryLogReq::_internal_set_limit(int32_t value) {
+  
+  limit_ = value;
+}
+inline void QueryLogReq::set_limit(int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.limit)
+}
+
+// int32 offset = 7;
+inline void QueryLogReq::clear_offset() {
+  offset_ = 0;
+}
+inline int32_t QueryLogReq::_internal_offset() const {
+  return offset_;
+}
+inline int32_t QueryLogReq::offset() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogReq.offset)
+  return _internal_offset();
+}
+inline void QueryLogReq::_internal_set_offset(int32_t value) {
+  
+  offset_ = value;
+}
+inline void QueryLogReq::set_offset(int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogReq.offset)
 }
 
 // -------------------------------------------------------------------
 
-// QueryLogRsp
+// QueryLogAck
 
 // int32 result = 1;
-inline void QueryLogRsp::clear_result() {
+inline void QueryLogAck::clear_result() {
   result_ = 0;
 }
-inline int32_t QueryLogRsp::_internal_result() const {
+inline int32_t QueryLogAck::_internal_result() const {
   return result_;
 }
-inline int32_t QueryLogRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.QueryLogRsp.result)
+inline int32_t QueryLogAck::result() const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogAck.result)
   return _internal_result();
 }
-inline void QueryLogRsp::_internal_set_result(int32_t value) {
+inline void QueryLogAck::_internal_set_result(int32_t value) {
   
   result_ = value;
 }
-inline void QueryLogRsp::set_result(int32_t value) {
+inline void QueryLogAck::set_result(int32_t value) {
   _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.QueryLogRsp.result)
+  // @@protoc_insertion_point(field_set:msg_log.QueryLogAck.result)
 }
 
-// repeated .msg_log.LogRecordInfo logs = 2;
-inline int QueryLogRsp::_internal_logs_size() const {
-  return logs_.size();
+// repeated .msg_log.LogRecord records = 2;
+inline int QueryLogAck::_internal_records_size() const {
+  return records_.size();
 }
-inline int QueryLogRsp::logs_size() const {
-  return _internal_logs_size();
+inline int QueryLogAck::records_size() const {
+  return _internal_records_size();
 }
-inline void QueryLogRsp::clear_logs() {
-  logs_.Clear();
+inline void QueryLogAck::clear_records() {
+  records_.Clear();
 }
-inline ::msg_log::LogRecordInfo* QueryLogRsp::mutable_logs(int index) {
-  // @@protoc_insertion_point(field_mutable:msg_log.QueryLogRsp.logs)
-  return logs_.Mutable(index);
+inline ::msg_log::LogRecord* QueryLogAck::mutable_records(int index) {
+  // @@protoc_insertion_point(field_mutable:msg_log.QueryLogAck.records)
+  return records_.Mutable(index);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >*
-QueryLogRsp::mutable_logs() {
-  // @@protoc_insertion_point(field_mutable_list:msg_log.QueryLogRsp.logs)
-  return &logs_;
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >*
+QueryLogAck::mutable_records() {
+  // @@protoc_insertion_point(field_mutable_list:msg_log.QueryLogAck.records)
+  return &records_;
 }
-inline const ::msg_log::LogRecordInfo& QueryLogRsp::_internal_logs(int index) const {
-  return logs_.Get(index);
+inline const ::msg_log::LogRecord& QueryLogAck::_internal_records(int index) const {
+  return records_.Get(index);
 }
-inline const ::msg_log::LogRecordInfo& QueryLogRsp::logs(int index) const {
-  // @@protoc_insertion_point(field_get:msg_log.QueryLogRsp.logs)
-  return _internal_logs(index);
+inline const ::msg_log::LogRecord& QueryLogAck::records(int index) const {
+  // @@protoc_insertion_point(field_get:msg_log.QueryLogAck.records)
+  return _internal_records(index);
 }
-inline ::msg_log::LogRecordInfo* QueryLogRsp::_internal_add_logs() {
-  return logs_.Add();
+inline ::msg_log::LogRecord* QueryLogAck::_internal_add_records() {
+  return records_.Add();
 }
-inline ::msg_log::LogRecordInfo* QueryLogRsp::add_logs() {
-  ::msg_log::LogRecordInfo* _add = _internal_add_logs();
-  // @@protoc_insertion_point(field_add:msg_log.QueryLogRsp.logs)
+inline ::msg_log::LogRecord* QueryLogAck::add_records() {
+  ::msg_log::LogRecord* _add = _internal_add_records();
+  // @@protoc_insertion_point(field_add:msg_log.QueryLogAck.records)
   return _add;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecordInfo >&
-QueryLogRsp::logs() const {
-  // @@protoc_insertion_point(field_list:msg_log.QueryLogRsp.logs)
-  return logs_;
-}
-
-// int32 total_count = 3;
-inline void QueryLogRsp::clear_total_count() {
-  total_count_ = 0;
-}
-inline int32_t QueryLogRsp::_internal_total_count() const {
-  return total_count_;
-}
-inline int32_t QueryLogRsp::total_count() const {
-  // @@protoc_insertion_point(field_get:msg_log.QueryLogRsp.total_count)
-  return _internal_total_count();
-}
-inline void QueryLogRsp::_internal_set_total_count(int32_t value) {
-  
-  total_count_ = value;
-}
-inline void QueryLogRsp::set_total_count(int32_t value) {
-  _internal_set_total_count(value);
-  // @@protoc_insertion_point(field_set:msg_log.QueryLogRsp.total_count)
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::msg_log::LogRecord >&
+QueryLogAck::records() const {
+  // @@protoc_insertion_point(field_list:msg_log.QueryLogAck.records)
+  return records_;
 }
 
 // -------------------------------------------------------------------
 
 // CountLogReq
 
-// int32 log_type = 1;
-inline void CountLogReq::clear_log_type() {
-  log_type_ = 0;
+// .msg_log.LogType type = 1;
+inline void CountLogReq::clear_type() {
+  type_ = 0;
 }
-inline int32_t CountLogReq::_internal_log_type() const {
-  return log_type_;
+inline ::msg_log::LogType CountLogReq::_internal_type() const {
+  return static_cast< ::msg_log::LogType >(type_);
 }
-inline int32_t CountLogReq::log_type() const {
-  // @@protoc_insertion_point(field_get:msg_log.CountLogReq.log_type)
-  return _internal_log_type();
+inline ::msg_log::LogType CountLogReq::type() const {
+  // @@protoc_insertion_point(field_get:msg_log.CountLogReq.type)
+  return _internal_type();
 }
-inline void CountLogReq::_internal_set_log_type(int32_t value) {
+inline void CountLogReq::_internal_set_type(::msg_log::LogType value) {
   
-  log_type_ = value;
+  type_ = value;
 }
-inline void CountLogReq::set_log_type(int32_t value) {
-  _internal_set_log_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.CountLogReq.log_type)
+inline void CountLogReq::set_type(::msg_log::LogType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:msg_log.CountLogReq.type)
 }
 
-// int64 start_time = 2;
+// int32 server_id = 2;
+inline void CountLogReq::clear_server_id() {
+  server_id_ = 0;
+}
+inline int32_t CountLogReq::_internal_server_id() const {
+  return server_id_;
+}
+inline int32_t CountLogReq::server_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.CountLogReq.server_id)
+  return _internal_server_id();
+}
+inline void CountLogReq::_internal_set_server_id(int32_t value) {
+  
+  server_id_ = value;
+}
+inline void CountLogReq::set_server_id(int32_t value) {
+  _internal_set_server_id(value);
+  // @@protoc_insertion_point(field_set:msg_log.CountLogReq.server_id)
+}
+
+// uint64 role_id = 3;
+inline void CountLogReq::clear_role_id() {
+  role_id_ = uint64_t{0u};
+}
+inline uint64_t CountLogReq::_internal_role_id() const {
+  return role_id_;
+}
+inline uint64_t CountLogReq::role_id() const {
+  // @@protoc_insertion_point(field_get:msg_log.CountLogReq.role_id)
+  return _internal_role_id();
+}
+inline void CountLogReq::_internal_set_role_id(uint64_t value) {
+  
+  role_id_ = value;
+}
+inline void CountLogReq::set_role_id(uint64_t value) {
+  _internal_set_role_id(value);
+  // @@protoc_insertion_point(field_set:msg_log.CountLogReq.role_id)
+}
+
+// int64 start_time = 4;
 inline void CountLogReq::clear_start_time() {
   start_time_ = int64_t{0};
 }
@@ -4899,7 +2659,7 @@ inline void CountLogReq::set_start_time(int64_t value) {
   // @@protoc_insertion_point(field_set:msg_log.CountLogReq.start_time)
 }
 
-// int64 end_time = 3;
+// int64 end_time = 5;
 inline void CountLogReq::clear_end_time() {
   end_time_ = int64_t{0};
 }
@@ -4921,1082 +2681,46 @@ inline void CountLogReq::set_end_time(int64_t value) {
 
 // -------------------------------------------------------------------
 
-// CountLogRsp
+// CountLogAck
 
 // int32 result = 1;
-inline void CountLogRsp::clear_result() {
+inline void CountLogAck::clear_result() {
   result_ = 0;
 }
-inline int32_t CountLogRsp::_internal_result() const {
+inline int32_t CountLogAck::_internal_result() const {
   return result_;
 }
-inline int32_t CountLogRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.CountLogRsp.result)
+inline int32_t CountLogAck::result() const {
+  // @@protoc_insertion_point(field_get:msg_log.CountLogAck.result)
   return _internal_result();
 }
-inline void CountLogRsp::_internal_set_result(int32_t value) {
+inline void CountLogAck::_internal_set_result(int32_t value) {
   
   result_ = value;
 }
-inline void CountLogRsp::set_result(int32_t value) {
+inline void CountLogAck::set_result(int32_t value) {
   _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.CountLogRsp.result)
+  // @@protoc_insertion_point(field_set:msg_log.CountLogAck.result)
 }
 
 // int64 count = 2;
-inline void CountLogRsp::clear_count() {
+inline void CountLogAck::clear_count() {
   count_ = int64_t{0};
 }
-inline int64_t CountLogRsp::_internal_count() const {
+inline int64_t CountLogAck::_internal_count() const {
   return count_;
 }
-inline int64_t CountLogRsp::count() const {
-  // @@protoc_insertion_point(field_get:msg_log.CountLogRsp.count)
+inline int64_t CountLogAck::count() const {
+  // @@protoc_insertion_point(field_get:msg_log.CountLogAck.count)
   return _internal_count();
 }
-inline void CountLogRsp::_internal_set_count(int64_t value) {
+inline void CountLogAck::_internal_set_count(int64_t value) {
   
   count_ = value;
 }
-inline void CountLogRsp::set_count(int64_t value) {
+inline void CountLogAck::set_count(int64_t value) {
   _internal_set_count(value);
-  // @@protoc_insertion_point(field_set:msg_log.CountLogRsp.count)
-}
-
-// -------------------------------------------------------------------
-
-// ClearOldLogReq
-
-// int32 days = 1;
-inline void ClearOldLogReq::clear_days() {
-  days_ = 0;
-}
-inline int32_t ClearOldLogReq::_internal_days() const {
-  return days_;
-}
-inline int32_t ClearOldLogReq::days() const {
-  // @@protoc_insertion_point(field_get:msg_log.ClearOldLogReq.days)
-  return _internal_days();
-}
-inline void ClearOldLogReq::_internal_set_days(int32_t value) {
-  
-  days_ = value;
-}
-inline void ClearOldLogReq::set_days(int32_t value) {
-  _internal_set_days(value);
-  // @@protoc_insertion_point(field_set:msg_log.ClearOldLogReq.days)
-}
-
-// -------------------------------------------------------------------
-
-// ClearOldLogRsp
-
-// int32 result = 1;
-inline void ClearOldLogRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t ClearOldLogRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t ClearOldLogRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.ClearOldLogRsp.result)
-  return _internal_result();
-}
-inline void ClearOldLogRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void ClearOldLogRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.ClearOldLogRsp.result)
-}
-
-// int32 cleared_count = 2;
-inline void ClearOldLogRsp::clear_cleared_count() {
-  cleared_count_ = 0;
-}
-inline int32_t ClearOldLogRsp::_internal_cleared_count() const {
-  return cleared_count_;
-}
-inline int32_t ClearOldLogRsp::cleared_count() const {
-  // @@protoc_insertion_point(field_get:msg_log.ClearOldLogRsp.cleared_count)
-  return _internal_cleared_count();
-}
-inline void ClearOldLogRsp::_internal_set_cleared_count(int32_t value) {
-  
-  cleared_count_ = value;
-}
-inline void ClearOldLogRsp::set_cleared_count(int32_t value) {
-  _internal_set_cleared_count(value);
-  // @@protoc_insertion_point(field_set:msg_log.ClearOldLogRsp.cleared_count)
-}
-
-// -------------------------------------------------------------------
-
-// LogLoginReq
-
-// uint64 role_id = 1;
-inline void LogLoginReq::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogLoginReq::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogLoginReq::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginReq.role_id)
-  return _internal_role_id();
-}
-inline void LogLoginReq::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogLoginReq::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginReq.role_id)
-}
-
-// string role_name = 2;
-inline void LogLoginReq::clear_role_name() {
-  role_name_.ClearToEmpty();
-}
-inline const std::string& LogLoginReq::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginReq.role_name)
-  return _internal_role_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogLoginReq::set_role_name(ArgT0&& arg0, ArgT... args) {
- 
- role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginReq.role_name)
-}
-inline std::string* LogLoginReq::mutable_role_name() {
-  std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogLoginReq.role_name)
-  return _s;
-}
-inline const std::string& LogLoginReq::_internal_role_name() const {
-  return role_name_.Get();
-}
-inline void LogLoginReq::_internal_set_role_name(const std::string& value) {
-  
-  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogLoginReq::_internal_mutable_role_name() {
-  
-  return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogLoginReq::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogLoginReq.role_name)
-  return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogLoginReq::set_allocated_role_name(std::string* role_name) {
-  if (role_name != nullptr) {
-    
-  } else {
-    
-  }
-  role_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (role_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogLoginReq.role_name)
-}
-
-// int32 server_id = 3;
-inline void LogLoginReq::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogLoginReq::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogLoginReq::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginReq.server_id)
-  return _internal_server_id();
-}
-inline void LogLoginReq::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogLoginReq::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginReq.server_id)
-}
-
-// string ip = 4;
-inline void LogLoginReq::clear_ip() {
-  ip_.ClearToEmpty();
-}
-inline const std::string& LogLoginReq::ip() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginReq.ip)
-  return _internal_ip();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogLoginReq::set_ip(ArgT0&& arg0, ArgT... args) {
- 
- ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginReq.ip)
-}
-inline std::string* LogLoginReq::mutable_ip() {
-  std::string* _s = _internal_mutable_ip();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogLoginReq.ip)
-  return _s;
-}
-inline const std::string& LogLoginReq::_internal_ip() const {
-  return ip_.Get();
-}
-inline void LogLoginReq::_internal_set_ip(const std::string& value) {
-  
-  ip_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogLoginReq::_internal_mutable_ip() {
-  
-  return ip_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogLoginReq::release_ip() {
-  // @@protoc_insertion_point(field_release:msg_log.LogLoginReq.ip)
-  return ip_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogLoginReq::set_allocated_ip(std::string* ip) {
-  if (ip != nullptr) {
-    
-  } else {
-    
-  }
-  ip_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ip,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (ip_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    ip_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogLoginReq.ip)
-}
-
-// bool is_login = 5;
-inline void LogLoginReq::clear_is_login() {
-  is_login_ = false;
-}
-inline bool LogLoginReq::_internal_is_login() const {
-  return is_login_;
-}
-inline bool LogLoginReq::is_login() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginReq.is_login)
-  return _internal_is_login();
-}
-inline void LogLoginReq::_internal_set_is_login(bool value) {
-  
-  is_login_ = value;
-}
-inline void LogLoginReq::set_is_login(bool value) {
-  _internal_set_is_login(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginReq.is_login)
-}
-
-// -------------------------------------------------------------------
-
-// LogLoginRsp
-
-// int32 result = 1;
-inline void LogLoginRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogLoginRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t LogLoginRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogLoginRsp.result)
-  return _internal_result();
-}
-inline void LogLoginRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogLoginRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogLoginRsp.result)
-}
-
-// -------------------------------------------------------------------
-
-// LogRechargeReq
-
-// uint64 role_id = 1;
-inline void LogRechargeReq::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogRechargeReq::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogRechargeReq::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeReq.role_id)
-  return _internal_role_id();
-}
-inline void LogRechargeReq::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogRechargeReq::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeReq.role_id)
-}
-
-// string role_name = 2;
-inline void LogRechargeReq::clear_role_name() {
-  role_name_.ClearToEmpty();
-}
-inline const std::string& LogRechargeReq::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeReq.role_name)
-  return _internal_role_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogRechargeReq::set_role_name(ArgT0&& arg0, ArgT... args) {
- 
- role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeReq.role_name)
-}
-inline std::string* LogRechargeReq::mutable_role_name() {
-  std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogRechargeReq.role_name)
-  return _s;
-}
-inline const std::string& LogRechargeReq::_internal_role_name() const {
-  return role_name_.Get();
-}
-inline void LogRechargeReq::_internal_set_role_name(const std::string& value) {
-  
-  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogRechargeReq::_internal_mutable_role_name() {
-  
-  return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogRechargeReq::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogRechargeReq.role_name)
-  return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogRechargeReq::set_allocated_role_name(std::string* role_name) {
-  if (role_name != nullptr) {
-    
-  } else {
-    
-  }
-  role_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (role_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogRechargeReq.role_name)
-}
-
-// int32 server_id = 3;
-inline void LogRechargeReq::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogRechargeReq::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogRechargeReq::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeReq.server_id)
-  return _internal_server_id();
-}
-inline void LogRechargeReq::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogRechargeReq::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeReq.server_id)
-}
-
-// int32 amount = 4;
-inline void LogRechargeReq::clear_amount() {
-  amount_ = 0;
-}
-inline int32_t LogRechargeReq::_internal_amount() const {
-  return amount_;
-}
-inline int32_t LogRechargeReq::amount() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeReq.amount)
-  return _internal_amount();
-}
-inline void LogRechargeReq::_internal_set_amount(int32_t value) {
-  
-  amount_ = value;
-}
-inline void LogRechargeReq::set_amount(int32_t value) {
-  _internal_set_amount(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeReq.amount)
-}
-
-// int32 product_id = 5;
-inline void LogRechargeReq::clear_product_id() {
-  product_id_ = 0;
-}
-inline int32_t LogRechargeReq::_internal_product_id() const {
-  return product_id_;
-}
-inline int32_t LogRechargeReq::product_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeReq.product_id)
-  return _internal_product_id();
-}
-inline void LogRechargeReq::_internal_set_product_id(int32_t value) {
-  
-  product_id_ = value;
-}
-inline void LogRechargeReq::set_product_id(int32_t value) {
-  _internal_set_product_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeReq.product_id)
-}
-
-// -------------------------------------------------------------------
-
-// LogRechargeRsp
-
-// int32 result = 1;
-inline void LogRechargeRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogRechargeRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t LogRechargeRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogRechargeRsp.result)
-  return _internal_result();
-}
-inline void LogRechargeRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogRechargeRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogRechargeRsp.result)
-}
-
-// -------------------------------------------------------------------
-
-// LogConsumeReq
-
-// uint64 role_id = 1;
-inline void LogConsumeReq::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogConsumeReq::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogConsumeReq::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.role_id)
-  return _internal_role_id();
-}
-inline void LogConsumeReq::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogConsumeReq::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.role_id)
-}
-
-// string role_name = 2;
-inline void LogConsumeReq::clear_role_name() {
-  role_name_.ClearToEmpty();
-}
-inline const std::string& LogConsumeReq::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.role_name)
-  return _internal_role_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogConsumeReq::set_role_name(ArgT0&& arg0, ArgT... args) {
- 
- role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.role_name)
-}
-inline std::string* LogConsumeReq::mutable_role_name() {
-  std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogConsumeReq.role_name)
-  return _s;
-}
-inline const std::string& LogConsumeReq::_internal_role_name() const {
-  return role_name_.Get();
-}
-inline void LogConsumeReq::_internal_set_role_name(const std::string& value) {
-  
-  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogConsumeReq::_internal_mutable_role_name() {
-  
-  return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogConsumeReq::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogConsumeReq.role_name)
-  return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogConsumeReq::set_allocated_role_name(std::string* role_name) {
-  if (role_name != nullptr) {
-    
-  } else {
-    
-  }
-  role_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (role_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogConsumeReq.role_name)
-}
-
-// int32 server_id = 3;
-inline void LogConsumeReq::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogConsumeReq::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogConsumeReq::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.server_id)
-  return _internal_server_id();
-}
-inline void LogConsumeReq::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogConsumeReq::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.server_id)
-}
-
-// int32 type = 4;
-inline void LogConsumeReq::clear_type() {
-  type_ = 0;
-}
-inline int32_t LogConsumeReq::_internal_type() const {
-  return type_;
-}
-inline int32_t LogConsumeReq::type() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.type)
-  return _internal_type();
-}
-inline void LogConsumeReq::_internal_set_type(int32_t value) {
-  
-  type_ = value;
-}
-inline void LogConsumeReq::set_type(int32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.type)
-}
-
-// int32 amount = 5;
-inline void LogConsumeReq::clear_amount() {
-  amount_ = 0;
-}
-inline int32_t LogConsumeReq::_internal_amount() const {
-  return amount_;
-}
-inline int32_t LogConsumeReq::amount() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.amount)
-  return _internal_amount();
-}
-inline void LogConsumeReq::_internal_set_amount(int32_t value) {
-  
-  amount_ = value;
-}
-inline void LogConsumeReq::set_amount(int32_t value) {
-  _internal_set_amount(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.amount)
-}
-
-// string reason = 6;
-inline void LogConsumeReq::clear_reason() {
-  reason_.ClearToEmpty();
-}
-inline const std::string& LogConsumeReq::reason() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeReq.reason)
-  return _internal_reason();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogConsumeReq::set_reason(ArgT0&& arg0, ArgT... args) {
- 
- reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeReq.reason)
-}
-inline std::string* LogConsumeReq::mutable_reason() {
-  std::string* _s = _internal_mutable_reason();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogConsumeReq.reason)
-  return _s;
-}
-inline const std::string& LogConsumeReq::_internal_reason() const {
-  return reason_.Get();
-}
-inline void LogConsumeReq::_internal_set_reason(const std::string& value) {
-  
-  reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogConsumeReq::_internal_mutable_reason() {
-  
-  return reason_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogConsumeReq::release_reason() {
-  // @@protoc_insertion_point(field_release:msg_log.LogConsumeReq.reason)
-  return reason_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogConsumeReq::set_allocated_reason(std::string* reason) {
-  if (reason != nullptr) {
-    
-  } else {
-    
-  }
-  reason_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), reason,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (reason_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    reason_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogConsumeReq.reason)
-}
-
-// -------------------------------------------------------------------
-
-// LogConsumeRsp
-
-// int32 result = 1;
-inline void LogConsumeRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogConsumeRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t LogConsumeRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogConsumeRsp.result)
-  return _internal_result();
-}
-inline void LogConsumeRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogConsumeRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogConsumeRsp.result)
-}
-
-// -------------------------------------------------------------------
-
-// LogItemReq
-
-// uint64 role_id = 1;
-inline void LogItemReq::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogItemReq::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogItemReq::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.role_id)
-  return _internal_role_id();
-}
-inline void LogItemReq::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogItemReq::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.role_id)
-}
-
-// string role_name = 2;
-inline void LogItemReq::clear_role_name() {
-  role_name_.ClearToEmpty();
-}
-inline const std::string& LogItemReq::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.role_name)
-  return _internal_role_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogItemReq::set_role_name(ArgT0&& arg0, ArgT... args) {
- 
- role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.role_name)
-}
-inline std::string* LogItemReq::mutable_role_name() {
-  std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogItemReq.role_name)
-  return _s;
-}
-inline const std::string& LogItemReq::_internal_role_name() const {
-  return role_name_.Get();
-}
-inline void LogItemReq::_internal_set_role_name(const std::string& value) {
-  
-  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogItemReq::_internal_mutable_role_name() {
-  
-  return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogItemReq::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogItemReq.role_name)
-  return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogItemReq::set_allocated_role_name(std::string* role_name) {
-  if (role_name != nullptr) {
-    
-  } else {
-    
-  }
-  role_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (role_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogItemReq.role_name)
-}
-
-// int32 server_id = 3;
-inline void LogItemReq::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogItemReq::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogItemReq::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.server_id)
-  return _internal_server_id();
-}
-inline void LogItemReq::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogItemReq::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.server_id)
-}
-
-// int32 item_id = 4;
-inline void LogItemReq::clear_item_id() {
-  item_id_ = 0;
-}
-inline int32_t LogItemReq::_internal_item_id() const {
-  return item_id_;
-}
-inline int32_t LogItemReq::item_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.item_id)
-  return _internal_item_id();
-}
-inline void LogItemReq::_internal_set_item_id(int32_t value) {
-  
-  item_id_ = value;
-}
-inline void LogItemReq::set_item_id(int32_t value) {
-  _internal_set_item_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.item_id)
-}
-
-// int32 count = 5;
-inline void LogItemReq::clear_count() {
-  count_ = 0;
-}
-inline int32_t LogItemReq::_internal_count() const {
-  return count_;
-}
-inline int32_t LogItemReq::count() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.count)
-  return _internal_count();
-}
-inline void LogItemReq::_internal_set_count(int32_t value) {
-  
-  count_ = value;
-}
-inline void LogItemReq::set_count(int32_t value) {
-  _internal_set_count(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.count)
-}
-
-// int32 type = 6;
-inline void LogItemReq::clear_type() {
-  type_ = 0;
-}
-inline int32_t LogItemReq::_internal_type() const {
-  return type_;
-}
-inline int32_t LogItemReq::type() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.type)
-  return _internal_type();
-}
-inline void LogItemReq::_internal_set_type(int32_t value) {
-  
-  type_ = value;
-}
-inline void LogItemReq::set_type(int32_t value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.type)
-}
-
-// string reason = 7;
-inline void LogItemReq::clear_reason() {
-  reason_.ClearToEmpty();
-}
-inline const std::string& LogItemReq::reason() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemReq.reason)
-  return _internal_reason();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogItemReq::set_reason(ArgT0&& arg0, ArgT... args) {
- 
- reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogItemReq.reason)
-}
-inline std::string* LogItemReq::mutable_reason() {
-  std::string* _s = _internal_mutable_reason();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogItemReq.reason)
-  return _s;
-}
-inline const std::string& LogItemReq::_internal_reason() const {
-  return reason_.Get();
-}
-inline void LogItemReq::_internal_set_reason(const std::string& value) {
-  
-  reason_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogItemReq::_internal_mutable_reason() {
-  
-  return reason_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogItemReq::release_reason() {
-  // @@protoc_insertion_point(field_release:msg_log.LogItemReq.reason)
-  return reason_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogItemReq::set_allocated_reason(std::string* reason) {
-  if (reason != nullptr) {
-    
-  } else {
-    
-  }
-  reason_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), reason,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (reason_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    reason_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogItemReq.reason)
-}
-
-// -------------------------------------------------------------------
-
-// LogItemRsp
-
-// int32 result = 1;
-inline void LogItemRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogItemRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t LogItemRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogItemRsp.result)
-  return _internal_result();
-}
-inline void LogItemRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogItemRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogItemRsp.result)
-}
-
-// -------------------------------------------------------------------
-
-// LogBattleReq
-
-// uint64 role_id = 1;
-inline void LogBattleReq::clear_role_id() {
-  role_id_ = uint64_t{0u};
-}
-inline uint64_t LogBattleReq::_internal_role_id() const {
-  return role_id_;
-}
-inline uint64_t LogBattleReq::role_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.role_id)
-  return _internal_role_id();
-}
-inline void LogBattleReq::_internal_set_role_id(uint64_t value) {
-  
-  role_id_ = value;
-}
-inline void LogBattleReq::set_role_id(uint64_t value) {
-  _internal_set_role_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.role_id)
-}
-
-// string role_name = 2;
-inline void LogBattleReq::clear_role_name() {
-  role_name_.ClearToEmpty();
-}
-inline const std::string& LogBattleReq::role_name() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.role_name)
-  return _internal_role_name();
-}
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void LogBattleReq::set_role_name(ArgT0&& arg0, ArgT... args) {
- 
- role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.role_name)
-}
-inline std::string* LogBattleReq::mutable_role_name() {
-  std::string* _s = _internal_mutable_role_name();
-  // @@protoc_insertion_point(field_mutable:msg_log.LogBattleReq.role_name)
-  return _s;
-}
-inline const std::string& LogBattleReq::_internal_role_name() const {
-  return role_name_.Get();
-}
-inline void LogBattleReq::_internal_set_role_name(const std::string& value) {
-  
-  role_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
-}
-inline std::string* LogBattleReq::_internal_mutable_role_name() {
-  
-  return role_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
-}
-inline std::string* LogBattleReq::release_role_name() {
-  // @@protoc_insertion_point(field_release:msg_log.LogBattleReq.role_name)
-  return role_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
-}
-inline void LogBattleReq::set_allocated_role_name(std::string* role_name) {
-  if (role_name != nullptr) {
-    
-  } else {
-    
-  }
-  role_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), role_name,
-      GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (role_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
-    role_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:msg_log.LogBattleReq.role_name)
-}
-
-// int32 server_id = 3;
-inline void LogBattleReq::clear_server_id() {
-  server_id_ = 0;
-}
-inline int32_t LogBattleReq::_internal_server_id() const {
-  return server_id_;
-}
-inline int32_t LogBattleReq::server_id() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.server_id)
-  return _internal_server_id();
-}
-inline void LogBattleReq::_internal_set_server_id(int32_t value) {
-  
-  server_id_ = value;
-}
-inline void LogBattleReq::set_server_id(int32_t value) {
-  _internal_set_server_id(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.server_id)
-}
-
-// int32 battle_type = 4;
-inline void LogBattleReq::clear_battle_type() {
-  battle_type_ = 0;
-}
-inline int32_t LogBattleReq::_internal_battle_type() const {
-  return battle_type_;
-}
-inline int32_t LogBattleReq::battle_type() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.battle_type)
-  return _internal_battle_type();
-}
-inline void LogBattleReq::_internal_set_battle_type(int32_t value) {
-  
-  battle_type_ = value;
-}
-inline void LogBattleReq::set_battle_type(int32_t value) {
-  _internal_set_battle_type(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.battle_type)
-}
-
-// int32 result = 5;
-inline void LogBattleReq::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogBattleReq::_internal_result() const {
-  return result_;
-}
-inline int32_t LogBattleReq::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.result)
-  return _internal_result();
-}
-inline void LogBattleReq::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogBattleReq::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.result)
-}
-
-// int32 duration = 6;
-inline void LogBattleReq::clear_duration() {
-  duration_ = 0;
-}
-inline int32_t LogBattleReq::_internal_duration() const {
-  return duration_;
-}
-inline int32_t LogBattleReq::duration() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleReq.duration)
-  return _internal_duration();
-}
-inline void LogBattleReq::_internal_set_duration(int32_t value) {
-  
-  duration_ = value;
-}
-inline void LogBattleReq::set_duration(int32_t value) {
-  _internal_set_duration(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleReq.duration)
-}
-
-// -------------------------------------------------------------------
-
-// LogBattleRsp
-
-// int32 result = 1;
-inline void LogBattleRsp::clear_result() {
-  result_ = 0;
-}
-inline int32_t LogBattleRsp::_internal_result() const {
-  return result_;
-}
-inline int32_t LogBattleRsp::result() const {
-  // @@protoc_insertion_point(field_get:msg_log.LogBattleRsp.result)
-  return _internal_result();
-}
-inline void LogBattleRsp::_internal_set_result(int32_t value) {
-  
-  result_ = value;
-}
-inline void LogBattleRsp::set_result(int32_t value) {
-  _internal_set_result(value);
-  // @@protoc_insertion_point(field_set:msg_log.LogBattleRsp.result)
+  // @@protoc_insertion_point(field_set:msg_log.CountLogAck.count)
 }
 
 #ifdef __GNUC__
@@ -6018,36 +2742,25 @@ inline void LogBattleRsp::set_result(int32_t value) {
 
 // -------------------------------------------------------------------
 
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace msg_log
+
+PROTOBUF_NAMESPACE_OPEN
+
+template <> struct is_proto_enum< ::msg_log::LogType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::msg_log::LogType>() {
+  return ::msg_log::LogType_descriptor();
+}
+template <> struct is_proto_enum< ::msg_log::LogLevel> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::msg_log::LogLevel>() {
+  return ::msg_log::LogLevel_descriptor();
+}
+
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
 

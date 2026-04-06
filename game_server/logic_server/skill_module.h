@@ -122,6 +122,9 @@ class SkillModule {
     
     // 获取技能配置
     bool GetSkillConfig(int32_t skill_config_id, SkillConfig& config);
+    
+    // 内部版本，假设调用者已经持有了 cache_mutex_
+    bool GetSkillConfigInternal(int32_t skill_config_id, SkillConfig& config);
 
     // 生成技能ID
     uint64_t GenerateSkillId();

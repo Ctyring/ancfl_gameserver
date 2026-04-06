@@ -1,11 +1,22 @@
 #ifndef __CENTER_SERVER_H__
 #define __CENTER_SERVER_H__
 
+#include "ancfl/ancfl.h"
+#include "common/game_service_base.h"
+#include "common/message_dispatcher.h"
 #include <unordered_map>
 #include <vector>
 #include <string>
 #include <mutex>
 #include <memory>
+#include <functional>
+
+// 前向声明
+namespace google {
+namespace protobuf {
+class Message;
+}
+}
 
 namespace game_server {
 
@@ -16,7 +27,8 @@ enum class ServerType {
     LOGIC = 3,
     DB = 4,
     PROXY = 5,
-    GATEWAY = 6
+    GATEWAY = 6,
+    CENTER = 7
 };
 
 // 服务器状态
@@ -63,16 +75,23 @@ enum class CrossType {
 };
 
 // 中心服务器类
-class CenterServer {
+class CenterServer : public GameServiceBase {
 public:
     CenterServer();
     ~CenterServer();
     
     // 初始化和启动
-    bool Init(const std::string& config_file);
-    bool Start();
-    void Stop();
-    bool IsRunning();
+    virtual bool InitService() override;
+    virtual void UninitService() override;
+    
+    // 注册所有消息处理器
+    virtual void RegisterAllHandlers() override;
+    
+    // 处理客户端连接（重写父类方法）
+    virtual void handleClient(ancfl::Socket::ptr client) override;
+    
+    // 处理接收消息
+    void HandleRecv(ancfl::Socket::ptr client, int32_t conn_id);
     
     // 服务器管理
     bool RegisterServer(const ServerInfo& info);
@@ -108,8 +127,27 @@ public:
     int32_t GetServerLoad(int32_t server_id);
     
     // 定时处理
-    void OnTimer();
+    virtual void OnTimer() override;
     
+    // 获取当前连接数
+    size_t GetConnectionCount() const;
+    
+    // 根据连接ID获取客户端socket
+    ancfl::Socket::ptr GetClientByConnId(uint32_t conn_id);
+    
+    // 设置最大连接数
+    void SetMaxConnections(size_t max_connections);
+    
+    // 获取最大连接数
+    size_t GetMaxConnections() const { return max_connections_; }
+
+protected:
+    std::unordered_map<uint32_t, ancfl::Socket::ptr> connections_;  ///< 连接映射表：conn_id -> socket
+    std::unordered_map<uint32_t, time_t> last_heart_time_;          ///< 心跳时间映射表：conn_id -> 最后心跳时间
+    ancfl::Mutex conn_mutex_;                                        ///< 连接映射表的互斥锁
+    int32_t next_conn_id_;                                           ///< 下一个连接ID
+    size_t max_connections_;                                         ///< 最大连接数
+
 private:
     // 检查服务器心跳
     void CheckServerHeartbeat();
@@ -131,14 +169,17 @@ private:
     std::mutex player_mutex_;
     std::mutex match_mutex_;
     
-    // 运行状态
-    bool is_running_;
-    
     // 心跳超时时间（秒）
     static const int32_t HEARTBEAT_TIMEOUT = 30;
     
     // 匹配超时时间（秒）
     static const int32_t MATCH_TIMEOUT = 60;
+    
+    // 内部方法：通知匹配成功的玩家
+    bool NotifyMatchSuccess(const std::vector<uint64_t>& role_ids, int32_t match_type, int32_t dest_server_id);
+    
+    // 内部方法：发送消息到指定服务器
+    bool SendMessageToServer(int32_t server_id, uint32_t msg_id, const google::protobuf::Message& msg);
 };
 
 } // namespace game_server

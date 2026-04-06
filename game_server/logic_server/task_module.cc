@@ -62,7 +62,7 @@ bool TaskModule::AcceptTask(uint64_t role_id, int32_t task_config_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
     
     // 检查是否可以接受任务
-    if (!CanAcceptTask(role_id, task_config_id)) {
+    if (!CanAcceptTaskInternal(role_id, task_config_id)) {
         return false;
     }
     
@@ -81,7 +81,7 @@ bool TaskModule::AcceptTask(uint64_t role_id, int32_t task_config_id) {
     
     // 获取任务配置
     TaskConfig config;
-    if (!GetTaskConfig(task_config_id, config)) {
+    if (!GetTaskConfigInternal(task_config_id, config)) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Task config not found: task_config_id=" << task_config_id;
         return false;
     }
@@ -132,7 +132,11 @@ bool TaskModule::CanAcceptTask(uint64_t role_id, int32_t task_config_id) {
 
 bool TaskModule::CheckTaskComplete(uint64_t role_id, int32_t task_config_id) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
-    
+    return CheckTaskCompleteInternal(role_id, task_config_id);
+}
+
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool TaskModule::CheckTaskCompleteInternal(uint64_t role_id, int32_t task_config_id) {
     auto it = task_cache_.find(role_id);
     if (it == task_cache_.end()) {
         return false;
@@ -264,7 +268,7 @@ bool TaskModule::UpdateTaskProgress(uint64_t role_id, int32_t task_config_id, in
                 task.conditions[condition_index].current_count = progress;
                 
                 // 检查任务是否完成
-                CheckTaskComplete(role_id, task_config_id);
+                CheckTaskCompleteInternal(role_id, task_config_id);
                 
                 ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Task progress updated: role_id=" << role_id << ", task_config_id=" << task_config_id;
                 return true;
@@ -294,7 +298,7 @@ bool TaskModule::AddTaskProgress(uint64_t role_id, TaskConditionType condition_t
                     }
                     
                     // 检查任务是否完成
-                    if (CheckTaskComplete(role_id, task.task_config_id)) {
+                    if (CheckTaskCompleteInternal(role_id, task.task_config_id)) {
                         updated = true;
                     }
                     
@@ -456,14 +460,67 @@ bool TaskModule::SaveTaskData(uint64_t role_id) {
 
 bool TaskModule::GetTaskConfig(int32_t task_config_id, TaskConfig& config) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
-    
+    return GetTaskConfigInternal(task_config_id, config);
+}
+
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool TaskModule::GetTaskConfigInternal(int32_t task_config_id, TaskConfig& config) {
     auto it = task_configs_.find(task_config_id);
     if (it == task_configs_.end()) {
         // TODO: 从配置表加载任务配置
-        return false;
+        // 暂时返回一个默认配置
+        config.task_config_id = task_config_id;
+        config.task_name = "Task_" + std::to_string(task_config_id);
+        config.type = TaskType::MAIN;
+        config.level_requirement = 1;
+        config.pre_task_id = 0;
+        config.description = "Task description";
+        
+        // 初始化默认条件
+        TaskCondition condition;
+        condition.condition_type = static_cast<int32_t>(TaskConditionType::KILL_MONSTER);
+        condition.target_id = 100;
+        condition.target_count = 1;
+        condition.current_count = 0;
+        config.conditions.push_back(condition);
+        
+        // 初始化默认奖励
+        TaskReward reward;
+        reward.reward_type = 1; // 金币
+        reward.reward_id = 0;
+        reward.reward_count = 100;
+        config.rewards.push_back(reward);
+        
+        return true;
     }
     
     config = it->second;
+    return true;
+}
+
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool TaskModule::CanAcceptTaskInternal(uint64_t role_id, int32_t task_config_id) {
+    // 检查任务配置是否存在
+    TaskConfig config;
+    if (!GetTaskConfigInternal(task_config_id, config)) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Task config not found: role_id=" << role_id << ", task_config_id=" << task_config_id;
+        return false;
+    }
+    
+    // 检查前置任务
+    if (config.pre_task_id > 0) {
+        if (!CheckPreTask(role_id, config.pre_task_id)) {
+            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Pre task not completed: role_id=" << role_id << ", pre_task_id=" << config.pre_task_id;
+            return false;
+        }
+    }
+    
+    // 检查等级要求
+    if (!CheckLevelRequirement(role_id, config.level_requirement)) {
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Level requirement not met: role_id=" << role_id << ", required_level=" << config.level_requirement;
+        return false;
+    }
+    
     return true;
 }
 

@@ -1,124 +1,79 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "logic_server/activity_module.h"
+#include "logic_server/logic_service.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MockLogicServiceForActivity : public LogicService {
-public:
-    MOCK_METHOD(bool, SendToClient, (uint64_t role_id, int32_t msg_id, const std::string& data), (override));
-    MOCK_METHOD(bool, SendToDB, (int32_t msg_id, const std::string& data), (override));
-};
-
-class ActivityModuleTest : public Test {
+class ActivityModuleTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mock_service_ = new MockLogicServiceForActivity();
-        activity_module_ = new ActivityModule(mock_service_);
+        service_ = nullptr;
+        activity_module_ = new ActivityModule(service_);
         test_role_id_ = 12345;
     }
     
     void TearDown() override {
         delete activity_module_;
-        delete mock_service_;
     }
     
-    MockLogicServiceForActivity* mock_service_;
+    LogicService* service_;
     ActivityModule* activity_module_;
     uint64_t test_role_id_;
 };
 
-TEST_F(ActivityModuleTest, InitActivity) {
-    EXPECT_TRUE(activity_module_->InitActivity(test_role_id_));
-}
-
-TEST_F(ActivityModuleTest, GetActivityList) {
-    activity_module_->InitActivity(test_role_id_);
-    
-    std::vector<ActivityInfo> activities;
-    EXPECT_TRUE(activity_module_->GetActivityList(activities));
-}
-
 TEST_F(ActivityModuleTest, JoinActivity) {
-    activity_module_->InitActivity(test_role_id_);
-    
     EXPECT_TRUE(activity_module_->JoinActivity(test_role_id_, 1001));
-    EXPECT_TRUE(activity_module_->IsInActivity(test_role_id_, 1001));
-}
-
-TEST_F(ActivityModuleTest, LeaveActivity) {
-    activity_module_->InitActivity(test_role_id_);
-    activity_module_->JoinActivity(test_role_id_, 1001);
-    
-    EXPECT_TRUE(activity_module_->LeaveActivity(test_role_id_, 1001));
-    EXPECT_FALSE(activity_module_->IsInActivity(test_role_id_, 1001));
-}
-
-TEST_F(ActivityModuleTest, UpdateProgress) {
-    activity_module_->InitActivity(test_role_id_);
-    activity_module_->JoinActivity(test_role_id_, 1001);
-    
-    EXPECT_TRUE(activity_module_->UpdateProgress(test_role_id_, 1001, 50));
-    
-    int32_t progress = 0;
-    activity_module_->GetProgress(test_role_id_, 1001, progress);
-    EXPECT_EQ(progress, 50);
-}
-
-TEST_F(ActivityModuleTest, GetReward) {
-    activity_module_->InitActivity(test_role_id_);
-    activity_module_->JoinActivity(test_role_id_, 1001);
-    activity_module_->UpdateProgress(test_role_id_, 1001, 100);
-    
-    EXPECT_TRUE(activity_module_->GetReward(test_role_id_, 1001, 1));
-}
-
-TEST_F(ActivityModuleTest, GetRewardNotEnoughProgress) {
-    activity_module_->InitActivity(test_role_id_);
-    activity_module_->JoinActivity(test_role_id_, 1001);
-    activity_module_->UpdateProgress(test_role_id_, 1001, 10);
-    
-    EXPECT_FALSE(activity_module_->GetReward(test_role_id_, 1001, 1));
 }
 
 TEST_F(ActivityModuleTest, GetActivityInfo) {
-    activity_module_->InitActivity(test_role_id_);
-    activity_module_->JoinActivity(test_role_id_, 1001);
-    
     ActivityInfo info;
-    EXPECT_TRUE(activity_module_->GetActivityInfo(test_role_id_, 1001, info));
+    EXPECT_TRUE(activity_module_->GetActivityInfo(1001, info));
+    EXPECT_EQ(info.activity_id, 1001);
 }
 
-TEST_F(ActivityModuleTest, CheckActivityTime) {
-    activity_module_->InitActivity(test_role_id_);
-    
-    EXPECT_TRUE(activity_module_->CheckActivityTime(1001));
+TEST_F(ActivityModuleTest, GetActivityList) {
+    std::vector<ActivityInfo> activities;
+    EXPECT_TRUE(activity_module_->GetActivityList(activities));
+    EXPECT_GT(activities.size(), 0);
 }
 
-TEST_F(ActivityModuleTest, GetActivityRank) {
-    activity_module_->InitActivity(test_role_id_);
+TEST_F(ActivityModuleTest, GetPlayerActivityData) {
     activity_module_->JoinActivity(test_role_id_, 1001);
     
-    std::vector<ActivityRankInfo> ranks;
-    EXPECT_TRUE(activity_module_->GetActivityRank(1001, ranks));
+    std::vector<PlayerActivityData> data_list;
+    EXPECT_TRUE(activity_module_->GetPlayerActivityData(test_role_id_, data_list));
+    EXPECT_GT(data_list.size(), 0);
 }
 
-TEST_F(ActivityModuleTest, UpdateRank) {
-    activity_module_->InitActivity(test_role_id_);
+TEST_F(ActivityModuleTest, GetActivityTaskProgress) {
     activity_module_->JoinActivity(test_role_id_, 1001);
     
-    EXPECT_TRUE(activity_module_->UpdateRank(test_role_id_, 1001, 1000));
+    std::vector<ActivityTaskInfo> tasks;
+    EXPECT_TRUE(activity_module_->GetActivityTaskProgress(test_role_id_, 1001, tasks));
 }
 
-TEST_F(ActivityModuleTest, ResetDailyActivity) {
-    activity_module_->InitActivity(test_role_id_);
+TEST_F(ActivityModuleTest, UpdateTaskProgress) {
     activity_module_->JoinActivity(test_role_id_, 1001);
-    activity_module_->UpdateProgress(test_role_id_, 1001, 50);
     
-    EXPECT_TRUE(activity_module_->ResetDailyActivity(test_role_id_));
+    EXPECT_TRUE(activity_module_->UpdateTaskProgress(test_role_id_, 1001, 1, 50));
+}
+
+TEST_F(ActivityModuleTest, GetTaskReward) {
+    activity_module_->JoinActivity(test_role_id_, 1001);
     
-    int32_t progress = 0;
-    activity_module_->GetProgress(test_role_id_, 1001, progress);
-    EXPECT_EQ(progress, 0);
+    std::vector<ActivityRewardInfo> rewards;
+    EXPECT_TRUE(activity_module_->GetTaskReward(test_role_id_, 1001, 1, rewards));
+}
+
+TEST_F(ActivityModuleTest, GetActivityRanking) {
+    activity_module_->JoinActivity(test_role_id_, 1001);
+    
+    std::vector<ActivityRankData> ranking;
+    EXPECT_TRUE(activity_module_->GetActivityRanking(1001, 10, ranking));
+}
+
+TEST_F(ActivityModuleTest, UpdateActivityScore) {
+    activity_module_->JoinActivity(test_role_id_, 1001);
+    
+    EXPECT_TRUE(activity_module_->UpdateActivityScore(test_role_id_, 1001, 1000));
 }

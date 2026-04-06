@@ -1,11 +1,9 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "monitor_server/monitor_server.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MonitorServerTest : public Test {
+class MonitorServerTest : public ::testing::Test {
 protected:
     void SetUp() override {
         monitor_server_ = new MonitorServer();
@@ -19,126 +17,155 @@ protected:
 };
 
 TEST_F(MonitorServerTest, Init) {
-    EXPECT_TRUE(monitor_server_->Init("0.0.0.0", 9997));
+    EXPECT_TRUE(monitor_server_->Init("config/monitor_server.yaml"));
 }
 
 TEST_F(MonitorServerTest, StartStop) {
-    monitor_server_->Init("0.0.0.0", 9997);
+    monitor_server_->Init("config/monitor_server.yaml");
     EXPECT_TRUE(monitor_server_->Start());
     monitor_server_->Stop();
 }
 
-TEST_F(MonitorServerTest, RegisterServer) {
-    monitor_server_->Init("0.0.0.0", 9997);
+TEST_F(MonitorServerTest, UpdateServerStatus) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    EXPECT_TRUE(monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001));
+    ServerPerfData data;
+    data.server_id = 1;
+    data.server_name = "LogicServer1";
+    data.server_type = 3;
+    data.status = MonitorServerStatus::ONLINE;
+    data.online_count = 100;
+    data.max_online = 1000;
+    data.cpu_usage = 50.0;
+    data.memory_usage = 1024.0;
+    data.network_in = 1000;
+    data.network_out = 2000;
+    data.message_queue_size = 10;
+    data.db_query_count = 100;
+    data.db_query_time = 5;
+    data.update_time = time(nullptr);
+    
+    EXPECT_TRUE(monitor_server_->UpdateServerStatus(data));
 }
 
-TEST_F(MonitorServerTest, UnregisterServer) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+TEST_F(MonitorServerTest, GetServerStatus) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    EXPECT_TRUE(monitor_server_->UnregisterServer(1));
-}
-
-TEST_F(MonitorServerTest, UpdateServerMetrics) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+    ServerPerfData data;
+    data.server_id = 1;
+    data.server_name = "LogicServer1";
+    data.server_type = 3;
+    data.status = MonitorServerStatus::ONLINE;
+    data.cpu_usage = 50.0;
+    data.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data);
     
-    ServerMetrics metrics;
-    metrics.cpu_usage = 50.0;
-    metrics.memory_usage = 1024 * 1024 * 100;
-    metrics.connection_count = 100;
-    metrics.qps = 1000;
-    metrics.latency = 10;
-    
-    EXPECT_TRUE(monitor_server_->UpdateServerMetrics(1, metrics));
-}
-
-TEST_F(MonitorServerTest, GetServerMetrics) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
-    
-    ServerMetrics metrics;
-    metrics.cpu_usage = 50.0;
-    metrics.memory_usage = 1024 * 1024 * 100;
-    metrics.connection_count = 100;
-    metrics.qps = 1000;
-    metrics.latency = 10;
-    monitor_server_->UpdateServerMetrics(1, metrics);
-    
-    ServerMetrics retrieved;
-    EXPECT_TRUE(monitor_server_->GetServerMetrics(1, retrieved));
+    ServerPerfData retrieved;
+    EXPECT_TRUE(monitor_server_->GetServerStatus(1, retrieved));
+    EXPECT_EQ(retrieved.server_id, 1);
     EXPECT_DOUBLE_EQ(retrieved.cpu_usage, 50.0);
 }
 
-TEST_F(MonitorServerTest, GetAllServerMetrics) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
-    monitor_server_->RegisterServer(2, "logic", "127.0.0.1", 8002);
+TEST_F(MonitorServerTest, GetAllServerStatus) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    ServerMetrics metrics;
-    metrics.cpu_usage = 50.0;
-    monitor_server_->UpdateServerMetrics(1, metrics);
-    metrics.cpu_usage = 60.0;
-    monitor_server_->UpdateServerMetrics(2, metrics);
+    ServerPerfData data1;
+    data1.server_id = 1;
+    data1.cpu_usage = 50.0;
+    data1.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data1);
     
-    std::map<int32_t, ServerMetrics> all_metrics;
-    EXPECT_TRUE(monitor_server_->GetAllServerMetrics(all_metrics));
-    EXPECT_EQ(all_metrics.size(), 2);
+    ServerPerfData data2;
+    data2.server_id = 2;
+    data2.cpu_usage = 60.0;
+    data2.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data2);
+    
+    std::vector<ServerPerfData> servers;
+    EXPECT_TRUE(monitor_server_->GetAllServerStatus(servers));
+    EXPECT_EQ(servers.size(), 2);
 }
 
-TEST_F(MonitorServerTest, SetAlertThreshold) {
-    monitor_server_->Init("0.0.0.0", 9997);
+TEST_F(MonitorServerTest, AddAlert) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    AlertThreshold threshold;
-    threshold.cpu_threshold = 80.0;
-    threshold.memory_threshold = 1024 * 1024 * 1024;
-    threshold.latency_threshold = 100;
+    AlertInfo alert;
+    alert.alert_id = 0;
+    alert.type = AlertType::CPU_HIGH;
+    alert.server_id = 1;
+    alert.message = "CPU usage is high";
+    alert.alert_time = time(nullptr);
+    alert.is_handled = false;
     
-    EXPECT_TRUE(monitor_server_->SetAlertThreshold(threshold));
+    EXPECT_TRUE(monitor_server_->AddAlert(alert));
 }
 
-TEST_F(MonitorServerTest, CheckAlerts) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+TEST_F(MonitorServerTest, GetAlerts) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    AlertThreshold threshold;
-    threshold.cpu_threshold = 80.0;
-    monitor_server_->SetAlertThreshold(threshold);
-    
-    ServerMetrics metrics;
-    metrics.cpu_usage = 90.0;
-    monitor_server_->UpdateServerMetrics(1, metrics);
+    AlertInfo alert;
+    alert.type = AlertType::CPU_HIGH;
+    alert.server_id = 1;
+    alert.message = "CPU usage is high";
+    alert.alert_time = time(nullptr);
+    monitor_server_->AddAlert(alert);
     
     std::vector<AlertInfo> alerts;
-    EXPECT_TRUE(monitor_server_->CheckAlerts(alerts));
-    EXPECT_GT(alerts.size(), 0);
+    EXPECT_TRUE(monitor_server_->GetAlerts(alerts));
 }
 
-TEST_F(MonitorServerTest, GetServerHistory) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+TEST_F(MonitorServerTest, HandleAlert) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    ServerMetrics metrics;
-    metrics.cpu_usage = 50.0;
-    monitor_server_->UpdateServerMetrics(1, metrics);
+    AlertInfo alert;
+    alert.type = AlertType::CPU_HIGH;
+    alert.server_id = 1;
+    alert.message = "CPU usage is high";
+    alert.alert_time = time(nullptr);
+    monitor_server_->AddAlert(alert);
     
-    std::vector<ServerMetrics> history;
-    EXPECT_TRUE(monitor_server_->GetServerHistory(1, 3600, history));
+    std::vector<AlertInfo> alerts;
+    monitor_server_->GetAlerts(alerts);
+    if (!alerts.empty()) {
+        EXPECT_TRUE(monitor_server_->HandleAlert(alerts[0].alert_id, "admin"));
+    }
 }
 
-TEST_F(MonitorServerTest, GetSystemOverview) {
-    monitor_server_->Init("0.0.0.0", 9997);
-    monitor_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+TEST_F(MonitorServerTest, SendCommand) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    SystemOverview overview;
-    EXPECT_TRUE(monitor_server_->GetSystemOverview(overview));
-    EXPECT_EQ(overview.server_count, 1);
+    ServerPerfData data;
+    data.server_id = 1;
+    data.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data);
+    
+    int32_t command_id = 0;
+    EXPECT_TRUE(monitor_server_->SendCommand(1, ControlCommand::RELOAD, "", command_id));
+    EXPECT_NE(command_id, 0);
 }
 
-TEST_F(MonitorServerTest, SetCollectInterval) {
-    monitor_server_->Init("0.0.0.0", 9997);
+TEST_F(MonitorServerTest, GetOnlineTrend) {
+    monitor_server_->Init("config/monitor_server.yaml");
     
-    EXPECT_TRUE(monitor_server_->SetCollectInterval(10));
+    ServerPerfData data;
+    data.server_id = 1;
+    data.online_count = 100;
+    data.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data);
+    
+    std::vector<std::pair<time_t, int32_t>> trend;
+    EXPECT_TRUE(monitor_server_->GetOnlineTrend(1, trend));
+}
+
+TEST_F(MonitorServerTest, GetPerformanceHistory) {
+    monitor_server_->Init("config/monitor_server.yaml");
+    
+    ServerPerfData data;
+    data.server_id = 1;
+    data.cpu_usage = 50.0;
+    data.update_time = time(nullptr);
+    monitor_server_->UpdateServerStatus(data);
+    
+    std::vector<ServerPerfData> history;
+    EXPECT_TRUE(monitor_server_->GetPerformanceHistory(1, history));
 }

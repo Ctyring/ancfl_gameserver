@@ -20,6 +20,11 @@ bool ConfigManager::Init(const std::string& db_path) {
         return true;
     }
 
+    if (db_path.empty()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Database path is empty";
+        return false;
+    }
+
     db_path_ = db_path;
 
     // 打开SQLite数据库
@@ -85,8 +90,18 @@ bool ConfigManager::LoadConfig(const std::string& table_name) {
 
     // 缓存配置表
     config_cache_[table_name] = table;
+    
+    // 重新建立ID索引，因为table被复制了，原来的指针已经失效
+    ConfigTable& cached_table = config_cache_[table_name];
+    cached_table.id_index.clear();
+    for (auto& row : cached_table.rows) {
+        auto it = row.find("id");
+        if (it != row.end()) {
+            cached_table.id_index[it->second.int_val] = &row;
+        }
+    }
 
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Config loaded: table=" << table_name.c_str() << ", rows=" << table.rows.size();
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Config loaded: table=" << table_name.c_str() << ", rows=" << cached_table.rows.size();
     return true;
 }
 

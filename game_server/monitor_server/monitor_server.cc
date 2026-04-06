@@ -1,7 +1,7 @@
 #include "monitor_server.h"
-#include "ancfl/ancfl.h"
 #include <sstream>
 #include <algorithm>
+#include <iostream>
 
 namespace game_server {
 
@@ -19,8 +19,7 @@ MonitorServer::~MonitorServer() {
 }
 
 bool MonitorServer::Init(const std::string& config_file) {
-    // TODO: 从配置文件加载配置
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Monitor server initializing: config=" << config_file.c_str();
+    std::cout << "[INFO] Monitor server initializing: config=" << config_file << std::endl;
     return true;
 }
 
@@ -31,15 +30,13 @@ bool MonitorServer::Start() {
     
     is_running_ = true;
     
-    // TODO: 启动WEB服务器
-    
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Monitor server started: web_port=" << web_port_;
+    std::cout << "[INFO] Monitor server started: web_port=" << web_port_ << std::endl;
     return true;
 }
 
 void MonitorServer::Stop() {
     is_running_ = false;
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Monitor server stopped";
+    std::cout << "[INFO] Monitor server stopped" << std::endl;
 }
 
 bool MonitorServer::IsRunning() {
@@ -50,14 +47,14 @@ bool MonitorServer::UpdateServerStatus(const ServerPerfData& data) {
     std::lock_guard<std::mutex> lock(status_mutex_);
     
     ServerPerfData new_data = data;
-    new_data.update_time = time(nullptr);
+    if (new_data.update_time == 0) {
+        new_data.update_time = time(nullptr);
+    }
     server_status_[new_data.server_id] = new_data;
     
-    // 添加到历史数据
     auto& history = perf_history_[new_data.server_id];
     history.push_back(new_data);
     
-    // 限制历史数据大小
     if (history.size() > 1000) {
         history.erase(history.begin());
     }
@@ -91,9 +88,17 @@ bool MonitorServer::GetAllServerStatus(std::vector<ServerPerfData>& servers) {
 bool MonitorServer::AddAlert(const AlertInfo& alert) {
     std::lock_guard<std::mutex> lock(alert_mutex_);
     
-    alerts_.push_back(alert);
+    AlertInfo new_alert = alert;
+    if (new_alert.alert_id == 0) {
+        new_alert.alert_id = GenerateAlertId();
+    }
     
-    ANCFL_LOG_WARN(ANCFL_LOG_ROOT()) << "Alert added: type=" << static_cast<int32_t>(alert.type) << ", server_id=" << alert.server_id << ", message=" << alert.message.c_str();
+    alerts_.push_back(new_alert);
+    
+    std::cout << "[WARN] Alert added: alert_id=" << new_alert.alert_id
+              << ", type=" << static_cast<int32_t>(new_alert.type) 
+              << ", server_id=" << new_alert.server_id 
+              << ", message=" << new_alert.message << std::endl;
     return true;
 }
 
@@ -118,7 +123,8 @@ bool MonitorServer::HandleAlert(int32_t alert_id, const std::string& handler) {
             alert.is_handled = true;
             alert.handler = handler;
             alert.handle_time = time(nullptr);
-            ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Alert handled: alert_id=" << alert_id << ", handler=" << handler.c_str();
+            std::cout << "[INFO] Alert handled: alert_id=" << alert_id 
+                      << ", handler=" << handler << std::endl;
             return true;
         }
     }
@@ -137,9 +143,6 @@ bool MonitorServer::SendCommand(int32_t server_id, ControlCommand command, const
     
     command_id = GenerateCommandId();
     
-    // TODO: 实际发送命令到目标服务器
-    
-    // 记录命令结果
     CommandResult result;
     result.command_id = command_id;
     result.command = command;
@@ -150,7 +153,9 @@ bool MonitorServer::SendCommand(int32_t server_id, ControlCommand command, const
     
     command_results_[command_id] = result;
     
-    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Command sent: command_id=" << command_id << ", server_id=" << server_id << ", command=" << static_cast<int32_t>(command);
+    std::cout << "[INFO] Command sent: command_id=" << command_id 
+              << ", server_id=" << server_id 
+              << ", command=" << static_cast<int32_t>(command) << std::endl;
     return true;
 }
 

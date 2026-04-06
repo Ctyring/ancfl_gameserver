@@ -1,19 +1,9 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "center_server/center_server.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MockCenterCallback : public CenterCallback {
-public:
-    MOCK_METHOD(void, OnServerRegister, (int32_t server_id, const std::string& server_type), (override));
-    MOCK_METHOD(void, OnServerUnregister, (int32_t server_id), (override));
-    MOCK_METHOD(void, OnCrossBattleStart, (int64_t battle_id), (override));
-    MOCK_METHOD(void, OnCrossBattleEnd, (int64_t battle_id), (override));
-};
-
-class CenterServerTest : public Test {
+class CenterServerTest : public ::testing::Test {
 protected:
     void SetUp() override {
         center_server_ = new CenterServer();
@@ -27,122 +17,146 @@ protected:
 };
 
 TEST_F(CenterServerTest, Init) {
-    EXPECT_TRUE(center_server_->Init("0.0.0.0", 9999));
+    EXPECT_TRUE(center_server_->Init("config/center_server.yaml"));
 }
 
 TEST_F(CenterServerTest, StartStop) {
-    center_server_->Init("0.0.0.0", 9999);
+    center_server_->Init("config/center_server.yaml");
     EXPECT_TRUE(center_server_->Start());
     center_server_->Stop();
 }
 
 TEST_F(CenterServerTest, RegisterServer) {
-    center_server_->Init("0.0.0.0", 9999);
+    center_server_->Init("config/center_server.yaml");
     
-    EXPECT_TRUE(center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001));
-    EXPECT_TRUE(center_server_->IsServerRegistered(1));
+    ServerInfo info;
+    info.server_id = 1;
+    info.type = ServerType::LOGIC;
+    info.ip = "127.0.0.1";
+    info.port = 8001;
+    info.status = ServerStatus::RUNNING;
+    info.online_count = 0;
+    info.max_online = 1000;
+    
+    EXPECT_TRUE(center_server_->RegisterServer(info));
 }
 
 TEST_F(CenterServerTest, UnregisterServer) {
-    center_server_->Init("0.0.0.0", 9999);
-    center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+    center_server_->Init("config/center_server.yaml");
     
+    ServerInfo info;
+    info.server_id = 1;
+    info.type = ServerType::LOGIC;
+    info.ip = "127.0.0.1";
+    info.port = 8001;
+    
+    center_server_->RegisterServer(info);
     EXPECT_TRUE(center_server_->UnregisterServer(1));
-    EXPECT_FALSE(center_server_->IsServerRegistered(1));
-}
-
-TEST_F(CenterServerTest, GetServerList) {
-    center_server_->Init("0.0.0.0", 9999);
-    center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
-    center_server_->RegisterServer(2, "logic", "127.0.0.1", 8002);
-    
-    std::vector<ServerInfo> servers;
-    EXPECT_TRUE(center_server_->GetServerList("logic", servers));
-    EXPECT_EQ(servers.size(), 2);
 }
 
 TEST_F(CenterServerTest, GetServerInfo) {
-    center_server_->Init("0.0.0.0", 9999);
-    center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
+    center_server_->Init("config/center_server.yaml");
     
     ServerInfo info;
-    EXPECT_TRUE(center_server_->GetServerInfo(1, info));
-    EXPECT_EQ(info.server_id, 1);
-    EXPECT_EQ(info.server_type, "logic");
+    info.server_id = 1;
+    info.type = ServerType::LOGIC;
+    info.ip = "127.0.0.1";
+    info.port = 8001;
+    center_server_->RegisterServer(info);
+    
+    ServerInfo retrieved;
+    EXPECT_TRUE(center_server_->GetServerInfo(1, retrieved));
+    EXPECT_EQ(retrieved.server_id, 1);
+}
+
+TEST_F(CenterServerTest, GetServerList) {
+    center_server_->Init("config/center_server.yaml");
+    
+    ServerInfo info1;
+    info1.server_id = 1;
+    info1.type = ServerType::LOGIC;
+    info1.ip = "127.0.0.1";
+    info1.port = 8001;
+    center_server_->RegisterServer(info1);
+    
+    ServerInfo info2;
+    info2.server_id = 2;
+    info2.type = ServerType::LOGIC;
+    info2.ip = "127.0.0.1";
+    info2.port = 8002;
+    center_server_->RegisterServer(info2);
+    
+    std::vector<ServerInfo> servers;
+    EXPECT_TRUE(center_server_->GetServerList(ServerType::LOGIC, servers));
+    EXPECT_EQ(servers.size(), 2);
 }
 
 TEST_F(CenterServerTest, UpdateServerLoad) {
-    center_server_->Init("0.0.0.0", 9999);
-    center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
-    
-    EXPECT_TRUE(center_server_->UpdateServerLoad(1, 50));
+    center_server_->Init("config/center_server.yaml");
     
     ServerInfo info;
-    center_server_->GetServerInfo(1, info);
-    EXPECT_EQ(info.load, 50);
+    info.server_id = 1;
+    info.type = ServerType::LOGIC;
+    info.ip = "127.0.0.1";
+    info.port = 8001;
+    center_server_->RegisterServer(info);
+    
+    EXPECT_TRUE(center_server_->UpdateServerLoad(1, 50));
+    EXPECT_EQ(center_server_->GetServerLoad(1), 50);
 }
 
-TEST_F(CenterServerTest, SelectLowestLoadServer) {
-    center_server_->Init("0.0.0.0", 9999);
-    center_server_->RegisterServer(1, "logic", "127.0.0.1", 8001);
-    center_server_->RegisterServer(2, "logic", "127.0.0.1", 8002);
+TEST_F(CenterServerTest, SelectBestServer) {
+    center_server_->Init("config/center_server.yaml");
+    
+    ServerInfo info1;
+    info1.server_id = 1;
+    info1.type = ServerType::LOGIC;
+    info1.ip = "127.0.0.1";
+    info1.port = 8001;
+    center_server_->RegisterServer(info1);
     center_server_->UpdateServerLoad(1, 80);
+    
+    ServerInfo info2;
+    info2.server_id = 2;
+    info2.type = ServerType::LOGIC;
+    info2.ip = "127.0.0.1";
+    info2.port = 8002;
+    center_server_->RegisterServer(info2);
     center_server_->UpdateServerLoad(2, 30);
     
-    int32_t server_id = 0;
-    EXPECT_TRUE(center_server_->SelectLowestLoadServer("logic", server_id));
+    int32_t server_id = center_server_->SelectBestServer(ServerType::LOGIC);
     EXPECT_EQ(server_id, 2);
 }
 
-TEST_F(CenterServerTest, CreateCrossBattle) {
-    center_server_->Init("0.0.0.0", 9999);
+TEST_F(CenterServerTest, PlayerEnterCross) {
+    center_server_->Init("config/center_server.yaml");
     
-    CrossBattleInfo battle;
-    battle.battle_type = 1;
-    battle.server_ids = {1, 2, 3};
-    
-    int64_t battle_id = 0;
-    EXPECT_TRUE(center_server_->CreateCrossBattle(battle, battle_id));
-    EXPECT_NE(battle_id, 0);
+    EXPECT_TRUE(center_server_->PlayerEnterCross(12345, 1, 2, (int32_t)CrossType::CROSS_BATTLE, "token123"));
 }
 
-TEST_F(CenterServerTest, JoinCrossBattle) {
-    center_server_->Init("0.0.0.0", 9999);
+TEST_F(CenterServerTest, PlayerLeaveCross) {
+    center_server_->Init("config/center_server.yaml");
+    center_server_->PlayerEnterCross(12345, 1, 2, (int32_t)CrossType::CROSS_BATTLE, "token123");
     
-    CrossBattleInfo battle;
-    battle.battle_type = 1;
-    battle.server_ids = {1, 2, 3};
-    
-    int64_t battle_id = 0;
-    center_server_->CreateCrossBattle(battle, battle_id);
-    
-    EXPECT_TRUE(center_server_->JoinCrossBattle(battle_id, 12345));
+    EXPECT_TRUE(center_server_->PlayerLeaveCross(12345));
 }
 
-TEST_F(CenterServerTest, GetCrossBattleInfo) {
-    center_server_->Init("0.0.0.0", 9999);
+TEST_F(CenterServerTest, IsPlayerInCross) {
+    center_server_->Init("config/center_server.yaml");
+    center_server_->PlayerEnterCross(12345, 1, 2, (int32_t)CrossType::CROSS_BATTLE, "token123");
     
-    CrossBattleInfo battle;
-    battle.battle_type = 1;
-    battle.server_ids = {1, 2, 3};
-    
-    int64_t battle_id = 0;
-    center_server_->CreateCrossBattle(battle, battle_id);
-    
-    CrossBattleInfo info;
-    EXPECT_TRUE(center_server_->GetCrossBattleInfo(battle_id, info));
-    EXPECT_EQ(info.battle_type, 1);
+    EXPECT_TRUE(center_server_->IsPlayerInCross(12345));
 }
 
-TEST_F(CenterServerTest, EndCrossBattle) {
-    center_server_->Init("0.0.0.0", 9999);
+TEST_F(CenterServerTest, AddToMatchQueue) {
+    center_server_->Init("config/center_server.yaml");
     
-    CrossBattleInfo battle;
-    battle.battle_type = 1;
-    battle.server_ids = {1, 2, 3};
+    EXPECT_TRUE(center_server_->AddToMatchQueue(12345, 1, 1000));
+}
+
+TEST_F(CenterServerTest, RemoveFromMatchQueue) {
+    center_server_->Init("config/center_server.yaml");
+    center_server_->AddToMatchQueue(12345, 1, 1000);
     
-    int64_t battle_id = 0;
-    center_server_->CreateCrossBattle(battle, battle_id);
-    
-    EXPECT_TRUE(center_server_->EndCrossBattle(battle_id));
+    EXPECT_TRUE(center_server_->RemoveFromMatchQueue(12345));
 }

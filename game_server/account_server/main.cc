@@ -1,38 +1,81 @@
-#include "account_service.h"
 #include "ancfl/ancfl.h"
+#include "ancfl/config.h"
+#include "ancfl/log.h"
+#include "account_service.h"
 
 using namespace game_server;
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     // 设置时区
     setenv("TZ", ":/etc/localtime", 1);
     tzset();
     srand(time(0));
 
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Starting account server...";
+
     // 初始化ancfl
-    ancfl::IOManager iom(1);
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing IO manager...";
+    auto iom = std::make_shared<ancfl::IOManager>(2, false, "service");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "IO manager initialized";
+    
+    // 启动IO管理器
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Starting IO manager...";
+    iom->start();
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "IO manager started";
 
-    // 创建工作线程池
-    ancfl::IOManager::ptr worker(new ancfl::IOManager(4, false, "worker"));
+    // 初始化日志
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing logger...";
+    auto logger = ancfl::LoggerMgr::GetInstance()->getLogger("account_server");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Logger initialized";
 
-    // 创建账号服务实例
-    auto service = std::make_shared<AccountService>();
+    // 加载配置
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Loading configuration...";
+    ancfl::Config::LoadFromConfDir("conf");
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Configuration loaded";
+
+    // 创建账号服务
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Creating AccountService...";
+    auto account_service = std::make_shared<AccountService>();
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "AccountService created";
+
+    // 设置主IOManager（用于网络IO）
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Setting IO manager for AccountService...";
+    account_service->SetIOManager(iom.get(), iom.get());
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "IO manager set";
 
     // 初始化服务
-    if (!service->InitService()) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
-            << "Failed to initialize AccountServer";
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Initializing AccountService...";
+    if (!account_service->InitService()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to init AccountService";
         return -1;
     }
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "AccountService initialized successfully";
 
     // 启动服务
-    service->Run();
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Starting AccountService...";
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "AccountService started";
 
     // 启动主循环
-    iom.schedule([service]() { service->MainLoop(); });
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Starting main loop...";
+    std::atomic<bool> main_loop_exited(false);
+    iom->schedule([account_service, iom, &main_loop_exited]() {
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Main loop coroutine started";
+        account_service->MainLoop();
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Main loop exited";
+        main_loop_exited = true;
+        // 当 MainLoop 退出时，停止 IO 管理器
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Stopping IO manager...";
+        iom->stop();
+        ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "IO manager stopped";
+    });
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Main loop coroutine scheduled";
 
-    // 运行IO管理器
-    iom.start();
+    // 等待主循环退出
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Waiting for main loop to exit...";
+    while (!main_loop_exited) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    ANCFL_LOG_INFO(ANCFL_LOG_ROOT()) << "Main loop exited";
 
     return 0;
 }

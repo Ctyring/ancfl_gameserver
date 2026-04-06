@@ -2,7 +2,8 @@
 #define __ACCOUNT_SERVICE_H__
 
 #include "../common/game_service_base.h"
-#include "ancfl/db/mysql.h"
+#include "../common/message_dispatcher.h"
+#include "../proto/msg_db.pb.h"
 
 namespace game_server {
 
@@ -37,6 +38,9 @@ public:
 
     // 每秒定时器
     virtual void OnTimer() override;
+    
+    // 5秒定时器
+    virtual void OnTimer5s() override;
 
     // 账号操作
     bool CreateAccount(const std::string& account_name, const std::string& password,
@@ -58,6 +62,16 @@ public:
                         const std::string& uuid, const std::string& idfa,
                         const std::string& imodel, const std::string& imei, int32_t ip);
 
+    // 处理登录请求
+    void HandleLoginRequest(ancfl::Socket::ptr client, const std::string& data);
+    
+    // 处理注册请求
+    void HandleRegisterRequest(ancfl::Socket::ptr client, const std::string& data);
+
+protected:
+    // 处理客户端连接
+    virtual void handleClient(ancfl::Socket::ptr client) override;
+
 private:
     // 消息处理器
     bool OnAccountRegReq(const NetPacket& packet);
@@ -65,28 +79,40 @@ private:
     bool OnSealAccountReq(const NetPacket& packet);
     bool OnHeartBeatReq(const NetPacket& packet);
 
-    // 数据库操作
-    bool InitDatabase();
-    void CloseDatabase();
+    // 连接中心服务器
+    bool ConnectToCenterServer();
+    
+    // 注册到中心服务器
+    bool RegisterToCenterServer();
+    
+    // 发送心跳到中心服务器
+    void SendHeartbeatToCenterServer();
+    
+    // 连接数据库服务器
+    bool ConnectToDBServer();
+    
+    // 向数据库服务器发送请求并获取响应
+    bool SendDBRequest(const DBRequest& req, DBResponse& rsp);
 
     // MD5加密
     std::string MD5Encrypt(const std::string& input);
 
 private:
-    // 数据库连接
-    ancfl::MySQL::ptr mysql_;
-    
     // 账号缓存
     std::unordered_map<uint64_t, AccountInfo> account_cache_;
     std::unordered_map<std::string, uint64_t> name_to_id_;
     ancfl::Mutex cache_mutex_;
     
-    // 数据库配置
-    std::string db_host_;
-    int32_t db_port_;
-    std::string db_user_;
-    std::string db_password_;
-    std::string db_name_;
+    // 中心服务器连接
+    uint32_t center_server_id_;
+    std::string center_server_ip_;
+    int32_t center_server_port_;
+    ancfl::Socket::ptr center_server_conn_;
+    
+    // 数据库服务器连接
+    std::string db_server_ip_;
+    int32_t db_server_port_;
+    ancfl::Socket::ptr db_server_conn_;
 };
 
 } // namespace game_server

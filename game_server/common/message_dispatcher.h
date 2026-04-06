@@ -14,7 +14,7 @@ struct MessageHeader {
     uint32_t msg_len;
     uint64_t target_id;
     uint32_t user_data;
-};
+} __attribute__((packed));
 
 // 网络包结构
 struct NetPacket {

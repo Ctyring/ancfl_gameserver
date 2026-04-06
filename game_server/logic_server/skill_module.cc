@@ -80,7 +80,7 @@ bool SkillModule::LearnSkill(uint64_t role_id, int32_t skill_config_id) {
 
     // 获取技能配置
     SkillConfig config;
-    if (!GetSkillConfig(skill_config_id, config)) {
+    if (!GetSkillConfigInternal(skill_config_id, config)) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill config not found: skill_config_id=" << skill_config_id;
         return false;
     }
@@ -260,23 +260,42 @@ bool SkillModule::UseSkill(uint64_t role_id,
 }
 
 bool SkillModule::CanUseSkill(uint64_t role_id, int32_t skill_config_id) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+
     // 检查技能是否存在
-    SkillInfo info;
-    if (!GetSkillInfo(role_id, skill_config_id, info)) {
+    auto it = skill_cache_.find(role_id);
+    if (it == skill_cache_.end()) {
+        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill not learned: role_id=" << role_id << ", skill_config_id=" << skill_config_id;
+        return false;
+    }
+
+    // 查找技能
+    const SkillInfo* info = nullptr;
+    for (const auto& skill : it->second) {
+        if (skill.skill_config_id == skill_config_id) {
+            info = &skill;
+            break;
+        }
+    }
+
+    if (!info) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill not learned: role_id=" << role_id << ", skill_config_id=" << skill_config_id;
         return false;
     }
 
     // 检查技能是否解锁
-    if (!info.is_unlocked) {
+    if (!info->is_unlocked) {
         ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill not unlocked: role_id=" << role_id << ", skill_config_id=" << skill_config_id;
         return false;
     }
 
     // 检查技能是否在冷却中
-    if (IsSkillInCooldown(role_id, skill_config_id)) {
-        ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill in cooldown: role_id=" << role_id << ", skill_config_id=" << skill_config_id;
-        return false;
+    if (info->last_use_time > 0) {
+        time_t now = time(nullptr);
+        if ((now - info->last_use_time) < info->cooldown_time) {
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Skill in cooldown: role_id=" << role_id << ", skill_config_id=" << skill_config_id;
+            return false;
+        }
     }
 
     // TODO: 检查MP是否足够
@@ -458,8 +477,12 @@ bool SkillModule::ApplySkillEffects(uint64_t role_id,
 
         // 添加Buff到目标
         if (buff_config_id > 0) {
-            if (!buff_module_->AddBuff(target_id, role_id, buff_config_id)) {
-                ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to add buff: target_id=" << target_id << ", caster_id=" << role_id << ", buff_config_id=" << buff_config_id;
+            if (buff_module_) {
+                if (!buff_module_->AddBuff(target_id, role_id, buff_config_id)) {
+                    ANCFL_LOG_ERROR(ANCFL_LOG_ROOT()) << "Failed to add buff: target_id=" << target_id << ", caster_id=" << role_id << ", buff_config_id=" << buff_config_id;
+                }
+            } else {
+                ANCFL_LOG_DEBUG(ANCFL_LOG_ROOT()) << "Buff module not initialized, skipping buff application";
             }
         }
     }
@@ -566,9 +589,8 @@ bool SkillModule::SaveSkillData(uint64_t role_id) {
     return true;
 }
 
-bool SkillModule::GetSkillConfig(int32_t skill_config_id, SkillConfig& config) {
-    std::lock_guard<std::mutex> lock(cache_mutex_);
-
+// 内部版本，假设调用者已经持有了 cache_mutex_
+bool SkillModule::GetSkillConfigInternal(int32_t skill_config_id, SkillConfig& config) {
     auto it = skill_configs_.find(skill_config_id);
     if (it != skill_configs_.end()) {
         config = it->second;
@@ -592,6 +614,11 @@ bool SkillModule::GetSkillConfig(int32_t skill_config_id, SkillConfig& config) {
     skill_configs_[skill_config_id] = config;
 
     return true;
+}
+
+bool SkillModule::GetSkillConfig(int32_t skill_config_id, SkillConfig& config) {
+    std::lock_guard<std::mutex> lock(cache_mutex_);
+    return GetSkillConfigInternal(skill_config_id, config);
 }
 
 uint64_t SkillModule::GenerateSkillId() {

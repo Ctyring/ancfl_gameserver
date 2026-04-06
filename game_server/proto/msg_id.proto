@@ -27,6 +27,10 @@ enum MessageID {
     MSG_SELECT_SERVER_REQ = 100011;
     MSG_SELECT_SERVER_ACK = 100012;
     
+    // 数据库相关消息
+    MSG_DB_REQ = 100090;
+    MSG_DB_RESP = 100091;
+    
     // 服务器间注册
     MSG_LOGIC_REGTO_LOGIN_REQ = 100013;
     MSG_LOGIC_REGTO_LOGIN_ACK = 100014;

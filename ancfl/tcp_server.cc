@@ -81,16 +81,24 @@ bool TcpServer::bind(const std::vector<Address::ptr>& addrs,
 }
 
 void TcpServer::startAccept(Socket::ptr sock) {
-    ANCFL_LOG_INFO(g_logger) << "startAccept: " << *sock;
     // 对于每个监听的socket，都循环不断等待接收请求
     while (!m_isStop) {
         Socket::ptr client = sock->accept();
         if (client) {
             client->setRecvTimeout(m_recvTimeout);
-            m_ioWorker->schedule(std::bind(&TcpServer::handleClient,
-                                           shared_from_this(), client));
-        } else {
-            ANCFL_LOG_ERROR(g_logger)
+            try {
+                auto self = shared_from_this();
+                if (m_ioWorker) {
+                    m_ioWorker->schedule(std::bind(&TcpServer::handleClient,
+                                                   self, client));
+                } else {
+                    client->close();
+                }
+            } catch (const std::bad_weak_ptr& e) {
+                client->close();
+            }
+        } else if (errno != EAGAIN) {
+            ANCFL_LOG_ERROR(ANCFL_LOG_ROOT())
                 << "accept errno=" << errno << " errstr=" << strerror(errno);
         }
     }
@@ -102,8 +110,12 @@ bool TcpServer::start() {
     }
     m_isStop = false;
     for (auto& sock : m_socks) {
-        m_acceptWorker->schedule(
-            std::bind(&TcpServer::startAccept, shared_from_this(), sock));
+        try {
+            auto self = shared_from_this();
+            m_acceptWorker->schedule(
+                std::bind(&TcpServer::startAccept, self, sock));
+        } catch (const std::bad_weak_ptr& e) {
+        }
     }
     return true;
 }

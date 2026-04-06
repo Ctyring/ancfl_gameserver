@@ -1,12 +1,12 @@
 #ifndef __GAME_SERVICE_BASE_H__
 #define __GAME_SERVICE_BASE_H__
 
-#include "tcp_service.h"
+#include "ancfl/tcp_server.h"
 
 namespace game_server {
 
 // 游戏服务基类
-class GameServiceBase : public TcpService {
+class GameServiceBase : public ancfl::TcpServer {
 public:
     using ptr = std::shared_ptr<GameServiceBase>;
 
@@ -21,6 +21,13 @@ public:
 
     // 设置服务ID
     void SetServiceId(uint32_t id) { service_id_ = id; }
+
+    // 设置IOManager
+    void SetIOManager(ancfl::IOManager* worker, ancfl::IOManager* io_worker) {
+        m_worker = worker;
+        m_ioWorker = io_worker;
+        m_acceptWorker = worker; // 使用worker作为acceptWorker
+    }
 
     // 初始化服务
     virtual bool InitService() = 0;

@@ -1,30 +1,22 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "logic_server/shop_module.h"
+#include "logic_server/logic_service.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MockLogicServiceForShop : public LogicService {
-public:
-    MOCK_METHOD(bool, SendToClient, (uint64_t role_id, int32_t msg_id, const std::string& data), (override));
-    MOCK_METHOD(bool, SendToDB, (int32_t msg_id, const std::string& data), (override));
-};
-
-class ShopModuleTest : public Test {
+class ShopModuleTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mock_service_ = new MockLogicServiceForShop();
-        shop_module_ = new ShopModule(mock_service_);
+        service_ = nullptr;
+        shop_module_ = new ShopModule(service_);
         test_role_id_ = 12345;
     }
     
     void TearDown() override {
         delete shop_module_;
-        delete mock_service_;
     }
     
-    MockLogicServiceForShop* mock_service_;
+    LogicService* service_;
     ShopModule* shop_module_;
     uint64_t test_role_id_;
 };
@@ -38,6 +30,15 @@ TEST_F(ShopModuleTest, GetShopList) {
     
     std::vector<ShopInfo> shops;
     EXPECT_TRUE(shop_module_->GetShopList(shops));
+    EXPECT_GT(shops.size(), 0);
+}
+
+TEST_F(ShopModuleTest, GetShopInfo) {
+    shop_module_->InitShop(test_role_id_);
+    
+    ShopInfo info;
+    EXPECT_TRUE(shop_module_->GetShopInfo(1, info));
+    EXPECT_EQ(info.shop_id, 1);
 }
 
 TEST_F(ShopModuleTest, GetShopItems) {
@@ -45,6 +46,7 @@ TEST_F(ShopModuleTest, GetShopItems) {
     
     std::vector<ShopItem> items;
     EXPECT_TRUE(shop_module_->GetShopItems(1, items));
+    EXPECT_GT(items.size(), 0);
 }
 
 TEST_F(ShopModuleTest, BuyItem) {
@@ -53,66 +55,27 @@ TEST_F(ShopModuleTest, BuyItem) {
     EXPECT_TRUE(shop_module_->BuyItem(test_role_id_, 1, 1001, 1));
 }
 
-TEST_F(ShopModuleTest, BuyItemLimit) {
+TEST_F(ShopModuleTest, CanBuyItem) {
     shop_module_->InitShop(test_role_id_);
     
-    EXPECT_TRUE(shop_module_->BuyItem(test_role_id_, 1, 1001, 10));
-    
-    int32_t count = 0;
-    shop_module_->GetItemBuyCount(test_role_id_, 1, 1001, count);
-    EXPECT_EQ(count, 10);
+    EXPECT_TRUE(shop_module_->CanBuyItem(test_role_id_, 1, 1001, 1));
 }
 
-TEST_F(ShopModuleTest, RefreshShop) {
+TEST_F(ShopModuleTest, GetItemBuyCount) {
     shop_module_->InitShop(test_role_id_);
     
-    EXPECT_TRUE(shop_module_->RefreshShop(test_role_id_, 1));
+    EXPECT_TRUE(shop_module_->GetItemBuyCount(test_role_id_, 1, 1001));
 }
 
-TEST_F(ShopModuleTest, OpenMysteryShop) {
+TEST_F(ShopModuleTest, AddItemBuyCount) {
     shop_module_->InitShop(test_role_id_);
     
-    EXPECT_TRUE(shop_module_->OpenMysteryShop(test_role_id_));
+    EXPECT_TRUE(shop_module_->AddItemBuyCount(test_role_id_, 1, 1001, 1));
 }
 
-TEST_F(ShopModuleTest, GetMysteryShop) {
+TEST_F(ShopModuleTest, GetPurchaseRecords) {
     shop_module_->InitShop(test_role_id_);
-    shop_module_->OpenMysteryShop(test_role_id_);
-    
-    MysteryShopInfo info;
-    EXPECT_TRUE(shop_module_->GetMysteryShop(test_role_id_, info));
-}
-
-TEST_F(ShopModuleTest, RefreshMysteryShop) {
-    shop_module_->InitShop(test_role_id_);
-    shop_module_->OpenMysteryShop(test_role_id_);
-    
-    EXPECT_TRUE(shop_module_->RefreshMysteryShop(test_role_id_));
-}
-
-TEST_F(ShopModuleTest, BuyMysteryItem) {
-    shop_module_->InitShop(test_role_id_);
-    shop_module_->OpenMysteryShop(test_role_id_);
-    
-    EXPECT_TRUE(shop_module_->BuyMysteryItem(test_role_id_, 0));
-}
-
-TEST_F(ShopModuleTest, GetPurchaseRecord) {
-    shop_module_->InitShop(test_role_id_);
-    shop_module_->BuyItem(test_role_id_, 1, 1001, 1);
     
     std::vector<PurchaseRecord> records;
-    EXPECT_TRUE(shop_module_->GetPurchaseRecord(test_role_id_, records));
-    EXPECT_GT(records.size(), 0);
-}
-
-TEST_F(ShopModuleTest, ResetBuyCount) {
-    shop_module_->InitShop(test_role_id_);
-    shop_module_->BuyItem(test_role_id_, 1, 1001, 5);
-    
-    EXPECT_TRUE(shop_module_->ResetBuyCount(test_role_id_, 1));
-    
-    int32_t count = 0;
-    shop_module_->GetItemBuyCount(test_role_id_, 1, 1001, count);
-    EXPECT_EQ(count, 0);
+    EXPECT_TRUE(shop_module_->GetPurchaseRecords(test_role_id_, records));
 }

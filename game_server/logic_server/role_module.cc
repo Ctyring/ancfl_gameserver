@@ -18,48 +18,45 @@ bool RoleModule::CreateRole(uint64_t account_id,
     // 生成角色ID
     role_id = time(nullptr) * 10000 + rand() % 10000;
 
-    // 创建角色数据
-    RoleData data;
-    data.role_id = role_id;
-    data.account_id = account_id;
-    data.role_name = role_name;
-    data.level = 1;
-    data.exp = 0;
-    data.gold = 10000;
-    data.diamond = 1000;
-    data.job = job;
-    data.gender = gender;
-    data.create_time = time(nullptr);
-    data.last_login_time = data.create_time;
-    data.last_logout_time = 0;
-    data.online_time = 0;
-    data.vip_level = 0;
-    data.vip_exp = 0;
-    data.stamina = 100;
-    data.energy = 100;
-    data.reputation = 0;
-    data.honor = 0;
-    data.war_credit = 0;
-    data.achievement = 0;
-    data.fight_power = 1000;
-    data.current_scene = 1001;
-    data.position_x = 0.0f;
-    data.position_y = 0.0f;
-    data.position_z = 0.0f;
-    data.rotation_y = 0.0f;
-
     // 保存到缓存
     {
         std::lock_guard<std::mutex> lock(cache_mutex_);
-        role_cache_[role_id] = data;
+        RoleData& data = role_cache_[role_id];
+        data.role_id = role_id;
+        data.account_id = account_id;
+        data.role_name = role_name;
+        data.level = 1;
+        data.exp = 0;
+        data.gold = 10000;
+        data.diamond = 1000;
+        data.job = job;
+        data.gender = gender;
+        data.create_time = time(nullptr);
+        data.last_login_time = data.create_time;
+        data.last_logout_time = 0;
+        data.online_time = 0;
+        data.vip_level = 0;
+        data.vip_exp = 0;
+        data.stamina = 100;
+        data.energy = 100;
+        data.reputation = 0;
+        data.honor = 0;
+        data.war_credit = 0;
+        data.achievement = 0;
+        data.fight_power = 1000;
+        data.current_scene = 1001;
+        data.position_x = 0.0f;
+        data.position_y = 0.0f;
+        data.position_z = 0.0f;
+        data.rotation_y = 0.0f;
         online_status_[role_id] = false;
     }
 
     // 计算角色属性
     RoleProperty property;
-    CalculateRoleProperty(data, property);
     {
         std::lock_guard<std::mutex> lock(cache_mutex_);
+        CalculateRoleProperty(role_cache_[role_id], property);
         property_cache_[role_id] = property;
     }
 
@@ -85,7 +82,34 @@ bool RoleModule::GetRoleInfo(uint64_t role_id, RoleData& info) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
     auto it = role_cache_.find(role_id);
     if (it != role_cache_.end()) {
-        info = it->second;
+        // 逐个字段复制而不是整个对象复制
+        info.role_id = it->second.role_id;
+        info.account_id = it->second.account_id;
+        info.role_name = it->second.role_name;
+        info.level = it->second.level;
+        info.exp = it->second.exp;
+        info.gold = it->second.gold;
+        info.diamond = it->second.diamond;
+        info.job = it->second.job;
+        info.gender = it->second.gender;
+        info.create_time = it->second.create_time;
+        info.last_login_time = it->second.last_login_time;
+        info.last_logout_time = it->second.last_logout_time;
+        info.online_time = it->second.online_time;
+        info.vip_level = it->second.vip_level;
+        info.vip_exp = it->second.vip_exp;
+        info.stamina = it->second.stamina;
+        info.energy = it->second.energy;
+        info.reputation = it->second.reputation;
+        info.honor = it->second.honor;
+        info.war_credit = it->second.war_credit;
+        info.achievement = it->second.achievement;
+        info.fight_power = it->second.fight_power;
+        info.current_scene = it->second.current_scene;
+        info.position_x = it->second.position_x;
+        info.position_y = it->second.position_y;
+        info.position_z = it->second.position_z;
+        info.rotation_y = it->second.rotation_y;
         return true;
     }
     return false;
@@ -93,7 +117,35 @@ bool RoleModule::GetRoleInfo(uint64_t role_id, RoleData& info) {
 
 bool RoleModule::UpdateRoleInfo(const RoleData& info) {
     std::lock_guard<std::mutex> lock(cache_mutex_);
-    role_cache_[info.role_id] = info;
+    RoleData& data = role_cache_[info.role_id];
+    // 逐个字段复制而不是整个对象复制
+    data.role_id = info.role_id;
+    data.account_id = info.account_id;
+    data.role_name = info.role_name;
+    data.level = info.level;
+    data.exp = info.exp;
+    data.gold = info.gold;
+    data.diamond = info.diamond;
+    data.job = info.job;
+    data.gender = info.gender;
+    data.create_time = info.create_time;
+    data.last_login_time = info.last_login_time;
+    data.last_logout_time = info.last_logout_time;
+    data.online_time = info.online_time;
+    data.vip_level = info.vip_level;
+    data.vip_exp = info.vip_exp;
+    data.stamina = info.stamina;
+    data.energy = info.energy;
+    data.reputation = info.reputation;
+    data.honor = info.honor;
+    data.war_credit = info.war_credit;
+    data.achievement = info.achievement;
+    data.fight_power = info.fight_power;
+    data.current_scene = info.current_scene;
+    data.position_x = info.position_x;
+    data.position_y = info.position_y;
+    data.position_z = info.position_z;
+    data.rotation_y = info.rotation_y;
 
     // 暂时返回 true，实际实现需要保存数据到数据库
     return true;

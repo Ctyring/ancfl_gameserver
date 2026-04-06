@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.0)
 
 project(ancfl)
 cmake_policy(SET CMP0064 NEW)
@@ -217,6 +217,9 @@ endif()
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+# 添加游戏服务器子目录
+add_subdirectory(game_server)
 
 
 

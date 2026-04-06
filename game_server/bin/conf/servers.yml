@@ -1,0 +1,71 @@
+# 服务器配置文件
+# 代理服务器配置
+proxy_server:
+  host: "0.0.0.0"
+  port: 8008
+  max_connections: 10000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）
+# 逻辑服务器配置（多个）
+logic_servers:
+  - id: 1
+    host: "127.0.0.1"
+    port: 8002
+    max_connections: 5000
+  - id: 2
+    host: "127.0.0.1"
+    port: 8003
+    max_connections: 5000
+  - id: 3
+    host: "127.0.0.1"
+    port: 8004
+    max_connections: 5000
+  - id: 4
+    host: "127.0.0.1"
+    port: 8005
+    max_connections: 5000
+  - id: 5
+    host: "127.0.0.1"
+    port: 8006
+    max_connections: 5000
+# 中心服务器配置
+center_server:
+  host: "0.0.0.0"
+  port: 8011
+  max_connections: 5000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）
+
+# 数据库服务器配置
+db_server:
+  host: "0.0.0.0"
+  port: 8012
+  max_connections: 10000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）
+# 账号服务器配置
+account_server:
+  host: "127.0.0.1"
+  port: 8201
+  max_connections: 5000
+# 登录服务器配置
+login_server:
+  host: "0.0.0.0"
+  port: 8000
+  max_connections: 5000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）
+# 监控服务器配置
+monitor_server:
+  host: "0.0.0.0"
+  port: 8100
+  max_connections: 1000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）
+# 日志服务器配置
+log_server:
+  host: "0.0.0.0"
+  port: 8300
+  max_connections: 1000
+  recv_timeout: 30000  # 接收超时时间（毫秒）
+  send_timeout: 10000  # 发送超时时间（毫秒）

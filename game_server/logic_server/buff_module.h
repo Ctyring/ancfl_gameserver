@@ -113,6 +113,15 @@ private:
     // 获取Buff配置
     bool GetBuffConfig(int32_t buff_config_id, BuffConfig& config);
     
+    // 内部版本，假设调用者已经持有了 cache_mutex_
+    bool GetBuffConfigInternal(int32_t buff_config_id, BuffConfig& config);
+    
+    // 堆叠Buff内部版本，假设调用者已经持有了 cache_mutex_
+    bool StackBuffInternal(uint64_t target_id, uint64_t buff_id);
+    
+    // 刷新Buff时间内部版本，假设调用者已经持有了 cache_mutex_
+    bool RefreshBuffInternal(uint64_t target_id, uint64_t buff_id);
+
     // 生成Buff ID
     uint64_t GenerateBuffId();
     

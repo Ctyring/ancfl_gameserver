@@ -1,11 +1,38 @@
 syntax = "proto3";
 package msg_log;
 
-// 日志记录
-message LogRecordInfo {
+// 日志类型
+enum LogType {
+    LOG_TYPE_LOGIN = 0;
+    LOG_TYPE_LOGOUT = 1;
+    LOG_TYPE_CREATE_ROLE = 2;
+    LOG_TYPE_DELETE_ROLE = 3;
+    LOG_TYPE_RECHARGE = 4;
+    LOG_TYPE_CONSUME = 5;
+    LOG_TYPE_ITEM = 6;
+    LOG_TYPE_TRADE = 7;
+    LOG_TYPE_BATTLE = 8;
+    LOG_TYPE_TASK = 9;
+    LOG_TYPE_GUILD = 10;
+    LOG_TYPE_CHAT = 11;
+    LOG_TYPE_ERROR = 12;
+    LOG_TYPE_SYSTEM = 13;
+}
+
+// 日志级别
+enum LogLevel {
+    LOG_LEVEL_DEBUG = 0;
+    LOG_LEVEL_INFO = 1;
+    LOG_LEVEL_WARN = 2;
+    LOG_LEVEL_ERROR = 3;
+    LOG_LEVEL_FATAL = 4;
+}
+
+// 单条日志记录
+message LogRecord {
     int64 log_id = 1;
-    int32 log_type = 2;
-    int32 log_level = 3;
+    LogType type = 2;
+    LogLevel level = 3;
     int32 server_id = 4;
     uint64 role_id = 5;
     string role_name = 6;
@@ -15,9 +42,32 @@ message LogRecordInfo {
     string ip = 10;
 }
 
-// 日志查询条件
-message LogQueryConditionInfo {
-    int32 log_type = 1;
+// 发送日志请求
+message SendLogReq {
+    LogRecord record = 1;
+}
+
+// 发送日志响应
+message SendLogAck {
+    int32 result = 1;
+    int64 log_id = 2;
+}
+
+// 批量发送日志请求
+message SendLogBatchReq {
+    repeated LogRecord records = 1;
+}
+
+// 批量发送日志响应
+message SendLogBatchAck {
+    int32 result = 1;
+    int32 success_count = 2;
+    int32 failed_count = 3;
+}
+
+// 查询日志请求
+message QueryLogReq {
+    LogType type = 1;
     int32 server_id = 2;
     uint64 role_id = 3;
     int64 start_time = 4;
@@ -26,134 +76,23 @@ message LogQueryConditionInfo {
     int32 offset = 7;
 }
 
-// 写入日志请求
-message WriteLogReq {
-    LogRecordInfo record = 1;
-}
-
-// 写入日志响应
-message WriteLogRsp {
-    int32 result = 1;
-    int64 log_id = 2;
-}
-
-// 批量写入日志请求
-message WriteLogBatchReq {
-    repeated LogRecordInfo records = 1;
-}
-
-// 批量写入日志响应
-message WriteLogBatchRsp {
-    int32 result = 1;
-    int32 success_count = 2;
-}
-
-// 查询日志请求
-message QueryLogReq {
-    LogQueryConditionInfo condition = 1;
-}
-
 // 查询日志响应
-message QueryLogRsp {
+message QueryLogAck {
     int32 result = 1;
-    repeated LogRecordInfo logs = 2;
-    int32 total_count = 3;
+    repeated LogRecord records = 2;
 }
 
 // 统计日志数量请求
 message CountLogReq {
-    int32 log_type = 1;
-    int64 start_time = 2;
-    int64 end_time = 3;
+    LogType type = 1;
+    int32 server_id = 2;
+    uint64 role_id = 3;
+    int64 start_time = 4;
+    int64 end_time = 5;
 }
 
 // 统计日志数量响应
-message CountLogRsp {
+message CountLogAck {
     int32 result = 1;
     int64 count = 2;
-}
-
-// 清理旧日志请求
-message ClearOldLogReq {
-    int32 days = 1;
-}
-
-// 清理旧日志响应
-message ClearOldLogRsp {
-    int32 result = 1;
-    int32 cleared_count = 2;
-}
-
-// 登录日志请求
-message LogLoginReq {
-    uint64 role_id = 1;
-    string role_name = 2;
-    int32 server_id = 3;
-    string ip = 4;
-    bool is_login = 5;
-}
-
-// 登录日志响应
-message LogLoginRsp {
-    int32 result = 1;
-}
-
-// 充值日志请求
-message LogRechargeReq {
-    uint64 role_id = 1;
-    string role_name = 2;
-    int32 server_id = 3;
-    int32 amount = 4;
-    int32 product_id = 5;
-}
-
-// 充值日志响应
-message LogRechargeRsp {
-    int32 result = 1;
-}
-
-// 消费日志请求
-message LogConsumeReq {
-    uint64 role_id = 1;
-    string role_name = 2;
-    int32 server_id = 3;
-    int32 type = 4;
-    int32 amount = 5;
-    string reason = 6;
-}
-
-// 消费日志响应
-message LogConsumeRsp {
-    int32 result = 1;
-}
-
-// 物品日志请求
-message LogItemReq {
-    uint64 role_id = 1;
-    string role_name = 2;
-    int32 server_id = 3;
-    int32 item_id = 4;
-    int32 count = 5;
-    int32 type = 6;
-    string reason = 7;
-}
-
-// 物品日志响应
-message LogItemRsp {
-    int32 result = 1;
-}
-
-// 战斗日志请求
-message LogBattleReq {
-    uint64 role_id = 1;
-    string role_name = 2;
-    int32 server_id = 3;
-    int32 battle_type = 4;
-    int32 result = 5;
-    int32 duration = 6;
-}
-
-// 战斗日志响应
-message LogBattleRsp {
-    int32 result = 1;
 }

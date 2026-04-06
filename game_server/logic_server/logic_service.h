@@ -1,129 +1,62 @@
 #ifndef __LOGIC_SERVICE_H__
 #define __LOGIC_SERVICE_H__
 
-#include "activity_module.h"
-#include "ancfl/ancfl.h"
-#include "bag_module.h"
-#include "buff_module.h"
-#include "common/game_service_base.h"
-#include "common/shared_memory.h"
-#include "equip_module.h"
-#include "friend_module.h"
-#include "guild_module.h"
-#include "mail_module.h"
-#include "role_data.h"
-#include "role_module.h"
-#include "scene_module.h"
-#include "shop_module.h"
-#include "skill_module.h"
-#include "task_module.h"
+#include "../common/game_service_base.h"
+#include "../common/message_dispatcher.h"
 
 namespace game_server {
 
-// 逻辑服务类
+// 逻辑服务器服务类
 class LogicService : public GameServiceBase {
-   public:
-    LogicService();
+public:
+    LogicService(int32_t server_id);
     ~LogicService();
 
+    // 初始化服务
     virtual bool InitService() override;
+
+    // 反初始化服务
     virtual void UninitService() override;
+
+    // 注册所有消息处理器
     virtual void RegisterAllHandlers() override;
+
+    // 每秒定时器
     virtual void OnTimer() override;
-
-    // 连接数据服务器
-    bool ConnectToDBServer();
-
-    // 角色管理
-    bool CreateRole(uint64_t account_id,
-                    const std::string& role_name,
-                    int32_t job,
-                    int32_t gender);
-    bool LoadRoleData(uint64_t role_id, RoleData& data);
-    bool SaveRoleData(const RoleData& data);
-    bool DeleteRole(uint64_t role_id);
-
-    // 获取角色列表
-    bool GetRoleList(uint64_t account_id, std::vector<RoleData>& roles);
-
-    // 共享内存管理
-    bool InitSharedMemory();
-    RoleData* AllocateRoleData();
-    void FreeRoleData(RoleData* data);
     
-    // 生成角色ID
-    uint64_t GetNextRoleId();
+    // 5秒定时器
+    virtual void OnTimer5s() override;
+    
+    // 连接中心服务器
+    bool ConnectToCenterServer();
+    
+    // 注册到中心服务器
+    bool RegisterToCenterServer();
+    
+    // 发送心跳到中心服务器
+    void SendHeartbeatToCenterServer();
 
-    // 获取各模块指针
-    RoleModule* GetRoleModule() { return &role_module_; }
-    BagModule* GetBagModule() { return &bag_module_; }
-    EquipModule* GetEquipModule() { return &equip_module_; }
-    TaskModule* GetTaskModule() { return &task_module_; }
-    MailModule* GetMailModule() { return &mail_module_; }
-    FriendModule* GetFriendModule() { return &friend_module_; }
-    ShopModule* GetShopModule() { return &shop_module_; }
-    GuildModule* GetGuildModule() { return &guild_module_; }
-    BuffModule* GetBuffModule() { return &buff_module_; }
-    SkillModule* GetSkillModule() { return &skill_module_; }
-    SceneModule* GetSceneModule() { return &scene_module_; }
-    ActivityModule* GetActivityModule() { return &activity_module_; }
+    // 获取服务器ID
+    int32_t GetServerId() const { return server_id_; }
 
-    // 设置主IOManager（用于网络IO）
-    void SetIOManager(ancfl::IOManager* io_manager) {
-        io_manager_ = io_manager;
-    }
-
-    // 设置工作线程池（用于后台任务）
-    void SetWorkerPool(ancfl::IOManager* worker_pool) {
-        worker_pool_ = worker_pool;
-    }
-
-   private:
-    // 消息处理器
-    bool OnRoleCreateReq(const NetPacket& packet);
-    bool OnRoleLoginReq(const NetPacket& packet);
-    bool OnRoleLogoutReq(const NetPacket& packet);
-    bool OnRoleListReq(const NetPacket& packet);
-    bool OnRoleDeleteReq(const NetPacket& packet);
-    bool OnHeartBeatReq(const NetPacket& packet);
-    bool OnDBRegToLogicReq(const NetPacket& packet);
-    bool OnDBDataSyncAck(const NetPacket& packet);
-
-    // 共享内存
-    std::unique_ptr<SharedMemory<RoleData>> role_memory_;
-
-    // 数据库服务器连接
-    uint32_t db_server_id_;
-    std::string db_server_ip_;
-    int32_t db_server_port_;
-
-    // 角色缓存
-    std::unordered_map<uint64_t, RoleData*> role_cache_;
-
-    // 同步定时器
-    int32_t sync_timer_;
-
-    // IO管理器
-    ancfl::IOManager* io_manager_;
-
-    // 工作线程池
-    ancfl::IOManager* worker_pool_;
-
-    // 游戏功能模块
-    RoleModule role_module_;
-    BagModule bag_module_;
-    EquipModule equip_module_;
-    TaskModule task_module_;
-    MailModule mail_module_;
-    FriendModule friend_module_;
-    ShopModule shop_module_;
-    GuildModule guild_module_;
-    BuffModule buff_module_;
-    SkillModule skill_module_;
-    SceneModule scene_module_;
-    ActivityModule activity_module_;
+private:
+    // 服务器ID
+    int32_t server_id_;
+    
+    // 中心服务器配置
+    std::string center_server_ip_;
+    int32_t center_server_port_;
+    
+    // 中心服务器连接
+    ancfl::Socket::ptr center_server_conn_;
+    
+    // 在线人数
+    int32_t online_count_;
+    
+    // 最大在线人数
+    int32_t max_online_;
 };
 
-}  // namespace game_server
+} // namespace game_server
 
-#endif  // __LOGIC_SERVICE_H__
+#endif // __LOGIC_SERVICE_H__

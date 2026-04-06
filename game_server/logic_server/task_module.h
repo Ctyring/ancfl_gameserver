@@ -151,6 +151,15 @@ class TaskModule {
     
     // 获取任务配置
     bool GetTaskConfig(int32_t task_config_id, TaskConfig& config);
+    
+    // 内部版本，假设调用者已经持有了 cache_mutex_
+    bool GetTaskConfigInternal(int32_t task_config_id, TaskConfig& config);
+    
+    // 内部版本，假设调用者已经持有了 cache_mutex_
+    bool CanAcceptTaskInternal(uint64_t role_id, int32_t task_config_id);
+    
+    // 内部版本，假设调用者已经持有了 cache_mutex_
+    bool CheckTaskCompleteInternal(uint64_t role_id, int32_t task_config_id);
 
     // 生成任务ID
     uint64_t GenerateTaskId();

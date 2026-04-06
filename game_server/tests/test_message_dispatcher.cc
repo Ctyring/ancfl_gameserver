@@ -1,12 +1,10 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
-#include "message_dispatcher.h"
+#include "common/message_dispatcher.h"
 #include "proto/msg_base.pb.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MessageDispatcherTest : public Test {
+class MessageDispatcherTest : public ::testing::Test {
 protected:
     void SetUp() override {
         dispatcher_ = new MessageDispatcher();

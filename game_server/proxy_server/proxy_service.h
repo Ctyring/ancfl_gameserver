@@ -3,126 +3,118 @@
 
 #include "ancfl/ancfl.h"
 #include "common/game_service_base.h"
+#include "common/message_dispatcher.h"
 
 namespace game_server {
 
-// 客户端会话信息
-struct ClientSession {
-    uint32_t conn_id;
-    uint64_t account_id;
-    uint64_t role_id;
-    std::string session_id;
-    int32_t logic_server_id;
-    time_t last_active_time;
-    time_t login_time;
-    std::string ip;
-    int32_t port;
-};
-
-// 服务器连接信息
-struct ServerConnection {
-    uint32_t conn_id;
-    std::string server_name;
-    std::string ip;
-    int32_t port;
-    time_t last_active_time;
-    int32_t player_count;
-};
-
-// 网关服务类
+/**
+ * @brief 代理服务器服务类
+ * 
+ * 主要功能：
+ * 1. 接受客户端连接
+ * 2. 处理客户端消息
+ * 3. 转发消息到逻辑服务器（待实现）
+ * 4. 管理客户端连接
+ * 
+ * 继承自GameServiceBase，重写了以下方法：
+ * - handleClient: 处理客户端连接
+ * - InitService: 初始化服务
+ * - UninitService: 反初始化服务
+ */
 class ProxyService : public GameServiceBase {
-   public:
+public:
     ProxyService();
     ~ProxyService();
 
+    /**
+     * @brief 初始化代理服务器服务
+     * @return true 初始化成功
+     * @return false 初始化失败
+     */
     virtual bool InitService() override;
+    
+    /**
+     * @brief 反初始化代理服务器服务
+     */
     virtual void UninitService() override;
+    
+    /**
+     * @brief 注册所有消息处理器
+     */
     virtual void RegisterAllHandlers() override;
-    virtual void OnTimer() override;
-
-    // 连接逻辑服务器
-    bool ConnectToLogicServers();
-
-    // 客户端连接管理
-    void OnClientConnect(uint32_t conn_id, const std::string& ip, int32_t port);
-    void OnClientDisconnect(uint32_t conn_id);
-
-    // 消息转发
-    bool ForwardToLogicServer(uint32_t client_conn_id,
-                              uint32_t msg_id,
-                              const std::string& data);
-    bool ForwardToClient(uint32_t client_conn_id,
-                         uint32_t msg_id,
-                         const std::string& data);
-
-    // 会话管理
-    bool CreateSession(uint32_t conn_id,
-                       uint64_t account_id,
-                       uint64_t role_id,
-                       const std::string& session_id);
-    bool RemoveSession(uint32_t conn_id);
-    ClientSession* GetSession(uint32_t conn_id);
-    ClientSession* GetSessionByAccount(uint64_t account_id);
-
-    // 负载均衡
-    uint32_t SelectLogicServer();
-
-    // 服务器管理
-    void AddLogicServer(const ServerConnection& server);
-    void RemoveLogicServer(uint32_t conn_id);
-    ServerConnection* GetLogicServer(uint32_t conn_id);
     
-    // 生成会话ID
-    std::string GenerateSessionId();
-
-    // 设置主IOManager（用于网络IO）
-    void SetIOManager(ancfl::IOManager* io_manager) {
-        io_manager_ = io_manager;
-    }
-
-    // 设置工作线程池（用于后台任务）
-    void SetWorkerPool(ancfl::IOManager* worker_pool) {
-        worker_pool_ = worker_pool;
-    }
-
-   private:
-    // 消息处理器
-    bool OnCheckVersionReq(const NetPacket& packet);
-    bool OnAccountRegReq(const NetPacket& packet);
-    bool OnAccountLoginReq(const NetPacket& packet);
-    bool OnServerListReq(const NetPacket& packet);
-    bool OnSelectServerReq(const NetPacket& packet);
-    bool OnRoleCreateReq(const NetPacket& packet);
-    bool OnRoleLoginReq(const NetPacket& packet);
-    bool OnRoleLogoutReq(const NetPacket& packet);
-    bool OnHeartBeatReq(const NetPacket& packet);
-    bool OnLogicRegToProxyReq(const NetPacket& packet);
-    bool OnLogicUpdateReq(const NetPacket& packet);
-    bool OnLogicDataAck(const NetPacket& packet);
-
-    // 客户端会话
-    std::unordered_map<uint32_t, ClientSession> client_sessions_;
-    std::unordered_map<uint64_t, uint32_t> account_to_conn_;
-    std::mutex session_mutex_;
-
-    // 逻辑服务器连接
-    std::vector<ServerConnection> logic_servers_;
-    std::mutex server_mutex_;
-
-    // 会话超时时间（秒）
-    int32_t session_timeout_;
-
-    // 心跳超时时间（秒）
-    int32_t heartbeat_timeout_;
+    /**
+     * @brief 处理客户端连接（重写父类方法）
+     * @param client 客户端socket
+     */
+    virtual void handleClient(ancfl::Socket::ptr client) override;
     
-    // 清理定时器
-    int32_t cleanup_timer_;
+    /**
+     * @brief 处理接收客户端消息
+     * @param client 客户端socket
+     * @param conn_id 连接ID
+     */
+    void HandleRecv(ancfl::Socket::ptr client, int32_t conn_id);
     
-    // IO管理器
-    ancfl::IOManager* io_manager_;
+    /**
+     * @brief 检查测试消息是否已发送
+     * @return true 测试消息已发送
+     * @return false 测试消息未发送
+     */
+    bool IsTestMessageSent() const { return test_msg_sent_; }
     
-    // 工作线程池
-    ancfl::IOManager* worker_pool_;
+    /**
+     * @brief 获取当前连接数
+     * @return 当前连接数
+     */
+    size_t GetConnectionCount() const;
+    
+    /**
+     * @brief 根据连接ID获取客户端socket
+     * @param conn_id 连接ID
+     * @return 客户端socket，如果不存在返回nullptr
+     */
+    ancfl::Socket::ptr GetClientByConnId(uint32_t conn_id);
+    
+    /**
+     * @brief 设置最大连接数
+     * @param max_connections 最大连接数
+     */
+    void SetMaxConnections(size_t max_connections);
+    
+    /**
+     * @brief 获取最大连接数
+     * @return 最大连接数
+     */
+    size_t GetMaxConnections() const { return max_connections_; }
+
+    /**
+     * @brief 5秒定时器回调
+     */
+    virtual void OnTimer5s() override;
+
+protected:
+    std::unordered_map<uint32_t, ancfl::Socket::ptr> connections_;  ///< 连接映射表：conn_id -> socket
+    std::unordered_map<uint32_t, time_t> last_heart_time_;          ///< 心跳时间映射表：conn_id -> 最后心跳时间
+    ancfl::Mutex conn_mutex_;                                        ///< 连接映射表的互斥锁
+    int32_t next_conn_id_;                                           ///< 下一个连接ID
+    size_t max_connections_;                                         ///< 最大连接数
+
+private:
+    bool test_msg_sent_;
+    
+    // 中心服务器连接
+    int32_t center_server_id_;
+    std::string center_server_ip_;
+    int32_t center_server_port_;
+    ancfl::Socket::ptr center_server_conn_;
+    
+    // 连接中心服务器
+    bool ConnectToCenterServer();
+    // 向中心服务器注册
+    bool RegisterToCenterServer();
+    // 发送心跳到中心服务器
+    void SendHeartbeatToCenterServer();  ///< 测试消息是否已发送标志
 };
 
 } // namespace game_server

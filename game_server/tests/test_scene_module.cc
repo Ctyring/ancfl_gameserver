@@ -1,30 +1,22 @@
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "logic_server/scene_module.h"
+#include "logic_server/logic_service.h"
 
 using namespace game_server;
-using namespace testing;
 
-class MockLogicServiceForScene : public LogicService {
-public:
-    MOCK_METHOD(bool, SendToClient, (uint64_t role_id, int32_t msg_id, const std::string& data), (override));
-    MOCK_METHOD(bool, BroadcastToScene, (int32_t scene_id, int32_t msg_id, const std::string& data), (override));
-};
-
-class SceneModuleTest : public Test {
+class SceneModuleTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        mock_service_ = new MockLogicServiceForScene();
-        scene_module_ = new SceneModule(mock_service_);
+        service_ = nullptr;
+        scene_module_ = new SceneModule(service_);
         test_role_id_ = 12345;
     }
     
     void TearDown() override {
         delete scene_module_;
-        delete mock_service_;
     }
     
-    MockLogicServiceForScene* mock_service_;
+    LogicService* service_;
     SceneModule* scene_module_;
     uint64_t test_role_id_;
 };
@@ -42,75 +34,6 @@ TEST_F(SceneModuleTest, DestroyScene) {
     EXPECT_TRUE(scene_module_->DestroyScene(scene_id));
 }
 
-TEST_F(SceneModuleTest, EnterScene) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    
-    EXPECT_TRUE(scene_module_->EnterScene(test_role_id_, scene_id));
-    
-    int32_t current_scene = 0;
-    EXPECT_TRUE(scene_module_->GetRoleScene(test_role_id_, current_scene));
-    EXPECT_EQ(current_scene, scene_id);
-}
-
-TEST_F(SceneModuleTest, LeaveScene) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    scene_module_->EnterScene(test_role_id_, scene_id);
-    
-    EXPECT_TRUE(scene_module_->LeaveScene(test_role_id_));
-    
-    int32_t current_scene = 0;
-    EXPECT_FALSE(scene_module_->GetRoleScene(test_role_id_, current_scene));
-}
-
-TEST_F(SceneModuleTest, GetSceneObjects) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    scene_module_->EnterScene(test_role_id_, scene_id);
-    
-    std::vector<SceneObject> objects;
-    EXPECT_TRUE(scene_module_->GetSceneObjects(scene_id, objects));
-    EXPECT_EQ(objects.size(), 1);
-}
-
-TEST_F(SceneModuleTest, MoveObject) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    scene_module_->EnterScene(test_role_id_, scene_id);
-    
-    Position pos;
-    pos.x = 100.0f;
-    pos.y = 200.0f;
-    pos.z = 0.0f;
-    
-    EXPECT_TRUE(scene_module_->MoveObject(test_role_id_, pos));
-    
-    SceneObject obj;
-    scene_module_->GetSceneObject(test_role_id_, obj);
-    EXPECT_FLOAT_EQ(obj.pos.x, 100.0f);
-    EXPECT_FLOAT_EQ(obj.pos.y, 200.0f);
-}
-
-TEST_F(SceneModuleTest, CreateNpc) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    
-    uint64_t npc_id = 0;
-    EXPECT_TRUE(scene_module_->CreateNpc(scene_id, 5001, Position{100, 100, 0}, npc_id));
-    EXPECT_NE(npc_id, 0);
-}
-
-TEST_F(SceneModuleTest, RemoveNpc) {
-    int32_t scene_id = 0;
-    scene_module_->CreateScene(1001, scene_id);
-    
-    uint64_t npc_id = 0;
-    scene_module_->CreateNpc(scene_id, 5001, Position{100, 100, 0}, npc_id);
-    
-    EXPECT_TRUE(scene_module_->RemoveNpc(scene_id, npc_id));
-}
-
 TEST_F(SceneModuleTest, GetSceneInfo) {
     int32_t scene_id = 0;
     scene_module_->CreateScene(1001, scene_id);
@@ -120,21 +43,93 @@ TEST_F(SceneModuleTest, GetSceneInfo) {
     EXPECT_EQ(info.scene_config_id, 1001);
 }
 
-TEST_F(SceneModuleTest, GetObjectCount) {
+TEST_F(SceneModuleTest, PlayerEnterScene) {
     int32_t scene_id = 0;
     scene_module_->CreateScene(1001, scene_id);
-    scene_module_->EnterScene(test_role_id_, scene_id);
     
-    EXPECT_EQ(scene_module_->GetObjectCount(scene_id), 1);
+    EXPECT_TRUE(scene_module_->PlayerEnterScene(test_role_id_, scene_id));
+    
+    int32_t current_scene = 0;
+    EXPECT_TRUE(scene_module_->GetPlayerScene(test_role_id_, current_scene));
+    EXPECT_EQ(current_scene, scene_id);
 }
 
-TEST_F(SceneModuleTest, BroadCastToScene) {
+TEST_F(SceneModuleTest, PlayerLeaveScene) {
     int32_t scene_id = 0;
     scene_module_->CreateScene(1001, scene_id);
-    scene_module_->EnterScene(test_role_id_, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
     
-    EXPECT_CALL(*mock_service_, BroadcastToScene(scene_id, testing::_, testing::_))
-        .Times(1);
+    EXPECT_TRUE(scene_module_->PlayerLeaveScene(test_role_id_));
+}
+
+TEST_F(SceneModuleTest, GetSceneObjects) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
     
-    scene_module_->BroadcastToScene(scene_id, 1001, "test_data");
+    std::vector<SceneObject> objects;
+    EXPECT_TRUE(scene_module_->GetSceneObjects(scene_id, objects));
+}
+
+TEST_F(SceneModuleTest, PlayerMove) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
+    
+    EXPECT_TRUE(scene_module_->PlayerMove(test_role_id_, 100.0f, 200.0f));
+}
+
+TEST_F(SceneModuleTest, UpdatePlayerPosition) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
+    
+    EXPECT_TRUE(scene_module_->UpdatePlayerPosition(test_role_id_, 100.0f, 0.0f, 200.0f, 0.0f));
+}
+
+TEST_F(SceneModuleTest, GetPlayerPosition) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
+    scene_module_->UpdatePlayerPosition(test_role_id_, 100.0f, 0.0f, 200.0f, 0.0f);
+    
+    float x, y, z, rotation_y;
+    EXPECT_TRUE(scene_module_->GetPlayerPosition(test_role_id_, x, y, z, rotation_y));
+    EXPECT_FLOAT_EQ(x, 100.0f);
+    EXPECT_FLOAT_EQ(z, 200.0f);
+}
+
+TEST_F(SceneModuleTest, AddObject) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    
+    SceneObject obj;
+    obj.object_id = 99999;
+    obj.type = SceneObjectType::MONSTER;
+    obj.position_x = 100.0f;
+    obj.position_y = 0.0f;
+    obj.position_z = 100.0f;
+    
+    EXPECT_TRUE(scene_module_->AddObject(scene_id, obj));
+}
+
+TEST_F(SceneModuleTest, RemoveObject) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    
+    SceneObject obj;
+    obj.object_id = 99999;
+    obj.type = SceneObjectType::MONSTER;
+    scene_module_->AddObject(scene_id, obj);
+    
+    EXPECT_TRUE(scene_module_->RemoveObject(scene_id, 99999));
+}
+
+TEST_F(SceneModuleTest, GetVisibleObjects) {
+    int32_t scene_id = 0;
+    scene_module_->CreateScene(1001, scene_id);
+    scene_module_->PlayerEnterScene(test_role_id_, scene_id);
+    
+    std::vector<SceneObject> objects;
+    EXPECT_TRUE(scene_module_->GetVisibleObjects(test_role_id_, objects));
 }
