@@ -73,6 +73,20 @@ TEST_F(ClientLoginTest, LoginFlow) {
     std::cout << "Last server ID: " << login_ack->last_svr_id() << std::endl;
     std::cout << "Last server name: " << login_ack->last_svr_name() << std::endl;
     
+    // 输出服务器列表
+    std::cout << "Server list: " << std::endl;
+    for (int i = 0; i < login_ack->svr_nodes_size(); i++) {
+        const auto& server = login_ack->svr_nodes(i);
+        std::cout << "  Server " << i + 1 << ":" << std::endl;
+        std::cout << "    ID: " << server.svr_id() << std::endl;
+        std::cout << "    Name: " << server.svr_name() << std::endl;
+        std::cout << "    Flag: " << server.svr_flag() << " (1:流畅, 2:拥挤, 3:爆满)" << std::endl;
+        std::cout << "    Corner mark: " << server.corner_mark() << " (0:无, 1:新服, 2:推荐)" << std::endl;
+        std::cout << "    Open time: " << server.svr_open_time() << std::endl;
+        std::cout << "    Status: " << server.svr_status() << " (1:在线, 0:离线)" << std::endl;
+        std::cout << "    Address: " << server.svr_addr() << ":" << server.svr_port() << std::endl;
+    }
+    
     // 断开连接
     client.Disconnect();
 }

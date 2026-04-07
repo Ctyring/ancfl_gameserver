@@ -143,6 +143,20 @@ int main(int argc, char** argv) {
                     std::cout << "  account_id: " << login_ack->account_id() << std::endl;
                     std::cout << "  last_svr_id: " << login_ack->last_svr_id() << std::endl;
                     std::cout << "  last_svr_name: " << login_ack->last_svr_name() << std::endl;
+                    
+                    // 输出服务器列表
+                    std::cout << "[客户端] 服务器列表: " << std::endl;
+                    for (int i = 0; i < login_ack->svr_nodes_size(); i++) {
+                        const auto& server = login_ack->svr_nodes(i);
+                        std::cout << "  服务器 " << i + 1 << ":" << std::endl;
+                        std::cout << "    ID: " << server.svr_id() << std::endl;
+                        std::cout << "    名称: " << server.svr_name() << std::endl;
+                        std::cout << "    状态: " << server.svr_flag() << " (1:流畅, 2:拥挤, 3:爆满)" << std::endl;
+                        std::cout << "    标签: " << server.corner_mark() << " (0:无, 1:新服, 2:推荐)" << std::endl;
+                        std::cout << "    开放时间: " << server.svr_open_time() << std::endl;
+                        std::cout << "    状态: " << server.svr_status() << " (1:在线, 0:离线)" << std::endl;
+                        std::cout << "    地址: " << server.svr_addr() << ":" << server.svr_port() << std::endl;
+                    }
                 }
             }
         }

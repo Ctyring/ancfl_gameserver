@@ -110,7 +110,8 @@ struct AccountLoginReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AccountLoginReqDefaultTypeInternal _AccountLoginReq_default_instance_;
 constexpr AccountLoginAck::AccountLoginAck(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : last_svr_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  : svr_nodes_()
+  , last_svr_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , account_id_(uint64_t{0u})
   , ret_code_(0u)
   , last_svr_id_(0)
@@ -553,6 +554,7 @@ const uint32_t TableStruct_msg_5faccount_2eproto::offsets[] PROTOBUF_SECTION_VAR
   PROTOBUF_FIELD_OFFSET(::AccountLoginAck, review_),
   PROTOBUF_FIELD_OFFSET(::AccountLoginAck, channel_),
   PROTOBUF_FIELD_OFFSET(::AccountLoginAck, ip_addr_),
+  PROTOBUF_FIELD_OFFSET(::AccountLoginAck, svr_nodes_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::ServerNode, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -784,31 +786,31 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 42, -1, -1, sizeof(::AccountRegAck)},
   { 50, -1, -1, sizeof(::AccountLoginReq)},
   { 62, -1, -1, sizeof(::AccountLoginAck)},
-  { 75, -1, -1, sizeof(::ServerNode)},
-  { 89, -1, -1, sizeof(::ServerListReq)},
-  { 99, -1, -1, sizeof(::ServerListAck)},
-  { 107, -1, -1, sizeof(::SelectServerReq)},
-  { 116, -1, -1, sizeof(::SelectServerAck)},
-  { 128, -1, -1, sizeof(::SealAccountReq)},
-  { 139, -1, -1, sizeof(::SealAccountAck)},
-  { 146, -1, -1, sizeof(::HeartBeatReq)},
-  { 154, -1, -1, sizeof(::HeartBeatAck)},
-  { 162, -1, -1, sizeof(::AccountInfo)},
-  { 178, -1, -1, sizeof(::AccountCreateReq)},
-  { 187, -1, -1, sizeof(::AccountCreateAck)},
-  { 195, -1, -1, sizeof(::AccountVerifyReq)},
-  { 203, -1, -1, sizeof(::AccountVerifyAck)},
-  { 211, -1, -1, sizeof(::AccountGetInfoReq)},
-  { 218, -1, -1, sizeof(::AccountGetInfoAck)},
-  { 226, -1, -1, sizeof(::AccountSealReq)},
-  { 235, -1, -1, sizeof(::AccountSealAck)},
-  { 242, -1, -1, sizeof(::AccountUnsealReq)},
-  { 249, -1, -1, sizeof(::AccountUnsealAck)},
-  { 256, -1, -1, sizeof(::AccountIsSealedReq)},
-  { 263, -1, -1, sizeof(::AccountIsSealedAck)},
-  { 272, -1, -1, sizeof(::LoginLogReq)},
-  { 282, -1, -1, sizeof(::LoginLogAck)},
-  { 289, -1, -1, sizeof(::DisconnectNty)},
+  { 76, -1, -1, sizeof(::ServerNode)},
+  { 90, -1, -1, sizeof(::ServerListReq)},
+  { 100, -1, -1, sizeof(::ServerListAck)},
+  { 108, -1, -1, sizeof(::SelectServerReq)},
+  { 117, -1, -1, sizeof(::SelectServerAck)},
+  { 129, -1, -1, sizeof(::SealAccountReq)},
+  { 140, -1, -1, sizeof(::SealAccountAck)},
+  { 147, -1, -1, sizeof(::HeartBeatReq)},
+  { 155, -1, -1, sizeof(::HeartBeatAck)},
+  { 163, -1, -1, sizeof(::AccountInfo)},
+  { 179, -1, -1, sizeof(::AccountCreateReq)},
+  { 188, -1, -1, sizeof(::AccountCreateAck)},
+  { 196, -1, -1, sizeof(::AccountVerifyReq)},
+  { 204, -1, -1, sizeof(::AccountVerifyAck)},
+  { 212, -1, -1, sizeof(::AccountGetInfoReq)},
+  { 219, -1, -1, sizeof(::AccountGetInfoAck)},
+  { 227, -1, -1, sizeof(::AccountSealReq)},
+  { 236, -1, -1, sizeof(::AccountSealAck)},
+  { 243, -1, -1, sizeof(::AccountUnsealReq)},
+  { 250, -1, -1, sizeof(::AccountUnsealAck)},
+  { 257, -1, -1, sizeof(::AccountIsSealedReq)},
+  { 264, -1, -1, sizeof(::AccountIsSealedAck)},
+  { 273, -1, -1, sizeof(::LoginLogReq)},
+  { 283, -1, -1, sizeof(::LoginLogAck)},
+  { 290, -1, -1, sizeof(::DisconnectNty)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -863,65 +865,66 @@ const char descriptor_table_protodef_msg_5faccount_2eproto[] PROTOBUF_SECTION_VA
   "Req\022\024\n\014account_name\030\001 \001(\t\022\020\n\010password\030\002 "
   "\001(\t\022\017\n\007channel\030\003 \001(\005\022\024\n\014from_channel\030\004 \001"
   "(\010\022\016\n\006review\030\005 \001(\010\022\036\n\tlogin_log\030\006 \001(\0132\013."
-  "AccountLog\"\225\001\n\017AccountLoginAck\022\020\n\010ret_co"
+  "AccountLog\"\265\001\n\017AccountLoginAck\022\020\n\010ret_co"
   "de\030\001 \001(\r\022\022\n\naccount_id\030\002 \001(\004\022\023\n\013last_svr"
   "_id\030\003 \001(\005\022\025\n\rlast_svr_name\030\004 \001(\t\022\016\n\006revi"
   "ew\030\005 \001(\010\022\017\n\007channel\030\006 \001(\005\022\017\n\007ip_addr\030\007 \001"
-  "(\005\"\244\001\n\nServerNode\022\016\n\006svr_id\030\001 \001(\005\022\020\n\010svr"
-  "_name\030\002 \001(\t\022\020\n\010svr_flag\030\003 \001(\005\022\023\n\013corner_"
-  "mark\030\004 \001(\005\022\025\n\rsvr_open_time\030\005 \001(\003\022\022\n\nsvr"
-  "_status\030\006 \001(\005\022\020\n\010svr_addr\030\007 \001(\t\022\020\n\010svr_p"
-  "ort\030\010 \001(\005\"U\n\rServerListReq\022\022\n\naccount_id"
-  "\030\001 \001(\004\022\017\n\007channel\030\002 \001(\005\022\017\n\007version\030\003 \001(\t"
-  "\022\016\n\006review\030\004 \001(\010\"A\n\rServerListAck\022\020\n\010ret"
-  "_code\030\001 \001(\r\022\036\n\tsvr_nodes\030\002 \003(\0132\013.ServerN"
-  "ode\"L\n\017SelectServerReq\022\022\n\naccount_id\030\001 \001"
-  "(\004\022\021\n\tserver_id\030\002 \001(\005\022\022\n\ncheck_role\030\003 \001("
-  "\010\"\210\001\n\017SelectServerAck\022\020\n\010ret_code\030\001 \001(\r\022"
-  "\022\n\naccount_id\030\002 \001(\004\022\021\n\tserver_id\030\003 \001(\005\022\023"
-  "\n\013server_addr\030\004 \001(\t\022\023\n\013server_port\030\005 \001(\005"
-  "\022\022\n\nlogin_code\030\006 \001(\005\"l\n\016SealAccountReq\022\024"
-  "\n\014account_name\030\001 \001(\t\022\022\n\naccount_id\030\002 \001(\004"
-  "\022\017\n\007channel\030\003 \001(\005\022\021\n\tseal_time\030\004 \001(\005\022\014\n\004"
-  "seal\030\005 \001(\010\"\"\n\016SealAccountAck\022\020\n\010ret_code"
-  "\030\001 \001(\r\"5\n\014HeartBeatReq\022\022\n\naccount_id\030\001 \001"
-  "(\004\022\021\n\ttimestamp\030\002 \001(\005\"5\n\014HeartBeatAck\022\020\n"
-  "\010ret_code\030\001 \001(\r\022\023\n\013server_time\030\002 \001(\005\"\336\001\n"
-  "\013AccountInfo\022\022\n\naccount_id\030\001 \001(\004\022\024\n\014acco"
-  "unt_name\030\002 \001(\t\022\020\n\010password\030\003 \001(\t\022\017\n\007chan"
-  "nel\030\004 \001(\005\022\025\n\rregister_time\030\005 \001(\005\022\027\n\017last"
-  "_login_time\030\006 \001(\005\022\023\n\013login_count\030\007 \001(\005\022\021"
-  "\n\tis_sealed\030\010 \001(\010\022\025\n\rseal_end_time\030\t \001(\005"
-  "\022\023\n\013seal_reason\030\n \001(\t\"K\n\020AccountCreateRe"
-  "q\022\024\n\014account_name\030\001 \001(\t\022\020\n\010password\030\002 \001("
-  "\t\022\017\n\007channel\030\003 \001(\005\"8\n\020AccountCreateAck\022\020"
-  "\n\010ret_code\030\001 \001(\r\022\022\n\naccount_id\030\002 \001(\004\"8\n\020"
-  "AccountVerifyReq\022\022\n\naccount_id\030\001 \001(\004\022\020\n\010"
-  "password\030\002 \001(\t\"H\n\020AccountVerifyAck\022\020\n\010re"
-  "t_code\030\001 \001(\r\022\"\n\014account_info\030\002 \001(\0132\014.Acc"
-  "ountInfo\"\'\n\021AccountGetInfoReq\022\022\n\naccount"
-  "_id\030\001 \001(\004\"I\n\021AccountGetInfoAck\022\020\n\010ret_co"
-  "de\030\001 \001(\r\022\"\n\014account_info\030\002 \001(\0132\014.Account"
-  "Info\"G\n\016AccountSealReq\022\022\n\naccount_id\030\001 \001"
-  "(\004\022\021\n\tseal_time\030\002 \001(\005\022\016\n\006reason\030\003 \001(\t\"\"\n"
-  "\016AccountSealAck\022\020\n\010ret_code\030\001 \001(\r\"&\n\020Acc"
-  "ountUnsealReq\022\022\n\naccount_id\030\001 \001(\004\"$\n\020Acc"
-  "ountUnsealAck\022\020\n\010ret_code\030\001 \001(\r\"(\n\022Accou"
-  "ntIsSealedReq\022\022\n\naccount_id\030\001 \001(\004\"P\n\022Acc"
-  "ountIsSealedAck\022\020\n\010ret_code\030\001 \001(\r\022\021\n\tis_"
-  "sealed\030\002 \001(\010\022\025\n\rseal_end_time\030\003 \001(\005\"X\n\013L"
-  "oginLogReq\022\022\n\naccount_id\030\001 \001(\004\022\017\n\007channe"
-  "l\030\002 \001(\005\022\020\n\010login_ip\030\003 \001(\t\022\022\n\nlogin_time\030"
-  "\004 \001(\005\"\037\n\013LoginLogAck\022\020\n\010ret_code\030\001 \001(\r\","
-  "\n\rDisconnectNty\022\016\n\006reason\030\001 \001(\r\022\013\n\003msg\030\002"
-  " \001(\tb\006proto3"
+  "(\005\022\036\n\tsvr_nodes\030\010 \003(\0132\013.ServerNode\"\244\001\n\nS"
+  "erverNode\022\016\n\006svr_id\030\001 \001(\005\022\020\n\010svr_name\030\002 "
+  "\001(\t\022\020\n\010svr_flag\030\003 \001(\005\022\023\n\013corner_mark\030\004 \001"
+  "(\005\022\025\n\rsvr_open_time\030\005 \001(\003\022\022\n\nsvr_status\030"
+  "\006 \001(\005\022\020\n\010svr_addr\030\007 \001(\t\022\020\n\010svr_port\030\010 \001("
+  "\005\"U\n\rServerListReq\022\022\n\naccount_id\030\001 \001(\004\022\017"
+  "\n\007channel\030\002 \001(\005\022\017\n\007version\030\003 \001(\t\022\016\n\006revi"
+  "ew\030\004 \001(\010\"A\n\rServerListAck\022\020\n\010ret_code\030\001 "
+  "\001(\r\022\036\n\tsvr_nodes\030\002 \003(\0132\013.ServerNode\"L\n\017S"
+  "electServerReq\022\022\n\naccount_id\030\001 \001(\004\022\021\n\tse"
+  "rver_id\030\002 \001(\005\022\022\n\ncheck_role\030\003 \001(\010\"\210\001\n\017Se"
+  "lectServerAck\022\020\n\010ret_code\030\001 \001(\r\022\022\n\naccou"
+  "nt_id\030\002 \001(\004\022\021\n\tserver_id\030\003 \001(\005\022\023\n\013server"
+  "_addr\030\004 \001(\t\022\023\n\013server_port\030\005 \001(\005\022\022\n\nlogi"
+  "n_code\030\006 \001(\005\"l\n\016SealAccountReq\022\024\n\014accoun"
+  "t_name\030\001 \001(\t\022\022\n\naccount_id\030\002 \001(\004\022\017\n\007chan"
+  "nel\030\003 \001(\005\022\021\n\tseal_time\030\004 \001(\005\022\014\n\004seal\030\005 \001"
+  "(\010\"\"\n\016SealAccountAck\022\020\n\010ret_code\030\001 \001(\r\"5"
+  "\n\014HeartBeatReq\022\022\n\naccount_id\030\001 \001(\004\022\021\n\tti"
+  "mestamp\030\002 \001(\005\"5\n\014HeartBeatAck\022\020\n\010ret_cod"
+  "e\030\001 \001(\r\022\023\n\013server_time\030\002 \001(\005\"\336\001\n\013Account"
+  "Info\022\022\n\naccount_id\030\001 \001(\004\022\024\n\014account_name"
+  "\030\002 \001(\t\022\020\n\010password\030\003 \001(\t\022\017\n\007channel\030\004 \001("
+  "\005\022\025\n\rregister_time\030\005 \001(\005\022\027\n\017last_login_t"
+  "ime\030\006 \001(\005\022\023\n\013login_count\030\007 \001(\005\022\021\n\tis_sea"
+  "led\030\010 \001(\010\022\025\n\rseal_end_time\030\t \001(\005\022\023\n\013seal"
+  "_reason\030\n \001(\t\"K\n\020AccountCreateReq\022\024\n\014acc"
+  "ount_name\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\022\017\n\007cha"
+  "nnel\030\003 \001(\005\"8\n\020AccountCreateAck\022\020\n\010ret_co"
+  "de\030\001 \001(\r\022\022\n\naccount_id\030\002 \001(\004\"8\n\020AccountV"
+  "erifyReq\022\022\n\naccount_id\030\001 \001(\004\022\020\n\010password"
+  "\030\002 \001(\t\"H\n\020AccountVerifyAck\022\020\n\010ret_code\030\001"
+  " \001(\r\022\"\n\014account_info\030\002 \001(\0132\014.AccountInfo"
+  "\"\'\n\021AccountGetInfoReq\022\022\n\naccount_id\030\001 \001("
+  "\004\"I\n\021AccountGetInfoAck\022\020\n\010ret_code\030\001 \001(\r"
+  "\022\"\n\014account_info\030\002 \001(\0132\014.AccountInfo\"G\n\016"
+  "AccountSealReq\022\022\n\naccount_id\030\001 \001(\004\022\021\n\tse"
+  "al_time\030\002 \001(\005\022\016\n\006reason\030\003 \001(\t\"\"\n\016Account"
+  "SealAck\022\020\n\010ret_code\030\001 \001(\r\"&\n\020AccountUnse"
+  "alReq\022\022\n\naccount_id\030\001 \001(\004\"$\n\020AccountUnse"
+  "alAck\022\020\n\010ret_code\030\001 \001(\r\"(\n\022AccountIsSeal"
+  "edReq\022\022\n\naccount_id\030\001 \001(\004\"P\n\022AccountIsSe"
+  "aledAck\022\020\n\010ret_code\030\001 \001(\r\022\021\n\tis_sealed\030\002"
+  " \001(\010\022\025\n\rseal_end_time\030\003 \001(\005\"X\n\013LoginLogR"
+  "eq\022\022\n\naccount_id\030\001 \001(\004\022\017\n\007channel\030\002 \001(\005\022"
+  "\020\n\010login_ip\030\003 \001(\t\022\022\n\nlogin_time\030\004 \001(\005\"\037\n"
+  "\013LoginLogAck\022\020\n\010ret_code\030\001 \001(\r\",\n\rDiscon"
+  "nectNty\022\016\n\006reason\030\001 \001(\r\022\013\n\003msg\030\002 \001(\tb\006pr"
+  "oto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_msg_5faccount_2eproto_deps[1] = {
   &::descriptor_table_msg_5fbase_2eproto,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_msg_5faccount_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_msg_5faccount_2eproto = {
-  false, false, 2692, descriptor_table_protodef_msg_5faccount_2eproto, "msg_account.proto", 
+  false, false, 2724, descriptor_table_protodef_msg_5faccount_2eproto, "msg_account.proto", 
   &descriptor_table_msg_5faccount_2eproto_once, descriptor_table_msg_5faccount_2eproto_deps, 1, 32,
   schemas, file_default_instances, TableStruct_msg_5faccount_2eproto::offsets,
   file_level_metadata_msg_5faccount_2eproto, file_level_enum_descriptors_msg_5faccount_2eproto, file_level_service_descriptors_msg_5faccount_2eproto,
@@ -2877,7 +2880,8 @@ class AccountLoginAck::_Internal {
 
 AccountLoginAck::AccountLoginAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  svr_nodes_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -2885,7 +2889,8 @@ AccountLoginAck::AccountLoginAck(::PROTOBUF_NAMESPACE_ID::Arena* arena,
   // @@protoc_insertion_point(arena_constructor:AccountLoginAck)
 }
 AccountLoginAck::AccountLoginAck(const AccountLoginAck& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      svr_nodes_(from.svr_nodes_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   last_svr_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
@@ -2940,6 +2945,7 @@ void AccountLoginAck::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  svr_nodes_.Clear();
   last_svr_name_.ClearToEmpty();
   ::memset(&account_id_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&ip_addr_) -
@@ -3008,6 +3014,19 @@ const char* AccountLoginAck::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
           ip_addr_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .ServerNode svr_nodes = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_svr_nodes(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<66>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -3086,6 +3105,14 @@ uint8_t* AccountLoginAck::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_ip_addr(), target);
   }
 
+  // repeated .ServerNode svr_nodes = 8;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_svr_nodes_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(8, this->_internal_svr_nodes(i), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3101,6 +3128,13 @@ size_t AccountLoginAck::ByteSizeLong() const {
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // repeated .ServerNode svr_nodes = 8;
+  total_size += 1UL * this->_internal_svr_nodes_size();
+  for (const auto& msg : this->svr_nodes_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
 
   // string last_svr_name = 4;
   if (!this->_internal_last_svr_name().empty()) {
@@ -3161,6 +3195,7 @@ void AccountLoginAck::MergeFrom(const AccountLoginAck& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  svr_nodes_.MergeFrom(from.svr_nodes_);
   if (!from._internal_last_svr_name().empty()) {
     _internal_set_last_svr_name(from._internal_last_svr_name());
   }
@@ -3201,6 +3236,7 @@ void AccountLoginAck::InternalSwap(AccountLoginAck* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  svr_nodes_.InternalSwap(&other->svr_nodes_);
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &last_svr_name_, lhs_arena,

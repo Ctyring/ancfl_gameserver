@@ -316,6 +316,102 @@ bool LoginService::ConnectToAccountServer() {
                 // 从缓冲区中移除已处理的消息
                 recv_buffer = recv_buffer.substr(header.msg_len);
                 
+                // 检查消息类型
+                MessageHeader resp_header;
+                memcpy(&resp_header, data.data(), sizeof(MessageHeader));
+                resp_header.msg_id = ancfl::byteswapOnLittleEndian(resp_header.msg_id);
+                resp_header.msg_len = ancfl::byteswapOnLittleEndian(resp_header.msg_len);
+                
+                LOG_INFO("接收到账号服务器响应，消息ID: " << resp_header.msg_id);
+                
+                // 提取消息体
+                std::string msg_data = data.substr(sizeof(MessageHeader));
+                
+                // 如果是登录响应，添加服务器列表
+                if (resp_header.msg_id == static_cast<uint32_t>(MessageID::MSG_ACCOUNT_LOGIN_ACK)) {
+                    AccountLoginAck login_ack;
+                    if (login_ack.ParseFromString(msg_data)) {
+                        LOG_INFO("登录响应解析成功，ret_code: " << login_ack.ret_code() << ", account_id: " << login_ack.account_id());
+                        // 登录成功，添加服务器列表
+                        if (login_ack.ret_code() == 0) {
+                            // 填充服务器列表
+                            { 
+                                ancfl::Mutex::Lock lock(server_mutex_);
+                                LOG_INFO("开始填充服务器列表，当前逻辑服务器数量: " << logic_servers_.size());
+                                // 直接遍历现有服务器
+                                for (const auto& pair : logic_servers_) {
+                                    const LogicServerInfo& server = pair.second;
+                                    auto server_info = login_ack.add_svr_nodes();
+                                    server_info->set_svr_id(server.server_id);
+                                    server_info->set_svr_name(server.server_name);
+                                    server_info->set_svr_flag(server.cur_online < server.max_online * 0.7 ? 1 : (server.cur_online < server.max_online ? 2 : 3)); // 1:流畅, 2:拥挤, 3:爆满
+                                    server_info->set_corner_mark(0); // 0:无
+                                    server_info->set_svr_open_time(time(nullptr));
+                                    server_info->set_svr_status(1); // 1:在线
+                                    server_info->set_svr_addr(server.ip);
+                                    server_info->set_svr_port(server.port);
+                                }
+                                
+                                // 如果没有逻辑服务器，添加默认服务器
+                                if (login_ack.svr_nodes_size() == 0) {
+                                    LOG_INFO("没有逻辑服务器，添加默认服务器");
+                                    auto server_info = login_ack.add_svr_nodes();
+                                    server_info->set_svr_id(1);
+                                    server_info->set_svr_name("默认服务器");
+                                    server_info->set_svr_flag(1); // 1:流畅
+                                    server_info->set_corner_mark(0); // 0:无
+                                    server_info->set_svr_open_time(time(nullptr));
+                                    server_info->set_svr_status(1); // 1:在线
+                                    server_info->set_svr_addr("127.0.0.1");
+                                    server_info->set_svr_port(8100);
+                                }
+                                LOG_INFO("服务器列表填充完成，服务器数量: " << login_ack.svr_nodes_size());
+                            }
+                            
+                            // 重新序列化响应
+                            std::string updated_data;
+                            if (login_ack.SerializeToString(&updated_data)) {
+                                LOG_INFO("登录响应重新序列化成功，大小: " << updated_data.size());
+                                // 重新构建消息
+                                MessageHeader new_header;
+                                new_header.msg_id = static_cast<uint32_t>(MessageID::MSG_ACCOUNT_LOGIN_ACK);
+                                new_header.msg_len = sizeof(MessageHeader) + updated_data.size();
+                                new_header.target_id = 0;
+                                new_header.user_data = 0;
+                                
+                                // 字节序转换
+                                new_header.msg_id = ancfl::byteswapOnLittleEndian(new_header.msg_id);
+                                new_header.msg_len = ancfl::byteswapOnLittleEndian(new_header.msg_len);
+                                new_header.target_id = ancfl::byteswapOnLittleEndian(new_header.target_id);
+                                new_header.user_data = ancfl::byteswapOnLittleEndian(new_header.user_data);
+                                
+                                // 构建完整消息
+                                std::string updated_msg_data;
+                                updated_msg_data.append(reinterpret_cast<const char*>(&new_header), sizeof(MessageHeader));
+                                updated_msg_data.append(updated_data);
+                                
+                                data = updated_msg_data;
+                                LOG_INFO("登录响应重构完成，总大小: " << data.size());
+                            } else {
+                                LOG_ERROR("登录响应重新序列化失败");
+                            }
+                        } else {
+                            LOG_INFO("登录失败，ret_code: " << login_ack.ret_code());
+                        }
+                    } else {
+                        LOG_ERROR("登录响应解析失败");
+                    }
+                } else if (resp_header.msg_id == static_cast<uint32_t>(MessageID::MSG_ACCOUNT_REG_ACK)) {
+                    AccountRegAck reg_ack;
+                    if (reg_ack.ParseFromString(msg_data)) {
+                        LOG_INFO("注册响应解析成功，ret_code: " << reg_ack.ret_code() << ", account_id: " << reg_ack.account_id());
+                    } else {
+                        LOG_ERROR("注册响应解析失败");
+                    }
+                } else {
+                    LOG_INFO("收到未知消息类型: " << resp_header.msg_id);
+                }
+                
                 // 转发响应给对应的客户端
                 auto it = client_map_.find(account_server_conn_.get());
                 if (it != client_map_.end()) {
@@ -333,8 +429,9 @@ bool LoginService::ConnectToAccountServer() {
                     }
                     // 移除已处理的客户端连接
                     client_map_.erase(it);
+                    LOG_INFO("客户端连接已从映射中移除，当前映射大小: " << client_map_.size());
                 } else {
-                    LOG_ERROR("找不到对应的客户端连接");
+                    LOG_ERROR("找不到对应的客户端连接，当前映射大小: " << client_map_.size());
                 }
             }
         }

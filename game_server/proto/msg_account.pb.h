@@ -1483,6 +1483,7 @@ class AccountLoginAck final :
   // accessors -------------------------------------------------------
 
   enum : int {
+    kSvrNodesFieldNumber = 8,
     kLastSvrNameFieldNumber = 4,
     kAccountIdFieldNumber = 2,
     kRetCodeFieldNumber = 1,
@@ -1491,6 +1492,24 @@ class AccountLoginAck final :
     kChannelFieldNumber = 6,
     kIpAddrFieldNumber = 7,
   };
+  // repeated .ServerNode svr_nodes = 8;
+  int svr_nodes_size() const;
+  private:
+  int _internal_svr_nodes_size() const;
+  public:
+  void clear_svr_nodes();
+  ::ServerNode* mutable_svr_nodes(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerNode >*
+      mutable_svr_nodes();
+  private:
+  const ::ServerNode& _internal_svr_nodes(int index) const;
+  ::ServerNode* _internal_add_svr_nodes();
+  public:
+  const ::ServerNode& svr_nodes(int index) const;
+  ::ServerNode* add_svr_nodes();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerNode >&
+      svr_nodes() const;
+
   // string last_svr_name = 4;
   void clear_last_svr_name();
   const std::string& last_svr_name() const;
@@ -1566,6 +1585,7 @@ class AccountLoginAck final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerNode > svr_nodes_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_svr_name_;
   uint64_t account_id_;
   uint32_t ret_code_;
@@ -7076,6 +7096,46 @@ inline void AccountLoginAck::_internal_set_ip_addr(int32_t value) {
 inline void AccountLoginAck::set_ip_addr(int32_t value) {
   _internal_set_ip_addr(value);
   // @@protoc_insertion_point(field_set:AccountLoginAck.ip_addr)
+}
+
+// repeated .ServerNode svr_nodes = 8;
+inline int AccountLoginAck::_internal_svr_nodes_size() const {
+  return svr_nodes_.size();
+}
+inline int AccountLoginAck::svr_nodes_size() const {
+  return _internal_svr_nodes_size();
+}
+inline void AccountLoginAck::clear_svr_nodes() {
+  svr_nodes_.Clear();
+}
+inline ::ServerNode* AccountLoginAck::mutable_svr_nodes(int index) {
+  // @@protoc_insertion_point(field_mutable:AccountLoginAck.svr_nodes)
+  return svr_nodes_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerNode >*
+AccountLoginAck::mutable_svr_nodes() {
+  // @@protoc_insertion_point(field_mutable_list:AccountLoginAck.svr_nodes)
+  return &svr_nodes_;
+}
+inline const ::ServerNode& AccountLoginAck::_internal_svr_nodes(int index) const {
+  return svr_nodes_.Get(index);
+}
+inline const ::ServerNode& AccountLoginAck::svr_nodes(int index) const {
+  // @@protoc_insertion_point(field_get:AccountLoginAck.svr_nodes)
+  return _internal_svr_nodes(index);
+}
+inline ::ServerNode* AccountLoginAck::_internal_add_svr_nodes() {
+  return svr_nodes_.Add();
+}
+inline ::ServerNode* AccountLoginAck::add_svr_nodes() {
+  ::ServerNode* _add = _internal_add_svr_nodes();
+  // @@protoc_insertion_point(field_add:AccountLoginAck.svr_nodes)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::ServerNode >&
+AccountLoginAck::svr_nodes() const {
+  // @@protoc_insertion_point(field_list:AccountLoginAck.svr_nodes)
+  return svr_nodes_;
 }
 
 // -------------------------------------------------------------------

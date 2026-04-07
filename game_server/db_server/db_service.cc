@@ -1158,7 +1158,7 @@ bool DBService::VerifyAccount(const std::string& account_name,
         if (result->next()) {
             account_id = result->getInt64(0);
             std::string stored_password = result->getString(1);
-            std::string encrypted_password = Sha1Hash(password);
+            std::string encrypted_password = ancfl::md5(password);
             ReleaseDBConnection(conn);
             return stored_password == encrypted_password;
         }
